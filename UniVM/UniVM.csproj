@@ -45,9 +45,12 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Eval.cs" />
+    <Compile Include="Memory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Registers.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="VM.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

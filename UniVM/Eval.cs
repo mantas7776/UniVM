@@ -10,11 +10,15 @@ namespace UniVM
 {
     class Eval
     {
-        private UInt32[] memory = new UInt32[Constants.BLOCK_SIZE * Constants.BLOCKS_AMOUNT];
-        private Registers registers = new Registers();
+        private Memory memory;
+        private Registers regs = new Registers();
         private bool running = false;
 
 
+        public Eval(Memory memory)
+        {
+            this.memory = memory;
+        }
         //private void update_flags(uint16_t r)
         //{
         //    uint newFlags;
@@ -34,16 +38,17 @@ namespace UniVM
             return line.Split(' ');
         }
 
-        public void run()
+        public void run(uint dataSegRow, uint codeSegRow)
         {
+
             running = true;
-            registers.IP = Constants.START;
+            regs.IP = 0;
 
             while (running)
             {
-                string instructionLine = "asd";
+                string instructionLine = "asd"; //cia reikia kodo kad isgauna eilute viena is codesego, vienas int32 laiko 4 simbolius atminty
                 string[] args = getArgs(instructionLine);
-                string instruction =
+                string instruction = args[0];
                 switch (instruction)
                 {
 
