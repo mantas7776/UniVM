@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace UniVM
+{
+    class Constants
+    {
+        public static readonly int WORD_SIZE = sizeof(UInt32);
+        public static readonly int BLOCK_SIZE = 16;
+        public static readonly int BLOCKS_AMOUNT = 16;
+        public static readonly uint START = 0x3000;
+
+
+        public enum Opcodes
+        {
+            ADD
+        }
+
+        [Flags]
+        public enum CondFlags
+        {
+            SF = 1 << 0,
+            ZF = 1 << 1,
+            OF = 1 << 2
+        }
+    }
+}
