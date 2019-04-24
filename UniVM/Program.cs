@@ -19,20 +19,20 @@ namespace UniVM
             uint[] memoryDataRow = Util.getData("FFFFFFFF\"ABRG\"");
 
 
-            memory.set(rowNr, blockNr, content)
+            memory.set(rowNr, blockNr, content);
 
-            PTR = 0;
-            /* supervizorinis rezimas 
-               1. Sukuriam VM'a:
-                    a) Priskiriam memory[0] -> transliavimo row.
-                    b) priskiriam memory[0][0] -> dataSegRow
-                    c) priskiriam memory[0][1] -> codeSegRow;
-            */
+            Registers.PTR = 0;
+        /* supervizorinis rezimas 
+            1. Sukuriam VM'a:
+                a) Priskiriam memory[0] -> transliavimo row.
+                b) priskiriam memory[0][0] -> dataSegRow
+                c) priskiriam memory[0][1] -> codeSegRow;
+        */
 
-            VM.
-            memory[0] = { 1, 2};
-            [dataSeg, codeSeg]
-        [0, 1, 2]
+        //    VM.
+        //    memory[0] = { 1, 2};
+        //    [dataSeg, codeSeg]
+        //[0, 1, 2]
 
         //paleiskPrograma() {
         //const virtualSegNr = memory.getAvailSeg() -> is memory gauni segmenta laisva
@@ -44,26 +44,26 @@ namespace UniVM
         //eval(uint dataVirtualSegNr, uint codeVirtualSegNr)
         //}
 
-        Memory.getAvailSeg() {
-            firstRow{uzimti_segmentai } = [];
-            allRows.forEach()
-            firstRow.push()
-        }
+        //Memory.getAvailSeg() {
+        //    firstRow{uzimti_segmentai } = [];
+        //    allRows.forEach()
+        //    firstRow.push()
+        //}
 
-            Eval()
-            {
-                getSegment(dataVirtualSegNr)
-            }
+        //    Eval()
+        //    {
+        //        getSegment(dataVirtualSegNr)
+        //    }
 
-        getSegment(uint virtualSegNr)
-        {
-            const realRow = translationRow[virtualSegNr]
-             return realRow;
-        }
+        //getSegment(uint virtualSegNr)
+        //{
+        //    const realRow = translationRow[virtualSegNr]
+        //     return realRow;
+        //}
 
-            //atlaisvinam jei nereik tuos segus su freeseg()
+        //    //atlaisvinam jei nereik tuos segus su freeseg()
 
-        }
+        //}
 
         private void setSegments()
         {

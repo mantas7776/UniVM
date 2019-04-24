@@ -7,39 +7,49 @@ using System.Threading.Tasks;
 namespace UniVM
 {
     class Memory { 
-        private uint[][] memory;
-        private uint lastVirtualNumber = 1;
+        private byte[][] memory;
+        private byte lastVirtualNumber = 1;
         static private readonly int translationTableIndex = 0;
 
         public Memory(uint blockAmount, uint blockSize)
         {
-            memory = new uint[blockAmount][blockSize];
+            memory = new byte[blockAmount][];
+            for (int i = 0; i < blockAmount; i++) memory[i] = new byte[blockSize*4];
         }
 
-        public uint getAvailableSegment()
+        public byte getAvailableSegment()
         {
             for (int i = 0; i < Constants.BLOCK_SIZE; i++)
             {
-                if (memory[translationTableIndex, i] == 0)
+                if (memory[translationTableIndex][i] == 0)
                 {
-                    uint newVirtNr = lastVirtualNumber++;
-                    memory[translationTableIndex, i] = newVirtNr;
+                    byte newVirtNr = lastVirtualNumber++;
+                    memory[translationTableIndex][i] = newVirtNr;
                     return newVirtNr;
                 }
             }
             throw new Exception("No free segment available");
         }
 
-        public 
-
-        public uint get(uint rowNr, uint blockNr)
+        public ref byte[] getMemRow(byte rowNr)
         {
-            return memory[rowNr, blockNr]; 
+            return ref memory[rowNr];
         }
 
-        public uint set(uint rowNr, uint blockNr)
+        public void copyBytesToRow(ref byte[] memRow, byte[] newData)
         {
-            return memory[rowNr, blockNr];
+            memRow = newData;
         }
+
+
+        //public uint get(uint rowNr, uint blockNr)
+        //{
+        //    return memory[rowNr, blockNr]; 
+        //}
+
+        //public uint set(uint rowNr, uint blockNr)
+        //{
+        //    return memory[rowNr, blockNr];
+        //}
     }
 }
