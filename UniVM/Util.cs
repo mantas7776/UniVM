@@ -22,9 +22,9 @@ namespace UniVM
             return BitConverter.ToUInt32(symbolArr, 0);
         }
 
-        static uint[] getData(string str)
+        public static byte[] getData(string str)
         {
-            List<uint> memory = new List<uint>();
+            List<byte> memory = new List<byte>();
             int i = 0;
             while (i < str.Length)
             {
@@ -33,8 +33,7 @@ namespace UniVM
                     if (str[i + 5] != '"') throw new Exception("Invalid symbol.");
                     string symbols = str.Substring(i, 4);
                     byte[] symbolArr = new byte[4];
-                    for (int j = 0; j < 4; j++) symbolArr[j] = (byte)symbols[j];
-                    memory.Add(BitConverter.ToUInt32(symbolArr, 0));
+                    memory.AddRange(symbolArr);
                     i += 6;
                 }
                 else
@@ -42,27 +41,17 @@ namespace UniVM
                     string value = str.Substring(i, 8);
                     i += 8;
                     uint numericValue = Convert.ToUInt32(value, 16);
-                    memory.Add(numericValue);
+                    byte[] numberBytes = BitConverter.GetBytes(numericValue);
+                    memory.AddRange(numberBytes);
                 }
             }
             return memory.ToArray();
         }
 
-        static uint[] getCode(string str)
+        public static byte[] getCode(string str)
         {
-            List<uint> memory = new List<uint>();
-            int i = 0;
-            while (i < str.Length)
-            {
-                //last case
-                if (i + 4 >= str.Length && str.Length % 4 != 0)
-                {
-                    str
-                    break;
-                }
-
-
-            }
+            return Encoding.ASCII.GetBytes(str);
         }
+
     }
 }
