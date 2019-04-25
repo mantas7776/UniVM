@@ -8,11 +8,11 @@ namespace UniVM
 {
     class Util
     {
-        public static uint genRandomNum(uint min, uint max)
-        {
-            Random random = new Random();
-            return random.Next(min, max);
-        }
+        //public static uint genRandomNum(uint min, uint max)
+        //{
+        //    Random random = new Random();
+        //    return random.Next(min, max);
+        //}
 
         static uint getUintFrom4Chars(string symbols)
         {
@@ -32,7 +32,7 @@ namespace UniVM
                 {
                     if (str[i + 5] != '"') throw new Exception("Invalid symbol.");
                     string symbols = str.Substring(i, 4);
-                    byte[] symbolArr = new byte[4];
+                    byte[] symbolArr = Encoding.ASCII.GetBytes(symbols);
                     memory.AddRange(symbolArr);
                     i += 6;
                 }

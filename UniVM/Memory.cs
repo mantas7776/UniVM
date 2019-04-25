@@ -31,14 +31,15 @@ namespace UniVM
             throw new Exception("No free segment available");
         }
 
-        public ref byte[] getMemRow(byte rowNr)
+        public byte[] getMemRow(byte virtRowNr)
         {
-            return ref memory[rowNr];
+            byte realRowNr = memory[translationTableIndex][virtRowNr];
+            return memory[realRowNr];
         }
 
-        public void copyBytesToRow(ref byte[] memRow, byte[] newData)
+        public void copyBytesToRow(byte[] memRow, byte[] newData)
         {
-            memRow = newData;
+            newData.CopyTo(memRow, 0);
         }
 
 
