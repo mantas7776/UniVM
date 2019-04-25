@@ -1,9 +1,10 @@
+using System;
+
 namespace UniVM {
-    class Mainas {
-        
-        //public static void Main() {
-            //RM realMachine = new RM();
-            //RM.start();
-        //}
+    class MainWrapper {
+        public static void Main(string[] args) {
+            RealMachine realMachine = new RealMachine();
+            realMachine.start();
+        }
     }
 }

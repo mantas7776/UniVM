@@ -57,7 +57,7 @@
     <Compile Include="Registers.cs" />
     <Compile Include="Storage.cs" />
     <Compile Include="Util.cs" />
-    <Compile Include="RM.cs" />
+    <Compile Include="RealMachine.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
