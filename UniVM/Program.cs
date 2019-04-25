@@ -12,10 +12,13 @@ namespace UniVM
         {
             Memory memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCKS_AMOUNT);
             Storage storage = new Storage("PATH", 1024);
+            Storage codeStorage = new Storage("code.bin");
             Eval eval = new Eval(memory, storage);
 
             byte[] inputDataRow = Util.getData("FFBBFFFF\"ABRG\"");
             byte[] inputCommandRow = Util.getCode("ADD\nHALT");
+            //Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = inputCommandRow, data = inputDataRow });
+            var res = Util.readCodeFromHdd(codeStorage, 10);
             byte dataSeg = memory.getAvailableSegment();
             byte codeSeg = memory.getAvailableSegment();
             byte[] dataMemory = memory.getMemRow(dataSeg);

@@ -61,12 +61,12 @@ namespace UniVM
         public static VMInfo readCodeFromHdd(Storage storage, int location)
         {
             byte[] storageBytes = storage.getBytes();
-            int codeLength = BitConverter.ToInt32(storageBytes, 0);
-            int dataLength = BitConverter.ToInt32(storageBytes, 0);
+            int codeLength = BitConverter.ToInt32(storageBytes, location);
+            int dataLength = BitConverter.ToInt32(storageBytes, location + 4);
             byte[] code = new byte[codeLength];
             byte[] data = new byte[dataLength];
-            Array.Copy(storageBytes, codeLength + 8, code, 0, codeLength);
-            Array.Copy(storageBytes, codeLength + dataLength + 8, code, 0, codeLength);
+            Array.Copy(storageBytes, location + 8, code, 0, codeLength);
+            Array.Copy(storageBytes, location + 8 + codeLength, data, 0, dataLength);
             return new VMInfo
             {
                 code = code,
@@ -74,11 +74,30 @@ namespace UniVM
             };
         }
 
-        public static int saveCodeToHdd(Storage storage, VMInfo info)
+        public static int saveCodeToHdd(Storage storage, int location, VMInfo info)
         {
-            int totalLength = info.code.Length + info.data.Length + 8 + 1; // 8 bytes for code and data size + eof
-            byte[] codeLength = BitConverter.GetBytes(info.code.Length);
-            byte[] dataLength = BitConverter.GetBytes(info.data.Length);
+            byte[] codeLengthBytes = BitConverter.GetBytes(info.code.Length);
+            byte[] dataLengthBytes = BitConverter.GetBytes(info.data.Length);
+
+            int totalLength = info.code.Length + info.data.Length + codeLengthBytes.Length + dataLengthBytes.Length; // 8 bytes for code and data size + eof
+            byte[] dataToWrite = new byte[totalLength];
+            int used = 0;
+
+            codeLengthBytes.CopyTo(dataToWrite, used);
+            used += codeLengthBytes.Length;
+            dataLengthBytes.CopyTo(dataToWrite, used);
+            used += dataLengthBytes.Length;
+
+            info.code.CopyTo(dataToWrite, used);
+            used += info.code.Length;
+
+            info.data.CopyTo(dataToWrite, used);
+            used += info.data.Length;
+            
+            for (int i = 0; i < totalLength; i++)
+            {
+                storage[location + i] = dataToWrite[i];
+            }
             return totalLength;
         }
 

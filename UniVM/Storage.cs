@@ -19,7 +19,7 @@ namespace UniVM
             this.length = size;
             this.path = path;
 
-            BitConverter.GetBytes(32).CopyTo(storage, 0);
+            BitConverter.GetBytes(size).CopyTo(storage, 0);
         }
 
         public byte[] getBytes()
@@ -30,7 +30,8 @@ namespace UniVM
         public Storage(string path)
         {
             byte[] fileBytes = File.ReadAllBytes(path);
-            length = BitConverter.ToInt32(storage, 0);
+            length = BitConverter.ToInt32(fileBytes, 0);
+            this.path = path;
             storage = new byte[length];
             fileBytes.CopyTo(storage, 0);
         }
@@ -57,6 +58,7 @@ namespace UniVM
             {
                 if (loc > 0 && loc < 4) throw new Exception("Writing to header is not allowed");
                 this.storage[loc] = value;
+                save();
             }
         }
     }
