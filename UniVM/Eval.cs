@@ -76,12 +76,12 @@ namespace UniVM
             return line.Split(' ');
         }
 
-        public void run(byte dataSegRow, byte codeSegRow)
+        public void run(byte[] dataMemory, byte[] codeMemory)
         {
             running = true;
             regs.IP = 0;
-            byte[] dataMemory = memory.getMemRow(dataSegRow);
-            byte[] codeMemory = memory.getMemRow(codeSegRow);
+            //byte[] dataMemory = memory.getMemRow(dataSegRow);
+            //byte[] codeMemory = memory.getMemRow(codeSegRow);
             string codeString = Encoding.ASCII.GetString(codeMemory);
             string[] code = codeString.Split('\n');
 
