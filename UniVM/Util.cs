@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
+    struct VMInfo
+    {
+        public byte[] data;
+        public byte[] code;
+    }
     class Util
     {
         //public static uint genRandomNum(uint min, uint max)
@@ -51,6 +56,30 @@ namespace UniVM
         public static byte[] getCode(string str)
         {
             return Encoding.ASCII.GetBytes(str);
+        }
+
+        public static VMInfo readCodeFromHdd(Storage storage, int location)
+        {
+            byte[] storageBytes = storage.getBytes();
+            int codeLength = BitConverter.ToInt32(storageBytes, 0);
+            int dataLength = BitConverter.ToInt32(storageBytes, 0);
+            byte[] code = new byte[codeLength];
+            byte[] data = new byte[dataLength];
+            Array.Copy(storageBytes, codeLength + 8, code, 0, codeLength);
+            Array.Copy(storageBytes, codeLength + dataLength + 8, code, 0, codeLength);
+            return new VMInfo
+            {
+                code = code,
+                data = data
+            };
+        }
+
+        public static int saveCodeToHdd(Storage storage, VMInfo info)
+        {
+            int totalLength = info.code.Length + info.data.Length + 8 + 1; // 8 bytes for code and data size + eof
+            byte[] codeLength = BitConverter.GetBytes(info.code.Length);
+            byte[] dataLength = BitConverter.GetBytes(info.data.Length);
+            return totalLength;
         }
 
     }

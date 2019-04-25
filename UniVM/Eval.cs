@@ -11,27 +11,65 @@ namespace UniVM
     class Eval
     {
         private Memory memory;
+        private Storage storage;
         private Registers regs = new Registers();
         private bool running = false;
+        private HandleStorage handles;
 
 
-        public Eval(Memory memory)
+        public Eval(Memory memory, Storage storage)
         {
+            //TODO: cia perduoti is isores hanldlestorage kai bus daugiau evalu;
             this.memory = memory;
+            this.storage = storage;
+            this.handles = new HandleStorage();
+            handles.add(new ConsoleDevice());
+            //handles.add()
         }
-        //private void update_flags(uint16_t r)
-        //{
-        //    uint newFlags;
-        //    if (reg[r] == 0)
-        //    {
-        //        reg[R_COND] = ZF;
-        //    }
 
-        //    if (reg[r] >> 15)
-        //        reg[R_COND] = FL_NEG;
-        //    else
-        //        reg[R_COND] = FL_POS;
-        //}
+
+        // 32bit - sign flag
+        // 31bit - OF Flag
+        // 30bit - zero Flag
+        private void setFlag(int loc, bool val)
+        {
+            uint newFlag;
+            newFlag = val ? (uint)1 : (uint)0;
+            newFlag <<= loc;
+        }
+
+        private bool getFlagByName(string flagName)
+        {
+            switch(flagName)
+            {
+                    
+                case "SF": return getFlagByLoc(32);
+                case "ZF": return getFlagByLoc(31);
+                case "OF": return getFlagByLoc(30);
+                default: throw new Exception($"Provided flag: {flagName} does not exist");
+            }
+        }
+
+        private bool getFlagByLoc(int loc)
+        {
+            return (regs.FLAGS >> loc) == 1;
+        }
+
+        private void updateOF(uint operator1, uint result)
+        {
+            bool OF = operator1 >> 31 != result >> 31;
+            setFlag(29, OF);
+        }
+        private void updateFlags(uint number)
+        {
+            //ZF
+            bool ZF = number == 0;
+                setFlag(30, ZF);
+
+            //SF
+            bool SF = number < 0;
+                setFlag(31, SF);
+        }
 
         private string[] getArgs(string line)
         {
@@ -40,7 +78,6 @@ namespace UniVM
 
         public void run(byte dataSegRow, byte codeSegRow)
         {
-
             running = true;
             regs.IP = 0;
             byte[] dataMemory = memory.getMemRow(dataSegRow);
@@ -53,15 +90,121 @@ namespace UniVM
                 string instructionLine = code[regs.IP++]; //cia reikia kodo kad isgauna eilute viena is codesego, vienas int32 laiko 4 simbolius atminty
                 string[] args = getArgs(instructionLine);
                 string instruction = args[0];
+
+                uint res;
                 switch (instruction)
                 {
+                    case "HALT":
+                        regs.PI = 1;
+                        running = false;
+                        break;
+                    case "ADD":
+                        regs.A += regs.B;
+                        updateFlags(regs.A);
+                        break;
+                    case "SUB":
+                        res = regs.A - regs.B;
+                        updateFlags(res);
+                        updateOF(regs.A, res);
+                        regs.A = res;
+                        break;
+                    case "MUL":
+                        regs.A *= regs.B;
+                        updateFlags(regs.A);
+                        break;
+                    case "DIV":
+                        regs.A /= regs.B;
+                        updateFlags(regs.A);
+                        break;
+                    case "CMP":
+                        res = regs.A - regs.B;
+                        updateFlags(res);
+                        updateOF(regs.A, res);
+                        break;
+                    case "JMP":
+                        {
+                            uint lineNr = uint.Parse(args[1]);
+                            regs.IP = lineNr;
+                            break;
+                        }
+                    case "JL":
+                        {
+                            uint lineNr = uint.Parse(args[1]);
+                            bool jump = getFlagByName("SF") != getFlagByName("OF");
+                            if (jump) regs.IP = lineNr;
+                            break;
+                        }
+                    case "JE":
+                        {
+                            uint lineNr = uint.Parse(args[1]);
+                            bool jump = getFlagByName("ZF");
+                            if (jump) regs.IP = lineNr;
+                            break;
+                        }
+                    case "MOVA":
+                    case "MOVB":
+                        {
+                            int location = int.Parse(args[1]);
+                            uint value = BitConverter.ToUInt32(dataMemory, location);
 
+                            if (instruction == "MOVA")
+                                regs.A = value;
+                            else if (instruction == "MOVB")
+                                regs.B = value;
+
+                            break;
+                        }
+                    case "MOVD":
+                        {
+                            int location = int.Parse(args[1]);
+                            byte[] converted = BitConverter.GetBytes(regs.A);
+                            dataMemory.CopyTo(converted, location);
+                            break;
+                        }
+                    case "READ": // read from console
+                        {
+                            regs.A = handles[(int)regs.B].read();
+                            break;
+                        }
+                    case "WRITE": // write to console
+                        {
+                            handles[(int)regs.B].write((byte)regs.A);
+                            break;
+                        }
+                    case "OPENFILEHANDLE": 
+                        {
+                            int location = int.Parse(args[1]);
+                            uint handleNr = (uint)handles.add(new HddDevice(this.storage, location));
+                            regs.B = handleNr;
+                            break;
+                        }
+                    case "DELETEFILE":
+                        {
+                            int location = int.Parse(args[1]);
+                            handles[(int)regs.B].delete(location);
+                            break;
+                        }
+                    case "CLOSEFILEHANDLE":
+                        {
+                            Handle handleToDelete = handles[(int)regs.B];
+                            handles.remove(handleToDelete);
+                            break;
+                        }
                     default:
                         Console.WriteLine("Bad opcode");
+                        regs.PI = 2;
+                        running = false;
                         break;
                 }
             }
         }
-
     }
 }
+
+/*
+    DATA SEGMENT
+    FILE 20 50
+    CODE SEGMENT___
+    OPEN 50
+
+ */

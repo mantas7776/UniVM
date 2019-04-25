@@ -11,9 +11,10 @@ namespace UniVM
         static void Main(string[] args)
         {
             Memory memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCKS_AMOUNT);
-            Eval eval = new Eval(memory);
+            Storage storage = new Storage("PATH", 1024);
+            Eval eval = new Eval(memory, storage);
 
-            byte[] inputDataRow = Util.getData("FFFFFFFF\"ABRG\"");
+            byte[] inputDataRow = Util.getData("FFBBFFFF\"ABRG\"");
             byte[] inputCommandRow = Util.getCode("ADD\nHALT");
             byte dataSeg = memory.getAvailableSegment();
             byte codeSeg = memory.getAvailableSegment();

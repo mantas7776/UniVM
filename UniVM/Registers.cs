@@ -9,12 +9,12 @@ namespace UniVM
     public struct Registers
     {
         public uint
-            R0,
-            R1,
+            A,
+            B,
             MODE,
             PTR,
             IP, /* instruction pointer */
-            COND,
+            FLAGS,
             SI,
             PI,
             CH1, 

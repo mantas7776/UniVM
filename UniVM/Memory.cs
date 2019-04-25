@@ -45,12 +45,12 @@ namespace UniVM
             throw new Exception("Virtual memory row: " + virtRowNr + " does not exist.");
         }
 
-        static public void copyBytesToRow(byte[] memRow, byte[] newData)
+        public static void copyBytesToRow(byte[] memRow, byte[] newData)
         {
             if (newData.Length > memRow.Length) throw new Exception("Newdata is too big for memory row.");
             newData.CopyTo(memRow, 0);
         }
-
+        
 
         //public uint get(uint rowNr, uint blockNr)
         //{
