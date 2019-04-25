@@ -8,26 +8,28 @@ namespace UniVM
 {
     class Program
     {
-        private string fileName;
         private byte[] dataMemory;
         private byte[] codeMemory;
         private Eval eval;
 
-        public Program(string fileName, byte[] dataMemory, byte[] codeMemory, Eval eval)
+        public Program(byte[] dataMemory, byte[] codeMemory, Eval eval, Memory memory)
         {
-            this.fileName = fileName;
-            this.dataMemory = dataMemory;
-            this.codeMemory = codeMemory;
+            byte dataSeg = memory.getAvailableSegment();
+            byte codeSeg = memory.getAvailableSegment();
+            this.dataMemory = memory.getMemRow(dataSeg);
+            this.codeMemory = memory.getMemRow(codeSeg);
+
+            dataMemory.CopyTo(this.dataMemory, 0);
+            codeMemory.CopyTo(this.codeMemory, 0);
+
             this.eval = eval;
         }
 
         public void run()
         {
 
-            byte[] inputDataRow = Util.getData("FFBBFFFF\"ABRG\"");
-            byte[] inputCommandRow = Util.getCode("ADD\nHALT");
-            Memory.copyBytesToRow(dataMemory, inputDataRow);
-            Memory.copyBytesToRow(codeMemory, inputCommandRow);
+            //Memory.copyBytesToRow(dataMemory, inputDataRow);
+            //Memory.copyBytesToRow(codeMemory, inputCommandRow);
             eval.run(dataMemory, codeMemory);
         }
     }

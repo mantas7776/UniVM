@@ -18,24 +18,22 @@ namespace UniVM {
 
         public RealMachine()
         {
-            this.memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCKS_AMOUNT);
+            this.memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCK_SIZE);
             this.storage = new Storage("HDD.txt", 1024);
             this.eval = new Eval(memory, storage);
         }
 
-        public void addProgram(string fileName)
+        public void addProgramFromFile(Storage storage, int location)
         {
-            byte dataSeg = memory.getAvailableSegment();
-            byte codeSeg = memory.getAvailableSegment();
-            byte[] dataMemory = memory.getMemRow(dataSeg);
-            byte[] codeMemory = memory.getMemRow(codeSeg);
-            Program program = new Program(fileName, dataMemory, codeMemory, eval);
+            VMInfo info = Util.readCodeFromHdd(storage, location);
+            byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
+            Program program = new Program(info.data, altcode, eval, memory);
             programs.Add(program);
         }
 
-        public void start() {                      
-            string fileName = "program.txt";
-            addProgram(fileName);
+        public void start() {
+            var codeStorage = new Storage("code.bin");
+            addProgramFromFile(codeStorage, 10);
             programs[0].run();
         }
     }
