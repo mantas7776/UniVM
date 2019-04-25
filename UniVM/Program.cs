@@ -13,11 +13,15 @@ namespace UniVM
             Memory memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCKS_AMOUNT);
             Eval eval = new Eval(memory);
 
-            byte[] readDataRow = Util.getData("FFFFFFFF\"ABRG\"");
-            byte[] readCommandRow = Util.getData("");
-            byte availRow = memory.getAvailableSegment();
-            byte[] memRow = memory.getMemRow(availRow);
-            memory.copyBytesToRow(memRow, readDataRow);
+            byte[] inputDataRow = Util.getData("FFFFFFFF\"ABRG\"");
+            byte[] inputCommandRow = Util.getCode("ADD\nHALT");
+            byte dataSeg = memory.getAvailableSegment();
+            byte codeSeg = memory.getAvailableSegment();
+            byte[] dataMemory = memory.getMemRow(dataSeg);
+            byte[] codeMemory = memory.getMemRow(codeSeg);
+            Memory.copyBytesToRow(dataMemory, inputDataRow);
+            Memory.copyBytesToRow(codeMemory, inputCommandRow);
+            eval.run(dataSeg, codeSeg);
 
 
             //Registers.PTR = 0;

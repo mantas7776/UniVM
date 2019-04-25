@@ -8,13 +8,14 @@ namespace UniVM
 {
     class Memory { 
         private byte[][] memory;
-        private byte lastVirtualNumber = 1;
+        private byte lastVirtualNumber = 2;
         static private readonly int translationTableIndex = 0;
 
         public Memory(uint blockAmount, uint blockSize)
         {
             memory = new byte[blockAmount][];
             for (int i = 0; i < blockAmount; i++) memory[i] = new byte[blockSize*4];
+            memory[translationTableIndex][0] = 1;
         }
 
         public byte getAvailableSegment()
@@ -33,12 +34,20 @@ namespace UniVM
 
         public byte[] getMemRow(byte virtRowNr)
         {
-            byte realRowNr = memory[translationTableIndex][virtRowNr];
-            return memory[realRowNr];
+            if (virtRowNr == 0) throw new Exception("Virtual memory row can not be 0");
+            //mem row - > virt row
+            byte[] translationTable = memory[translationTableIndex];
+            for (int i = 0; i < translationTable.Length; i++)
+            {
+                if (translationTable[i] == virtRowNr)
+                    return memory[i]; 
+            }
+            throw new Exception("Virtual memory row: " + virtRowNr + " does not exist.");
         }
 
-        public void copyBytesToRow(byte[] memRow, byte[] newData)
+        static public void copyBytesToRow(byte[] memRow, byte[] newData)
         {
+            if (newData.Length > memRow.Length) throw new Exception("Newdata is too big for memory row.");
             newData.CopyTo(memRow, 0);
         }
 

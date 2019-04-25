@@ -38,15 +38,19 @@ namespace UniVM
             return line.Split(' ');
         }
 
-        public void run(uint dataSegRow, uint codeSegRow)
+        public void run(byte dataSegRow, byte codeSegRow)
         {
 
             running = true;
             regs.IP = 0;
+            byte[] dataMemory = memory.getMemRow(dataSegRow);
+            byte[] codeMemory = memory.getMemRow(codeSegRow);
+            string codeString = Encoding.ASCII.GetString(codeMemory);
+            string[] code = codeString.Split('\n');
 
             while (running)
             {
-                string instructionLine = "asd"; //cia reikia kodo kad isgauna eilute viena is codesego, vienas int32 laiko 4 simbolius atminty
+                string instructionLine = code[regs.IP++]; //cia reikia kodo kad isgauna eilute viena is codesego, vienas int32 laiko 4 simbolius atminty
                 string[] args = getArgs(instructionLine);
                 string instruction = args[0];
                 switch (instruction)
