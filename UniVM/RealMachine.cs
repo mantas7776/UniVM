@@ -27,14 +27,41 @@ namespace UniVM {
         {
             VMInfo info = Util.readCodeFromHdd(storage, location);
             byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
-            Program program = new Program(info.data, altcode, eval, memory);
+            byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
+            //Util.saveCodeToHdd(storage, location, new VMInfo { code = altcode, data = altdata });
+            Program program = new Program(info.data, info.code, memory);
             programs.Add(program);
         }
+
+
 
         public void start() {
             var codeStorage = new Storage("code.bin");
             addProgramFromFile(codeStorage, 10);
-            programs[0].run();
+
+            while (true)
+            {
+                bool ranAnything = false;
+                foreach (var program in programs)
+                {
+                    if (program.completed)
+                        continue;
+
+                    ranAnything = true;
+
+                    eval.importantRegisters = program.ImportantRegisters;
+
+                    eval.run(program);
+
+
+                    if (eval.importantRegisters.SI == 1) program.setDone();
+                    if (eval.importantRegisters.PI == 2) program.setDone();
+                    program.ImportantRegisters = eval.importantRegisters;
+                }
+
+                if (!ranAnything) break;
+            }
+            
         }
     }
 }
