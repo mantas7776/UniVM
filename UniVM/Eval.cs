@@ -221,11 +221,3 @@ namespace UniVM
         }
     }
 }
-
-/*
-    DATA SEGMENT
-    FILE 20 50
-    CODE SEGMENT___
-    OPEN 50
-
- */

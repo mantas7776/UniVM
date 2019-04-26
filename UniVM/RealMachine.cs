@@ -23,6 +23,35 @@ namespace UniVM {
             this.eval = new Eval(memory, storage);
         }
 
+
+        public void handleSiInt(Program program, uint siNr)
+        {
+            switch(siNr)
+            {
+                case 1:
+                    {
+                        program.setDone();
+                        break;
+                    }
+            }
+
+            return;
+        }
+
+        public void handlePiInt(Program program, uint siNr)
+        {
+            switch (siNr)
+            {
+                case 2:
+                    {
+                        program.setDone();
+                        break;
+                    }
+            }
+
+            return;
+        }
+
         public void addProgramFromFile(Storage storage, int location)
         {
             VMInfo info = Util.readCodeFromHdd(storage, location);
@@ -54,8 +83,8 @@ namespace UniVM {
                     eval.run(program);
 
 
-                    if (eval.importantRegisters.SI == 1) program.setDone();
-                    if (eval.importantRegisters.PI == 2) program.setDone();
+                    if (eval.importantRegisters.SI > 0) handleSiInt(program, eval.importantRegisters.SI);
+                    if (eval.importantRegisters.PI > 0) handlePiInt(program, eval.importantRegisters.PI);
                     program.ImportantRegisters = eval.importantRegisters;
                 }
 
