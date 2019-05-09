@@ -16,7 +16,20 @@ namespace UniVM
         private bool running = false;
         private HandleStorage handles;
 
-
+        public Registers importantRegisters
+        {
+            get
+            {
+                return regs;
+            }
+            set
+            {
+                regs.A = value.A;
+                regs.B = value.B;
+                regs.IP = value.IP;
+                regs.FLAGS = value.FLAGS;
+            }
+        }
         public Eval(Memory memory, Storage storage)
         {
             //TODO: cia perduoti is isores hanldlestorage kai bus daugiau evalu;
@@ -76,10 +89,12 @@ namespace UniVM
             return line.Split(' ');
         }
 
-        public void run(byte[] dataMemory, byte[] codeMemory)
+        public void run(Program program)
         {
             running = true;
-            regs.IP = 0;
+            byte[] dataMemory = program.dataMemory;
+            byte[] codeMemory = program.codeMemory;
+            int timer = 2;
             //byte[] dataMemory = memory.getMemRow(dataSegRow);
             //byte[] codeMemory = memory.getMemRow(codeSegRow);
             string codeString = Encoding.ASCII.GetString(codeMemory);
@@ -91,11 +106,17 @@ namespace UniVM
                 string[] args = getArgs(instructionLine);
                 string instruction = args[0];
 
+                if (--timer == 0)
+                {
+                    running = false;
+                    break;
+                }
+
                 uint res;
                 switch (instruction)
                 {
                     case "HALT":
-                        regs.PI = 1;
+                        regs.SI = 1;
                         running = false;
                         break;
                     case "ADD":
@@ -191,7 +212,7 @@ namespace UniVM
                             break;
                         }
                     default:
-                        Console.WriteLine("Bad opcode");
+                        Console.WriteLine("Bad opcode " + args[0]);
                         regs.PI = 2;
                         running = false;
                         break;
@@ -200,11 +221,3 @@ namespace UniVM
         }
     }
 }
-
-/*
-    DATA SEGMENT
-    FILE 20 50
-    CODE SEGMENT___
-    OPEN 50
-
- */

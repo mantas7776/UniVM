@@ -8,11 +8,14 @@ namespace UniVM
 {
     class Program
     {
-        private byte[] dataMemory;
-        private byte[] codeMemory;
+        public byte[] dataMemory { get; }
+        public byte[] codeMemory { get; }
         private Eval eval;
+        public bool completed { get; private set; } = false;
+        public Registers ImportantRegisters { get; set; }
+        
 
-        public Program(byte[] dataMemory, byte[] codeMemory, Eval eval, Memory memory)
+        public Program(byte[] dataMemory, byte[] codeMemory, Memory memory)
         {
             byte dataSeg = memory.getAvailableSegment();
             byte codeSeg = memory.getAvailableSegment();
@@ -21,17 +24,15 @@ namespace UniVM
 
             dataMemory.CopyTo(this.dataMemory, 0);
             codeMemory.CopyTo(this.codeMemory, 0);
-
-            this.eval = eval;
         }
 
-        public void run()
+        public void setDone()
         {
-
-            //Memory.copyBytesToRow(dataMemory, inputDataRow);
-            //Memory.copyBytesToRow(codeMemory, inputCommandRow);
-            eval.run(dataMemory, codeMemory);
+            completed = true;
         }
+
+
+
     }
 }
 
