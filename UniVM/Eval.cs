@@ -15,17 +15,7 @@ namespace UniVM
         private bool running = false;
         private HandleStorage handles;
 
-        public Registers registers
-        {
-            get
-            {
-                return regs;
-            }
-            set
-            {
-                regs = value;
-            }
-        }
+        public Registers registers;
         public Eval(Storage storage)
         {
             //TODO: cia perduoti is isores hanldlestorage kai bus daugiau evalu;

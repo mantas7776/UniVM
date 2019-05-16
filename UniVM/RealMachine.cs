@@ -8,6 +8,7 @@ namespace UniVM {
         private Memory memory;
         private VirtualMemory virtualMemory;
         private Eval eval;
+        private Registers registers;
 
         public RealMachine()
         {
@@ -47,7 +48,14 @@ namespace UniVM {
         public void addProgramFromFile(string fileName)
         {
             var codeStorage = new Storage(fileName);
-            uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
+
+            //byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
+            //byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
+            //Util.saveCodeToHdd(storage, 0, new VMInfo { code = altcode, data = altdata });
+
+            //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
+
+            uint rowCount = 4;
             MemAccesser memAccesser = virtualMemory.reserveMemory(fileName, rowCount);
             Program program = new Program(memAccesser, fileName, eval.registers);
             programs.Add(program);
@@ -56,7 +64,9 @@ namespace UniVM {
         public void start() {
             var regs = eval.registers;
             regs.PTR = 0;
-            eval.registers = regs; 
+            eval.registers = regs;
+
+            this.addProgramFromFile("code.bin");
 
             while (true)
             {
@@ -68,7 +78,7 @@ namespace UniVM {
 
                     ranAnything = true;
 
-                    eval.registers = program.importantRegisters;
+                    eval.registers = program.registers;
                     eval.run(program);
 
 
