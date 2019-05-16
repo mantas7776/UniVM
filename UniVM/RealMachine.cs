@@ -49,7 +49,7 @@ namespace UniVM {
             var codeStorage = new Storage(fileName);
             uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
             MemAccesser memAccesser = virtualMemory.reserveMemory(fileName, rowCount);
-            Program program = new Program(memAccesser, fileName, );
+            Program program = new Program(memAccesser, fileName, eval.registers);
             programs.Add(program);
         }
 
@@ -68,13 +68,13 @@ namespace UniVM {
 
                     ranAnything = true;
 
-                    eval.registers = program.importantRegisters;
+                    eval.registers = program.registers;
                     eval.run(program);
 
 
                     if (eval.registers.SI > 0) handleSiInt(program, eval.registers.SI);
                     if (eval.registers.PI > 0) handlePiInt(program, eval.registers.PI);
-                    program.importantRegisters = eval.registers;
+                    program.registers = eval.registers;
                 }
 
                 if (!ranAnything) break;

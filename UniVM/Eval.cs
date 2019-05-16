@@ -87,14 +87,10 @@ namespace UniVM
         public void run(Program program)
         {
             running = true;
-            byte[] dataMemory = program.dataMemory;
-            byte[] codeMemory = program.codeMemory;
             int timer = 2;
-            //byte[] dataMemory = memory.getMemRow(dataSegRow);
-            //byte[] codeMemory = memory.getMemRow(codeSegRow);
 
-            uint codeSegByteCount = this.importantRegisters.DS - this.importantRegisters.CS;
-            byte[] codeSegBytes = program.memAccesser.readFromAddr(this.importantRegisters.CS, codeSegByteCount);
+            uint codeSegByteCount = this.registers.DS - this.registers.CS;
+            byte[] codeSegBytes = program.memAccesser.readFromAddr(this.registers.CS, codeSegByteCount);
             string codeString = Encoding.ASCII.GetString(codeSegBytes);
             string[] code = codeString.Split('\n');
 
@@ -163,8 +159,9 @@ namespace UniVM
                     case "MOVA":
                     case "MOVB":
                         {
-                            int location = int.Parse(args[1]);
-                            uint value = BitConverter.ToUInt32(dataMemory, location);
+                            uint location = uint.Parse(args[1]);
+                            byte[] dataToTransfer = program.memAccesser.readFromAddr(location, 4);
+                            uint value = BitConverter.ToUInt32(dataToTransfer, 0);
 
                             if (instruction == "MOVA")
                                 regs.A = value;
@@ -177,7 +174,7 @@ namespace UniVM
                         {
                             int location = int.Parse(args[1]);
                             byte[] converted = BitConverter.GetBytes(regs.A);
-                            dataMemory.CopyTo(converted, location);
+                            program.memAccesser.writeFromAddr((uint)location, converted);
                             break;
                         }
                     case "READ": // read from console
