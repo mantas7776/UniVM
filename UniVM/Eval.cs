@@ -96,7 +96,10 @@ namespace UniVM
             int timer = 2;
             //byte[] dataMemory = memory.getMemRow(dataSegRow);
             //byte[] codeMemory = memory.getMemRow(codeSegRow);
-            string codeString = Encoding.ASCII.GetString(codeMemory);
+
+            uint codeSegByteCount = this.importantRegisters.DS - this.importantRegisters.CS;
+            byte[] codeSegBytes = program.memAccesser.readFromAddr(this.importantRegisters.CS, codeSegByteCount);
+            string codeString = Encoding.ASCII.GetString(codeSegBytes);
             string[] code = codeString.Split('\n');
 
             while (running)

@@ -3,13 +3,14 @@
     class Program
     {
         private string fileName;
-        private MemAccesser memAccesser;
-        public Registers importantRegisters { get; set; }
+        public MemAccesser memAccesser;
+        public Registers registers { get; set; }
         public bool completed { get; private set; } = false;
 
-        public Program(MemAccesser memAccesser, string fileName)
+        public Program(MemAccesser memAccesser, string fileName, Registers registers)
         {
             this.fileName = fileName;
+            this.registers = registers;
             this.loadSelfToMem();
         }
 
@@ -23,11 +24,11 @@
             var codeStorage = new Storage(this.fileName);
             VMInfo info = Util.readCodeFromHdd(codeStorage, 0);
 
-            memAccesser.writeFromAddr(0, info.data);
-            memAccesser.writeFromAddr((uint)info.data.Length, info.code);
+            memAccesser.writeFromAddr(0, info.code);
+            memAccesser.writeFromAddr((uint)info.code.Length, info.data);
 
-            this.importantRegisters.DS = 0;
-            this.importantRegisters.CS = info.data.Length;
+            this.registers.DS = 0;
+            this.registers.CS = info.data.Length;
         }
     }
 }

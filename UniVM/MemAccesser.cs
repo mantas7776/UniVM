@@ -39,7 +39,7 @@ namespace UniVM
             }
         }
 
-        public void readFromAddr(uint fromVirtAddr, uint byteCount)
+        public byte[] readFromAddr(uint fromVirtAddr, uint byteCount)
         {
             byte[] bytesRead = new byte[byteCount];
             for(uint i = 0; i < byteCount; i++)
