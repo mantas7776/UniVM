@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ByteHelper.cs" />
+    <Compile Include="FileInfo.cs" />
     <Compile Include="MemAccesser.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Constants.cs" />
@@ -60,6 +62,7 @@
     <Compile Include="Registers.cs" />
     <Compile Include="SegsVNrsContainer.cs" />
     <Compile Include="Storage.cs" />
+    <Compile Include="StorageFile.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="RealMachine.cs" />
     <Compile Include="VirtualMemory.cs" />
