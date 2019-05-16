@@ -4,7 +4,7 @@
     {
         private string fileName;
         private MemAccesser memAccesser;
-        public Registers importantRegisters { get; set; }
+        public Registers importantRegisters;
         public bool completed { get; private set; } = false;
 
         public Program(MemAccesser memAccesser, string fileName)
@@ -16,6 +16,11 @@
         public void setDone()
         {
             completed = true;
+        }
+
+        public void setTimer(uint val)
+        {
+            importantRegisters.TIMER = val;
         }
 
         private void loadSelfToMem()

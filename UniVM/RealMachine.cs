@@ -67,9 +67,12 @@ namespace UniVM {
                         continue;
 
                     ranAnything = true;
-
+                    program.importantRegisters.TIMER = 5;
                     eval.registers = program.importantRegisters;
-                    eval.run(program);
+                    while (eval.registers.TIMER > 0 && eval.registers.SI == 0 && eval.registers.PI == 0)
+                    {
+                        eval.run(program);
+                    }
 
 
                     if (eval.registers.SI > 0) handleSiInt(program, eval.registers.SI);
