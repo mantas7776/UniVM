@@ -15,6 +15,16 @@ namespace UniVM
         {
             this.PTR = PTR;
             this.memory = memory;
+            this.initTranslTable();
+        }
+
+        private void initTranslTable()
+        {
+            byte negativeOne = BitConverter.GetBytes(-1)[0];
+            for(uint i = 0; i < Constants.BLOCK_SIZE; i++)
+            {
+                memory.set(i, negativeOne);
+            }
         }
 
         public MemAccesser reserveMemory(string progName, uint rowCount)
@@ -30,8 +40,8 @@ namespace UniVM
 
             for(uint i = 0; i < Constants.BLOCK_SIZE; i++)
             {
-                byte[] oneByteArr = { memory.get(PTR + i) };
-                int translCellValue = BitConverter.ToInt32(oneByteArr, 0);
+
+                int translCellValue = memory.get(PTR + i);
                 if(translCellValue != -1)
                 {
                     freeVirtRows[rowToSet] = i;
