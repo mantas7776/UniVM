@@ -13,7 +13,7 @@ namespace UniVM {
         {
             this.memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCK_SIZE);
             this.eval = new Eval(this.storage);
-            this.virtualMemory = new VirtualMemory(eval.importantRegisters.PTR, memory);
+            this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
         }
 
         public void handleSiInt(Program program, uint siNr)
@@ -54,7 +54,9 @@ namespace UniVM {
         }
 
         public void start() {
-            eval.importantRegisters.PTR = 0;
+            var regs = eval.registers;
+            regs.PTR = 0;
+            eval.registers = regs; 
 
             while (true)
             {
@@ -66,13 +68,13 @@ namespace UniVM {
 
                     ranAnything = true;
 
-                    eval.importantRegisters = program.importantRegisters;
+                    eval.registers = program.importantRegisters;
                     eval.run(program);
 
 
-                    if (eval.importantRegisters.SI > 0) handleSiInt(program, eval.importantRegisters.SI);
-                    if (eval.importantRegisters.PI > 0) handlePiInt(program, eval.importantRegisters.PI);
-                    program.importantRegisters = eval.importantRegisters;
+                    if (eval.registers.SI > 0) handleSiInt(program, eval.registers.SI);
+                    if (eval.registers.PI > 0) handlePiInt(program, eval.registers.PI);
+                    program.importantRegisters = eval.registers;
                 }
 
                 if (!ranAnything) break;
