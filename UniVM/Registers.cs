@@ -21,6 +21,7 @@ namespace UniVM
             CH2,
             CH3,
             CS,
+            TIMER,
             DS;
     };
 }

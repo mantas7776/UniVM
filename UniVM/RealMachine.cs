@@ -68,7 +68,7 @@ namespace UniVM {
 
                     ranAnything = true;
 
-                    eval.registers = program.registers;
+                    eval.registers = program.importantRegisters;
                     eval.run(program);
 
 

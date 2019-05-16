@@ -4,7 +4,7 @@
     {
         private string fileName;
         public MemAccesser memAccesser;
-        public Registers registers { get; set; }
+        public Registers registers;
         public bool completed { get; private set; } = false;
 
         public Program(MemAccesser memAccesser, string fileName, Registers registers)
@@ -28,7 +28,7 @@
             memAccesser.writeFromAddr(0, info.data);
 
             this.registers.DS = 0;
-            this.registers.CS = info.data.Length;
+            this.registers.CS = (uint)info.data.Length;
         }
     }
 }
