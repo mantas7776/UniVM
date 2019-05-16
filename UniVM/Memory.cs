@@ -15,10 +15,22 @@ namespace UniVM
              this.physicalMemory = new byte[4 * blockSize * blocksAmount];
         }
 
-        public byte get(uint pos)
+        public byte get(uint addr)
         {
-            if (pos < 0 || pos > 4 * Constants.BLOCK_SIZE * Constants.BLOCKS_AMOUNT - 1) throw new Exception("Trying to access outside bounds memory!");
-            return physicalMemory[pos];
+            if (!this.addrCheck(addr)) throw new Exception("Trying to access invalid memory at addr: " + addr);
+            return physicalMemory[addr];
+        }
+
+        public void set(uint addr, byte data)
+        {
+            if (!this.addrCheck(addr)) throw new Exception("Trying to access invalid memory at addr: " + addr);
+            physicalMemory[addr] = data;
+        }
+
+        private Boolean addrCheck(uint addr)
+        {
+            if (addr < 0 || addr > 4 * Constants.BLOCK_SIZE * Constants.BLOCKS_AMOUNT - 1) return false;
+            return true;
         }
     }
 }

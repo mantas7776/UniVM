@@ -38,8 +38,10 @@ namespace UniVM
                     rowToSet++;
                 }
 
-                if (rowToSet == rowCount) break;
+                if (rowToSet == rowCount+1) break;
             }
+
+            if (rowToSet != rowCount + 1) throw new Exception("Not enough virtual memory!");
 
             return freeVirtRows;
         }

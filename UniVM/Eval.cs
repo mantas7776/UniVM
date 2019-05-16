@@ -26,6 +26,7 @@ namespace UniVM
                 regs.A = value.A;
                 regs.B = value.B;
                 regs.IP = value.IP;
+                regs.PTR = value.PTR;
                 regs.FLAGS = value.FLAGS;
             }
         }
@@ -87,7 +88,7 @@ namespace UniVM
             return line.Split(' ');
         }
 
-        public void run(ProgramOld program)
+        public void run(Program program)
         {
             running = true;
             byte[] dataMemory = program.dataMemory;
