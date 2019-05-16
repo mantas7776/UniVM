@@ -25,7 +25,7 @@
             VMInfo info = Util.readCodeFromHdd(codeStorage, 0);
 
             memAccesser.writeFromAddr(0, info.code);
-            memAccesser.writeFromAddr((uint)info.code.Length, info.data);
+            memAccesser.writeFromAddr(0, info.data);
 
             this.registers.DS = 0;
             this.registers.CS = info.data.Length;
