@@ -33,7 +33,7 @@ namespace UniVM
         static string getFileName(byte[] storageBytes, int fileLoc)
         {
             int nameLoc = fileLoc + 4;
-
+            return "";
         }
 
         static StorageFile open(Storage storage, string name)
@@ -48,7 +48,7 @@ namespace UniVM
 
         static StorageFile create(Storage storage, string name, uint size)
         {
-
+            return new StorageFile();
         }
     }
 }
