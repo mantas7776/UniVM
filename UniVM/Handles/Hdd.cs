@@ -18,12 +18,12 @@ namespace UniVM
 
         public override byte read()
         {
-            return this.storage[this.seek];
+            return this.storage[this.seek++];
         }
 
         public override bool write(byte data)
         {
-            this.storage[this.seek] = data;
+            this.storage[this.seek++] = data;
             return true;
         }
 

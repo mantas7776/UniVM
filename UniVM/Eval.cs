@@ -15,7 +15,7 @@ namespace UniVM
         private bool running = false;
         private HandleStorage handles;
 
-        public Registers importantRegisters
+        public Registers registers
         {
             get
             {
@@ -23,11 +23,7 @@ namespace UniVM
             }
             set
             {
-                regs.A = value.A;
-                regs.B = value.B;
-                regs.IP = value.IP;
-                regs.PTR = value.PTR;
-                regs.FLAGS = value.FLAGS;
+                regs = value;
             }
         }
         public Eval(Storage storage)
