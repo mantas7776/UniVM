@@ -77,131 +77,121 @@ namespace UniVM
         public void run(Program program)
         {
             running = true;
-            int timer = 2;
 
             uint codeSegByteCount = this.registers.DS - this.registers.CS;
             byte[] codeSegBytes = program.memAccesser.readFromAddr(this.registers.CS, codeSegByteCount);
             string codeString = Encoding.ASCII.GetString(codeSegBytes);
             string[] code = codeString.Split('\n');
 
-            while (running)
-            {
                 string instructionLine = code[regs.IP++]; //cia reikia kodo kad isgauna eilute viena is codesego, vienas int32 laiko 4 simbolius atminty
                 string[] args = getArgs(instructionLine);
                 string instruction = args[0];
 
-                if (--timer == 0)
-                {
+            uint res;
+            switch (instruction)
+            {
+                case "HALT":
+                    regs.SI = 1;
                     running = false;
                     break;
-                }
+                case "ADD":
+                    regs.A += regs.B;
+                    updateFlags(regs.A);
+                    break;
+                case "SUB":
+                    res = regs.A - regs.B;
+                    updateFlags(res);
+                    updateOF(regs.A, res);
+                    regs.A = res;
+                    break;
+                case "MUL":
+                    regs.A *= regs.B;
+                    updateFlags(regs.A);
+                    break;
+                case "DIV":
+                    regs.A /= regs.B;
+                    updateFlags(regs.A);
+                    break;
+                case "CMP":
+                    res = regs.A - regs.B;
+                    updateFlags(res);
+                    updateOF(regs.A, res);
+                    break;
+                case "JMP":
+                    {
+                        uint lineNr = uint.Parse(args[1]);
+                        regs.IP = lineNr;
+                        break;
+                    }
+                case "JL":
+                    {
+                        uint lineNr = uint.Parse(args[1]);
+                        bool jump = getFlagByName("SF") != getFlagByName("OF");
+                        if (jump) regs.IP = lineNr;
+                        break;
+                    }
+                case "JE":
+                    {
+                        uint lineNr = uint.Parse(args[1]);
+                        bool jump = getFlagByName("ZF");
+                        if (jump) regs.IP = lineNr;
+                        break;
+                    }
+                case "MOVA":
+                case "MOVB":
+                    {
+                        uint location = uint.Parse(args[1]);
+                        byte[] dataToTransfer = program.memAccesser.readFromAddr(location, 4);
+                        uint value = BitConverter.ToUInt32(dataToTransfer, 0);
 
-                uint res;
-                switch (instruction)
-                {
-                    case "HALT":
-                        regs.SI = 1;
-                        running = false;
-                        break;
-                    case "ADD":
-                        regs.A += regs.B;
-                        updateFlags(regs.A);
-                        break;
-                    case "SUB":
-                        res = regs.A - regs.B;
-                        updateFlags(res);
-                        updateOF(regs.A, res);
-                        regs.A = res;
-                        break;
-                    case "MUL":
-                        regs.A *= regs.B;
-                        updateFlags(regs.A);
-                        break;
-                    case "DIV":
-                        regs.A /= regs.B;
-                        updateFlags(regs.A);
-                        break;
-                    case "CMP":
-                        res = regs.A - regs.B;
-                        updateFlags(res);
-                        updateOF(regs.A, res);
-                        break;
-                    case "JMP":
-                        {
-                            uint lineNr = uint.Parse(args[1]);
-                            regs.IP = lineNr;
-                            break;
-                        }
-                    case "JL":
-                        {
-                            uint lineNr = uint.Parse(args[1]);
-                            bool jump = getFlagByName("SF") != getFlagByName("OF");
-                            if (jump) regs.IP = lineNr;
-                            break;
-                        }
-                    case "JE":
-                        {
-                            uint lineNr = uint.Parse(args[1]);
-                            bool jump = getFlagByName("ZF");
-                            if (jump) regs.IP = lineNr;
-                            break;
-                        }
-                    case "MOVA":
-                    case "MOVB":
-                        {
-                            uint location = uint.Parse(args[1]);
-                            byte[] dataToTransfer = program.memAccesser.readFromAddr(location, 4);
-                            uint value = BitConverter.ToUInt32(dataToTransfer, 0);
+                        if (instruction == "MOVA")
+                            regs.A = value;
+                        else if (instruction == "MOVB")
+                            regs.B = value;
 
-                            if (instruction == "MOVA")
-                                regs.A = value;
-                            else if (instruction == "MOVB")
-                                regs.B = value;
-
-                            break;
-                        }
-                    case "MOVD":
-                        {
-                            int location = int.Parse(args[1]);
-                            byte[] converted = BitConverter.GetBytes(regs.A);
-                            program.memAccesser.writeFromAddr((uint)location, converted);
-                            break;
-                        }
-                    case "READ": // read from console
-                        {
-                            regs.A = handles[(int)regs.B].read();
-                            break;
-                        }
-                    case "WRITE": // write to console
-                        {
-                            handles[(int)regs.B].write((byte)regs.A);
-                            break;
-                        }
-                    case "OPENFILEHANDLE": 
-                        {
-                            int location = int.Parse(args[1]);
-                            uint handleNr = (uint)handles.add(new HddDevice(this.storage, location));
-                            regs.B = handleNr;
-                            break;
-                        }
-                    case "DELETEFILE":
-                        {
-                            int location = int.Parse(args[1]);
-                            handles[(int)regs.B].delete(location);
-                            break;
-                        }
-                    case "CLOSEFILEHANDLE":
-                        {
-                            Handle handleToDelete = handles[(int)regs.B];
-                            handles.remove(handleToDelete);
-                            break;
-                        }
-                    default:
-                        Console.WriteLine("Bad opcode " + args[0]);
-                        regs.PI = 2;
-                        running = false;
                         break;
-                }
+                    }
+                case "MOVD":
+                    {
+                        int location = int.Parse(args[1]);
+                        byte[] converted = BitConverter.GetBytes(regs.A);
+                        program.memAccesser.writeFromAddr((uint)location, converted);
+                        break;
+                    }
+                case "READ": // read from console
+                    {
+                        regs.A = handles[(int)regs.B].read();
+                        break;
+                    }
+                case "WRITE": // write to console
+                    {
+                        handles[(int)regs.B].write((byte)regs.A);
+                        break;
+                    }
+                case "OPENFILEHANDLE": 
+                    {
+                        int location = int.Parse(args[1]);
+                        uint handleNr = (uint)handles.add(new HddDevice(this.storage, location));
+                        regs.B = handleNr;
+                        break;
+                    }
+                case "DELETEFILE":
+                    {
+                        int location = int.Parse(args[1]);
+                        handles[(int)regs.B].delete(location);
+                        break;
+                    }
+                case "CLOSEFILEHANDLE":
+                    {
+                        Handle handleToDelete = handles[(int)regs.B];
+                        handles.remove(handleToDelete);
+                        break;
+                    }
+                default:
+                    Console.WriteLine("Bad opcode " + args[0]);
+                    regs.PI = 2;
+                    running = false;
+                    break;
             }
         }
     }
