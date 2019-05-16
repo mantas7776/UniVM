@@ -30,7 +30,7 @@ namespace UniVM
 
             for(uint i = 0; i < Constants.BLOCK_SIZE; i++)
             {
-                byte[] oneByteArr = [memory.get(PTR + i)];
+                byte[] oneByteArr = { memory.get(PTR + i) };
                 int translCellValue = BitConverter.ToInt32(oneByteArr, 0);
                 if(translCellValue != -1)
                 {
