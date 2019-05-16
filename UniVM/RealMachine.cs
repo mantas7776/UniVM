@@ -1,30 +1,23 @@
 using System.Collections.Generic;
 
 namespace UniVM {
-
-    //struct ProgramInfo
-    //{
-    //    byte[] code;
-    //    byte[] data;
-    //    Storage storage;
-    //}
-
     class RealMachine
     {
+        private readonly uint PTR = 0;
         private List<Program> programs = new List<Program>();
+        private Storage storage = new Storage("HDD.txt", 1024);
         private Memory memory;
-        private Storage storage;
+        private VirtualMemory virtualMemory;
         private Eval eval;
 
         public RealMachine()
         {
             this.memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCK_SIZE);
-            this.storage = new Storage("HDD.txt", 1024);
-            this.eval = new Eval(memory, storage);
+            this.eval = new Eval(this.storage);
+            this.virtualMemory = new VirtualMemory(PTR, memory);
         }
 
-
-        public void handleSiInt(Program program, uint siNr)
+        public void handleSiInt(ProgramOld program, uint siNr)
         {
             switch(siNr)
             {
@@ -38,7 +31,7 @@ namespace UniVM {
             return;
         }
 
-        public void handlePiInt(Program program, uint siNr)
+        public void handlePiInt(ProgramOld program, uint siNr)
         {
             switch (siNr)
             {
@@ -52,22 +45,25 @@ namespace UniVM {
             return;
         }
 
-        public void addProgramFromFile(Storage storage, int location)
+        public void addProgramFromFile(string fileName, int location)
         {
+            var codeStorage = new Storage("code.bin");
             VMInfo info = Util.readCodeFromHdd(storage, location);
             byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
             byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
             //Util.saveCodeToHdd(storage, location, new VMInfo { code = altcode, data = altdata });
-            Program program = new Program(info.data, info.code, memory);
+
+            uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
+            MemAccesser memAccesser = virtualMemory.reserveMemory(fileName, rowCount);
+            Program program = new Program(memAccesser);
             programs.Add(program);
         }
 
 
 
         public void start() {
-            var codeStorage = new Storage("code.bin");
-            addProgramFromFile(codeStorage, 10);
-
+            // SET PTR HERE or in constructor;
+            addProgramFromFile("code.bin", 10);
             while (true)
             {
                 bool ranAnything = false;
@@ -94,16 +90,3 @@ namespace UniVM {
         }
     }
 }
-
-/*
- *             for (Program program : programs)
-            {
-                program.run();
-                VM.loadImportantRegister(Register register);
-                VM.run(data blokas, storage blokas);
-                kai baigiasi runas = timer interupt
-                Register VM.getImportantRegister();
-            }
- * 
- * 
- */

@@ -10,7 +10,6 @@ namespace UniVM
 {
     class Eval
     {
-        private Memory memory;
         private Storage storage;
         private Registers regs = new Registers();
         private bool running = false;
@@ -30,10 +29,9 @@ namespace UniVM
                 regs.FLAGS = value.FLAGS;
             }
         }
-        public Eval(Memory memory, Storage storage)
+        public Eval(Storage storage)
         {
             //TODO: cia perduoti is isores hanldlestorage kai bus daugiau evalu;
-            this.memory = memory;
             this.storage = storage;
             this.handles = new HandleStorage();
             handles.add(new ConsoleDevice());
@@ -89,7 +87,7 @@ namespace UniVM
             return line.Split(' ');
         }
 
-        public void run(Program program)
+        public void run(ProgramOld program)
         {
             running = true;
             byte[] dataMemory = program.dataMemory;
