@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UniVM
+﻿namespace UniVM
 {
     class Program
     {
-        public byte[] dataMemory { get; }
-        public byte[] codeMemory { get; }
-        private Eval eval;
+        private string fileName;
+        public MemAccesser memAccesser;
+        public Registers registers;
         public bool completed { get; private set; } = false;
-        public Registers ImportantRegisters { get; set; }
-        
+        public Storage storage;
 
-        public Program(byte[] dataMemory, byte[] codeMemory, Memory memory)
+        public Program(MemAccesser memAccesser, string fileName, Registers registers, Storage storage)
         {
-            byte dataSeg = memory.getAvailableSegment();
-            byte codeSeg = memory.getAvailableSegment();
-            this.dataMemory = memory.getMemRow(dataSeg);
-            this.codeMemory = memory.getMemRow(codeSeg);
-
-            dataMemory.CopyTo(this.dataMemory, 0);
-            codeMemory.CopyTo(this.codeMemory, 0);
+            this.memAccesser = memAccesser;
+            this.fileName = fileName;
+            this.registers = registers;
+            this.storage = storage;
+            this.loadSelfToMem();
         }
 
         public void setDone()
@@ -31,63 +22,24 @@ namespace UniVM
             completed = true;
         }
 
+        private void loadSelfToMem()
+        {
+            //var codeStorage = new Storage(this.fileName);
+            //VMInfo info = Util.readCodeFromHdd(storage, 0);
+
+            byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
+            byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
+
+            memAccesser.writeFromAddr(0, altcode);
+            memAccesser.writeFromAddr((uint)altcode.Length, altdata);
 
 
+            //memAccesser.writeFromAddr(0, info.code);
+            //memAccesser.writeFromAddr(0, info.data);
+
+            this.registers.DS = (uint)altcode.Length;
+            this.registers.CS = 0;
+            //this.registers.CS = (uint)info.data.Length;
+        }
     }
 }
-
-
-        //Registers.PTR = 0;
-        /* supervizorinis rezimas 
-            1. Sukuriam VM'a:
-                a) Priskiriam memory[0] -> transliavimo row.
-                b) priskiriam memory[0][0] -> dataSegRow
-                c) priskiriam memory[0][1] -> codeSegRow;
-        */
-
-        //    VM.
-        //    memory[0] = { 1, 2};
-        //    [dataSeg, codeSeg]
-        //[0, 1, 2]
-
-        //paleiskPrograma() {
-        //const virtualSegNr = memory.getAvailSeg() -> is memory gauni segmenta laisva
-        //setSeg(virtualSegNr, uint arr)
-
-        //getavailseg kodui
-        //setSeg(uint kodasarr)
-
-        //eval(uint dataVirtualSegNr, uint codeVirtualSegNr)
-        //}
-
-        //Memory.getAvailSeg() {
-        //    firstRow{uzimti_segmentai } = [];
-        //    allRows.forEach()
-        //    firstRow.push()
-        //}
-
-        //    Eval()
-        //    {
-        //        getSegment(dataVirtualSegNr)
-        //    }
-
-        //getSegment(uint virtualSegNr)
-        //{
-        //    const realRow = translationRow[virtualSegNr]
-        //     return realRow;
-        //}
-
-        //    //atlaisvinam jei nereik tuos segus su freeseg()
-
-        //}
-
-        //private void setSegments()
-        //{
-        //    const uint pagesRowNr = 0;
-        //    const uint dataSegRowNr = 1;
-        //    const uint codeSegRowNr = 2;
-
-        //    regs.PTR = pagesRowNr;
-        //    memory.set(pagesRow, 0, dataSegRow);
-        //    memory.set(pagesRow, 1, codeSegRow);
-        //}

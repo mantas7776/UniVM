@@ -1,28 +1,21 @@
 using System.Collections.Generic;
 
 namespace UniVM {
-
-    //struct ProgramInfo
-    //{
-    //    byte[] code;
-    //    byte[] data;
-    //    Storage storage;
-    //}
-
     class RealMachine
     {
         private List<Program> programs = new List<Program>();
+        private Storage storage = new Storage("HDD.txt", 1024);
         private Memory memory;
-        private Storage storage;
+        private VirtualMemory virtualMemory;
         private Eval eval;
+        private Registers registers;
 
         public RealMachine()
         {
             this.memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCK_SIZE);
-            this.storage = new Storage("HDD.txt", 1024);
-            this.eval = new Eval(memory, storage);
+            this.eval = new Eval(this.storage);
+            this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
         }
-
 
         public void handleSiInt(Program program, uint siNr)
         {
@@ -52,21 +45,26 @@ namespace UniVM {
             return;
         }
 
-        public void addProgramFromFile(Storage storage, int location)
+        public void addProgramFromFile(string fileName)
         {
-            VMInfo info = Util.readCodeFromHdd(storage, location);
+            var codeStorage = new Storage(fileName);
+
             byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
             byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
-            //Util.saveCodeToHdd(storage, location, new VMInfo { code = altcode, data = altdata });
-            Program program = new Program(info.data, info.code, memory);
+            Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
+            //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
+            uint rowCount = 10;
+            MemAccesser memAccesser = virtualMemory.reserveMemory(fileName, rowCount);
+            Program program = new Program(memAccesser, fileName, eval.registers, codeStorage);
             programs.Add(program);
         }
 
-
-
         public void start() {
-            var codeStorage = new Storage("code.bin");
-            addProgramFromFile(codeStorage, 10);
+            var regs = eval.registers;
+            regs.PTR = 0;
+            eval.registers = regs;
+
+            this.addProgramFromFile("code.bin");
 
             while (true)
             {
@@ -78,14 +76,13 @@ namespace UniVM {
 
                     ranAnything = true;
 
-                    eval.importantRegisters = program.ImportantRegisters;
-
+                    eval.registers = program.registers;
                     eval.run(program);
 
 
-                    if (eval.importantRegisters.SI > 0) handleSiInt(program, eval.importantRegisters.SI);
-                    if (eval.importantRegisters.PI > 0) handlePiInt(program, eval.importantRegisters.PI);
-                    program.ImportantRegisters = eval.importantRegisters;
+                    if (eval.registers.SI > 0) handleSiInt(program, eval.registers.SI);
+                    if (eval.registers.PI > 0) handlePiInt(program, eval.registers.PI);
+                    program.registers = eval.registers;
                 }
 
                 if (!ranAnything) break;
@@ -94,16 +91,3 @@ namespace UniVM {
         }
     }
 }
-
-/*
- *             for (Program program : programs)
-            {
-                program.run();
-                VM.loadImportantRegister(Register register);
-                VM.run(data blokas, storage blokas);
-                kai baigiasi runas = timer interupt
-                Register VM.getImportantRegister();
-            }
- * 
- * 
- */

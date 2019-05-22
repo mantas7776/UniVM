@@ -6,60 +6,31 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class Memory { 
-        private byte[][] memory;
-        private byte lastVirtualNumber = 2;
-        static private readonly int translationTableIndex = 0;
+    class Memory
+    {
+        private byte[] physicalMemory;
 
-        public Memory(uint blockAmount, uint blockSize)
+        public Memory(uint blockSize, uint blocksAmount)
         {
-            memory = new byte[blockAmount][];
-            for (int i = 0; i < blockAmount; i++) memory[i] = new byte[blockSize*4];
-            memory[translationTableIndex][0] = 1;
+             this.physicalMemory = new byte[4 * blockSize * blocksAmount];
         }
 
-        public byte getAvailableSegment()
+        public byte get(uint addr)
         {
-            for (int i = 0; i < Constants.BLOCK_SIZE; i++)
-            {
-                if (memory[translationTableIndex][i] == 0)
-                {
-                    byte newVirtNr = lastVirtualNumber++;
-                    memory[translationTableIndex][i] = newVirtNr;
-                    return newVirtNr;
-                }
-            }
-            throw new Exception("No free segment available");
+            if (!this.addrCheck(addr)) throw new Exception("Trying to access invalid memory at addr: " + addr);
+            return physicalMemory[addr];
         }
 
-        public byte[] getMemRow(byte virtRowNr)
+        public void set(uint addr, byte data)
         {
-            if (virtRowNr == 0) throw new Exception("Virtual memory row can not be 0");
-            //mem row - > virt row
-            byte[] translationTable = memory[translationTableIndex];
-            for (int i = 0; i < translationTable.Length; i++)
-            {
-                if (translationTable[i] == virtRowNr)
-                    return memory[i]; 
-            }
-            throw new Exception("Virtual memory row: " + virtRowNr + " does not exist.");
+            if (!this.addrCheck(addr)) throw new Exception("Trying to access invalid memory at addr: " + addr);
+            physicalMemory[addr] = data;
         }
 
-        public static void copyBytesToRow(byte[] memRow, byte[] newData)
+        private Boolean addrCheck(uint addr)
         {
-            if (newData.Length > memRow.Length) throw new Exception("Newdata is too big for memory row.");
-            newData.CopyTo(memRow, 0);
+            if (addr < 0 || addr > 4 * Constants.BLOCK_SIZE * Constants.BLOCKS_AMOUNT - 1) return false;
+            return true;
         }
-        
-
-        //public uint get(uint rowNr, uint blockNr)
-        //{
-        //    return memory[rowNr, blockNr]; 
-        //}
-
-        //public uint set(uint rowNr, uint blockNr)
-        //{
-        //    return memory[rowNr, blockNr];
-        //}
     }
 }

@@ -17,8 +17,11 @@ namespace UniVM
             FLAGS,
             SI,
             PI,
-            CH1, 
+            CH1,
             CH2,
-            CH3;
+            CH3,
+            CS,
+            TIMER,
+            DS;
     };
 }
