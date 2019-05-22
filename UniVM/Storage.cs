@@ -47,6 +47,14 @@ namespace UniVM
             File.WriteAllBytes(this.path, this.storage);
         }
         
+        public void setStorage(byte[] storage)
+        {
+            //TODO: add checks if header was unmodified;
+            if (this.storage.Length != storage.Length)
+                throw new Exception("New storage size is different");
+            this.storage = storage;
+            save();
+        }
 
         public byte this[int loc]
         {

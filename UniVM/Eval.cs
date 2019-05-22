@@ -12,7 +12,6 @@ namespace UniVM
     {
         private Storage storage;
         private Registers regs = new Registers();
-        private bool running = false;
         private HandleStorage handles;
 
         public Registers registers;
@@ -76,7 +75,6 @@ namespace UniVM
 
         public void run(Program program)
         {
-            running = true;
 
             uint codeSegByteCount = this.registers.DS - this.registers.CS;
             byte[] codeSegBytes = program.memAccesser.readFromAddr(this.registers.CS, codeSegByteCount);
@@ -92,7 +90,6 @@ namespace UniVM
             {
                 case "HALT":
                     regs.SI = 1;
-                    running = false;
                     break;
                 case "ADD":
                     regs.A += regs.B;
@@ -190,7 +187,6 @@ namespace UniVM
                 default:
                     Console.WriteLine("Bad opcode " + args[0]);
                     regs.PI = 2;
-                    running = false;
                     break;
             }
         }
