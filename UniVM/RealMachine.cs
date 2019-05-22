@@ -49,15 +49,13 @@ namespace UniVM {
         {
             var codeStorage = new Storage(fileName);
 
-            //byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
-            //byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
-            //Util.saveCodeToHdd(storage, 0, new VMInfo { code = altcode, data = altdata });
-
+            byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
+            byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
+            Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
             //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
-
-            uint rowCount = 4;
+            uint rowCount = 10;
             MemAccesser memAccesser = virtualMemory.reserveMemory(fileName, rowCount);
-            Program program = new Program(memAccesser, fileName, eval.registers);
+            Program program = new Program(memAccesser, fileName, eval.registers, codeStorage);
             programs.Add(program);
         }
 

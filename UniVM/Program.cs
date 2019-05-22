@@ -6,11 +6,14 @@
         public MemAccesser memAccesser;
         public Registers registers;
         public bool completed { get; private set; } = false;
+        public Storage storage;
 
-        public Program(MemAccesser memAccesser, string fileName, Registers registers)
+        public Program(MemAccesser memAccesser, string fileName, Registers registers, Storage storage)
         {
+            this.memAccesser = memAccesser;
             this.fileName = fileName;
             this.registers = registers;
+            this.storage = storage;
             this.loadSelfToMem();
         }
 
@@ -21,16 +24,22 @@
 
         private void loadSelfToMem()
         {
-            var codeStorage = new Storage(this.fileName);
-            VMInfo info = Util.readCodeFromHdd(codeStorage, 0);
+            //var codeStorage = new Storage(this.fileName);
+            //VMInfo info = Util.readCodeFromHdd(storage, 0);
+
+            byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
+            byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
+
             memAccesser.writeFromAddr(0, altcode);
             memAccesser.writeFromAddr((uint)altcode.Length, altdata);
+
 
             //memAccesser.writeFromAddr(0, info.code);
             //memAccesser.writeFromAddr(0, info.data);
 
-            this.registers.DS = 0;
-            this.registers.CS = (uint)info.data.Length;
+            this.registers.DS = (uint)altcode.Length;
+            this.registers.CS = 0;
+            //this.registers.CS = (uint)info.data.Length;
         }
     }
 }

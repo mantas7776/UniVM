@@ -33,9 +33,9 @@ namespace UniVM
 
         public void writeFromAddr(uint fromVirtAddr, byte[] data)
         {
-            foreach(byte dataByte in data)
+            for(uint i = 0; i < data.Length; i++)
             {
-                this.set(fromVirtAddr, dataByte);
+                this.set(fromVirtAddr+i, data[i]);
             }
         }
 
