@@ -9,7 +9,7 @@ namespace UniVM
     public struct FileInfo
     {
         public string FileName;
-        public uint length;
-        public uint start;
+        public int length;
+        public int start;
     }
 }

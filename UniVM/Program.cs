@@ -23,8 +23,8 @@
         {
             var codeStorage = new Storage(this.fileName);
             VMInfo info = Util.readCodeFromHdd(codeStorage, 0);
-            memAccesser.writeFromAddr(0, altcode);
-            memAccesser.writeFromAddr((uint)altcode.Length, altdata);
+            //memAccesser.writeFromAddr(0, altcode);
+            //memAccesser.writeFromAddr((uint)altcode.Length, altdata);
 
             //memAccesser.writeFromAddr(0, info.code);
             //memAccesser.writeFromAddr(0, info.data);
