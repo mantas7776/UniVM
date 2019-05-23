@@ -17,6 +17,16 @@
             this.loadSelfToMem();
         }
 
+        //public Program(MemAccesser memAccesser, string fileName, Storage storage)
+        //{
+        //    this.memAccesser = memAccesser;
+        //    this.fileName = fileName;
+        //    this.registers = new Registers();
+        //    this.storage = storage;
+
+        //    this.loadSelfToMem();
+        //}
+
         public void setDone()
         {
             completed = true;

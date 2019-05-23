@@ -54,7 +54,7 @@ namespace UniVM
             programs.Add(program);
         }
 
-        public void addProgramFromFile(string fileName)
+        public void addTestPrograms()
         {
             var codeStorage = new Storage(fileName);
 
