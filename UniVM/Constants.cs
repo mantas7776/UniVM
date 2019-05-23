@@ -12,6 +12,7 @@ namespace UniVM
         public static readonly uint BLOCK_SIZE = 16;
         public static readonly uint BLOCKS_AMOUNT = 16;
         public static readonly uint START = 0x3000;
+        public static readonly uint TIMER_VALUE = 10;
 
 
         public enum Opcodes

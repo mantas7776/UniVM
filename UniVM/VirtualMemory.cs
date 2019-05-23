@@ -23,7 +23,7 @@ namespace UniVM
             byte reservedValue = BitConverter.GetBytes(255)[0];
             for(uint i = 0; i < Constants.BLOCK_SIZE-1; i++)
             {
-                memory.set(i, reservedValue);
+                memory.set(PTR+i, reservedValue);
             }
         }
 
