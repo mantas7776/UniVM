@@ -75,6 +75,14 @@ namespace UniVM
             return fileList;
         }
 
+        private static List<FileInfo> getFileTableSorted(byte[] storageBytes)
+        {
+            List<FileInfo> fileList = getFileTable(storageBytes);
+
+
+            return fileList.Where(o => o.start != 0).OrderBy(o => o.start).ToList();
+        }
+
         private static int getFreeFileIndex(List<FileInfo> files)
         {
             int current = 0;
@@ -105,41 +113,73 @@ namespace UniVM
             storage.setStorage(storageBytes);
         }
 
+        private static Boolean IsFileNameTaken(List<FileInfo> files, string name)
+        {
+            return files.Exists(o => o.FileName == name);
+        }
+
         public static StorageFile createFile(Storage storage, string name, int length)
         {
             byte[] storageBytes = storage.getBytes();
             List<FileInfo> files = getFileTable(storageBytes);
             int available = getFreeFileIndex(files);
 
-            List<FileInfo> filesSorted = files.Where(o=>o.start != 0).OrderBy(o => o.start).ToList();
+            List<FileInfo> filesSorted = getFileTableSorted(storageBytes);
+            if (IsFileNameTaken(filesSorted, name))
+                throw new Exception("File with name: " + name + " already exists");
+
+            int newFileStart; 
             if (filesSorted.Count == 0)
             {
-                
-                FileInfo newFile = new FileInfo() {
-                    start = FileHeaderStart + FileHeaderSize,
-                    FileName = name,
-                    length = length
-                };
-                ReserveFileInStorage(storage, newFile, available);
-                return new StorageFile(storage, newFile);
+                newFileStart = FileHeaderStart + FileHeaderSize;
             }
-            return null;
+            else
+            {
+                //TODO check if space exists between start and first file
+                FileInfo last = new FileInfo { length = 0, start = FileHeaderStart + FileHeaderSize };
+                foreach (FileInfo file in filesSorted)
+                {
+                    int endOfFile = last.start + last.length;
+                    if (endOfFile - file.start >= length)
+                    {
+                        newFileStart = endOfFile;
+                        break;
+                    }
+                    last = file;
+                }
+
+                //TODO: check with last file to storage end!
+                throw new Exception("Not enough space for file or storage is too fragmented.");
+            }
+
+
+            FileInfo newFile = new FileInfo()
+            {
+                start = newFileStart,
+                FileName = name,
+                length = length
+            };
+            ReserveFileInStorage(storage, newFile, available);
+            return new StorageFile(storage, newFile);
         }
 
-        static string getFileName(byte[] storageBytes, int fileLoc)
-        {
-            int nameLoc = fileLoc + 4;
-            return "";
-        }
-
-        static StorageFile open(Storage storage, string name)
+        public static StorageFile Open(Storage storage, string name)
         {
             byte[] storageBytes = storage.getBytes();
-            byte[] fileNameBytes = Encoding.ASCII.GetBytes(name);
-            ByteHelper.Locate(storageBytes, fileNameBytes);
+            List<FileInfo> fileTable = getFileTableSorted(storageBytes);
 
-            //StorageFile file = new StorageFile();
-            return null;
+            try
+            {
+                FileInfo file = fileTable.Find(o => o.FileName == name);
+                StorageFile storageFile = new StorageFile(storage, file);
+                return storageFile;
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.Error.WriteLine(e);
+                throw new Exception("File was not found");
+            }
+
         }
     }
 }
