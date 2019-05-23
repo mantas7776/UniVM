@@ -11,6 +11,7 @@ namespace UniVM
         FileManager = 0,
         OSExit = 1,
         Memory,
-        Storage
+        Storage,
+        ProgramStart
     };
 }

@@ -19,6 +19,7 @@ namespace UniVM
             first = false;
             kernelStorage.resources.add(new Resource(ResTypes.Memory, this.id, true));
             kernelStorage.resources.add(new Resource(ResTypes.Storage, this.id, true));
+            kernelStorage.resources.add(new ProgramStart(this.id));
 
             //kernelStorage.processes.add(this);
             var scheduler = new ProcessScheduler(kernelStorage);
