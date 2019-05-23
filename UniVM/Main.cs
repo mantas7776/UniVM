@@ -5,7 +5,7 @@ namespace UniVM {
         public static void Main(string[] args) {
             RealMachine realMachine = new RealMachine();
             var randomStorage = new Storage("test.bin");
-            var file = StorageFile.createFile(randomStorage, "ayylmao2", 50);
+            var file = StorageFile.createFile(randomStorage, "ayylmao3", 50);
             var file2 = StorageFile.Open(randomStorage, "ayylmao");
             //realMachine.start();
         }

@@ -128,28 +128,36 @@ namespace UniVM
             if (IsFileNameTaken(filesSorted, name))
                 throw new Exception("File with name: " + name + " already exists");
 
-            int newFileStart; 
+            int newFileStart = -1; 
             if (filesSorted.Count == 0)
             {
                 newFileStart = FileHeaderStart + FileHeaderSize;
             }
             else
             {
-                //TODO check if space exists between start and first file
                 FileInfo last = new FileInfo { length = 0, start = FileHeaderStart + FileHeaderSize };
+                int endOfLastFile = FileHeaderStart + FileHeaderSize;
+
                 foreach (FileInfo file in filesSorted)
                 {
-                    int endOfFile = last.start + last.length;
-                    if (endOfFile - file.start >= length)
+                     
+                    if (file.start - endOfLastFile >= length)
                     {
-                        newFileStart = endOfFile;
+                        newFileStart = endOfLastFile;
                         break;
                     }
                     last = file;
+                    endOfLastFile = last.start + last.length;
                 }
 
+                //last file to end of storage
+                if (storage.Length - endOfLastFile >= length)
+                {
+                    newFileStart = endOfLastFile;
+                }
                 //TODO: check with last file to storage end!
-                throw new Exception("Not enough space for file or storage is too fragmented.");
+                if (newFileStart == -1)
+                    throw new Exception("Not enough space for file or storage is too fragmented.");
             }
 
 
@@ -180,6 +188,24 @@ namespace UniVM
                 throw new Exception("File was not found");
             }
 
+        }
+
+        public byte this[int key]
+        {
+            get
+            {
+                int loc = dataStart + key;
+                if (loc > fileInfo.start + fileInfo.length)
+                    throw new Exception("Reading file out of bounds.");
+                return storage[loc];
+            }
+            set
+            {
+                int loc = dataStart + key;
+                if (loc > fileInfo.start + fileInfo.length)
+                    throw new Exception("Writing file out of bounds.");
+                storage[loc] = value;
+            }
         }
     }
 }
