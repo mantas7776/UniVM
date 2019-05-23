@@ -56,10 +56,16 @@
     <Compile Include="Handles\Hdd.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="MemoryOld.cs" />
+    <Compile Include="Processes\BaseSystemProcess.cs" />
+    <Compile Include="Processes\ProcessList.cs" />
+    <Compile Include="Processes\StartStop.cs" />
     <Compile Include="ProgramOld.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Registers.cs" />
+    <Compile Include="Resource\Resource.cs" />
+    <Compile Include="Resource\ResourceHolder.cs" />
+    <Compile Include="Resource\ResourceScheduler.cs" />
     <Compile Include="SegsVNrsContainer.cs" />
     <Compile Include="Storage.cs" />
     <Compile Include="StorageFile.cs" />

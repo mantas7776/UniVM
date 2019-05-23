@@ -52,7 +52,7 @@ namespace UniVM
             return freeVirtRows;
         }
 
-        private uint[] reserveVirtRows( uint rowCount)
+        private uint[] reserveVirtRows(uint rowCount)
         {
             List<uint> allFreeTranslTableIndexes = this.getAllFreeVirtRowsIndexes();
             if (allFreeTranslTableIndexes.Count < rowCount) throw new Exception("There are not enough virtual memory rows!");
