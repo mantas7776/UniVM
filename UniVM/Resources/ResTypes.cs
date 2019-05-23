@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class ProcessList
+    enum ResTypes
     {
-        private List<ProcessList> processes;
-
-
-    }
+        FileManager = 0,
+        OSExit = 1,
+        Memory,
+        Storage
+    };
 }

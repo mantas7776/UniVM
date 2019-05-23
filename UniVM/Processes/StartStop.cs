@@ -8,10 +8,32 @@ namespace UniVM
 {
     class StartStop : BaseSystemProcess
     {
-        StartStop(int id, int priority) : base(id, priority) { }
-        public override void Run()
+        private bool first = true;
+        private KernelStorage kernelStorage;
+
+        public StartStop(int priority, KernelStorage kernelStorage) : base(priority) {
+            this.kernelStorage = kernelStorage;
+        }
+        public override void run()
         {
-            throw new NotImplementedException();
+            first = false;
+            kernelStorage.resources.add(new Resource(ResTypes.Memory, this.id, true));
+            kernelStorage.resources.add(new Resource(ResTypes.Storage, this.id, true));
+
+            //kernelStorage.processes.add(this);
+            var scheduler = new ProcessScheduler(kernelStorage);
+            kernelStorage.processes.add(scheduler);
+            kernelStorage.processes.add(new ResourceScheduler(99, kernelStorage));
+
+            this.resourceHolder.request(ResTypes.OSExit);
+            while (!this.resourceHolder.haveResource(ResTypes.OSExit))
+            {
+                scheduler.run();
+            }
+                
+
+            kernelStorage.processes.killAll();
+            kernelStorage.resources.clear();
         }
     }
 }

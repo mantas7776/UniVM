@@ -8,18 +8,18 @@ namespace UniVM
 {
     abstract class BaseSystemProcess
     {
+        private static int nextId = 0;
         public readonly int id;
-        public ResourceHolder resourceHolder { get; private set; }
+        public ResourceHolder resourceHolder { get; private set; } = new ResourceHolder();
         public int priority { get; set; }
+        public KernelStorage kernelStorage = new KernelStorage();
 
-
-
-        protected BaseSystemProcess(int id, int priority)
+        protected BaseSystemProcess(int priority)
         {
-            this.id = id;
+            this.id = nextId++;
             this.priority = priority;
         }
 
-        public abstract void Run();
+        public abstract void run();
     }
 }

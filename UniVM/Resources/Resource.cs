@@ -9,15 +9,17 @@ namespace UniVM
     class Resource
     {
         public int id { get; private set; }
-        public string type { get; private set; }
+        public ResTypes type { get; private set; }
 
         public int creatorId { get; private set; }
-        private Program assignedTo = null;
+        public bool staticRes { get; private set; }
+        private BaseSystemProcess assignedTo = null;
 
-        Resource(string type, int creatorId)
+        public Resource(ResTypes type, int creatorId, bool staticRes = false)
         {
             this.type = type;
             this.creatorId = creatorId;
+            this.staticRes = staticRes;
         }
 
         public Boolean isFree()
@@ -25,8 +27,9 @@ namespace UniVM
             return assignedTo == null;
         }
 
-        public void assign()
+        public void assign(BaseSystemProcess process)
         {
+            assignedTo = process;
 
         }
 
