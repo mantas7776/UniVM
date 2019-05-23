@@ -10,7 +10,7 @@ namespace UniVM
     {
         private uint[] allowedVirtRows;
         private Memory memory;
-        private uint PTR;
+        public uint PTR { get; private set; }
 
         public MemAccesser(uint[] allowedVirtRows, Memory memory, uint PTR)
         {

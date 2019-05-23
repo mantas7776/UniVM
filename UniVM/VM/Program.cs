@@ -8,11 +8,11 @@
         public bool completed { get; private set; } = false;
         public Storage storage;
 
-        public Program(MemAccesser memAccesser, string fileName, Registers registers, Storage storage)
+        public Program(MemAccesser memAccesser, string fileName, Storage storage)
         {
             this.memAccesser = memAccesser;
             this.fileName = fileName;
-            this.registers = registers;
+            this.registers = new Registers();
             this.storage = storage;
             this.loadSelfToMem();
         }
@@ -37,6 +37,7 @@
             //memAccesser.writeFromAddr(0, info.code);
             //memAccesser.writeFromAddr(0, info.data);
 
+            this.registers.PTR = memAccesser.PTR;
             this.registers.DS = (uint)altcode.Length;
             this.registers.CS = 0;
             //this.registers.CS = (uint)info.data.Length;

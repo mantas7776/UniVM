@@ -44,42 +44,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ByteHelper.cs" />
-    <Compile Include="FileInfo.cs" />
+    <Compile Include="RealMachine\FileInfo.cs" />
     <Compile Include="Processes\ProgramLoader.cs" />
+    <Compile Include="Processes\VMScheduler.cs" />
     <Compile Include="RealMachine\Kernel.cs" />
-    <Compile Include="MemAccesser.cs" />
-    <Compile Include="Memory.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="Eval.cs" />
+    <Compile Include="VM\MemAccesser.cs" />
+    <Compile Include="RealMachine\Memory.cs" />
+    <Compile Include="VM\Constants.cs" />
+    <Compile Include="VM\Eval.cs" />
     <Compile Include="Handles\Console.cs" />
     <Compile Include="Handles\Handle.cs" />
     <Compile Include="Handles\HandleStorage.cs" />
     <Compile Include="Handles\Hdd.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="MemoryOld.cs" />
     <Compile Include="RealMachine\KernelStorage.cs" />
     <Compile Include="Processes\BaseSystemProcess.cs" />
     <Compile Include="RealMachine\ProcessList.cs" />
     <Compile Include="Processes\ProcessScheduler.cs" />
     <Compile Include="Processes\ResourceScheduler.cs" />
     <Compile Include="Processes\StartStop.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="VM\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RealMachine\ResourceList.cs" />
-    <Compile Include="Registers.cs" />
+    <Compile Include="VM\Registers.cs" />
     <Compile Include="Resources\ProgramStart.cs" />
     <Compile Include="Resources\Resource.cs" />
-    <Compile Include="Processes\ResourceHolder.cs" />
-    <Compile Include="Resources\ResTypes.cs" />
-    <Compile Include="Storage.cs" />
-    <Compile Include="StorageFile.cs" />
-    <Compile Include="Util.cs" />
-    <Compile Include="RealMachine.cs" />
-    <Compile Include="VirtualMemory.cs" />
+    <Compile Include="Processes\Util\ResourceHolder.cs" />
+    <Compile Include="Resources\Util\ResTypes.cs" />
+    <Compile Include="RealMachine\Storage.cs" />
+    <Compile Include="RealMachine\StorageFile.cs" />
+    <Compile Include="VM\Util.cs" />
+    <Compile Include="VM\RealMachine.cs" />
+    <Compile Include="VM\VirtualMemory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

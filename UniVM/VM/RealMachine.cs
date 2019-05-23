@@ -54,7 +54,7 @@ namespace UniVM {
             //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
             uint rowCount = 10;
             MemAccesser memAccesser = virtualMemory.reserveMemory(fileName, rowCount);
-            Program program = new Program(memAccesser, fileName, eval.registers, codeStorage);
+            Program program = new Program(memAccesser, fileName, codeStorage);
             programs.Add(program);
         }
 
