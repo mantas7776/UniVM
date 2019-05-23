@@ -8,7 +8,6 @@ namespace UniVM {
         private Memory memory;
         private VirtualMemory virtualMemory;
         private Eval eval;
-        private Registers registers;
 
         public RealMachine()
         {
@@ -59,12 +58,11 @@ namespace UniVM {
             programs.Add(program);
         }
 
-        public void start() {
-            var regs = eval.registers;
+        public void start()
+        {
+            var regs = new Registers();
             regs.PTR = 0;
             eval.registers = regs;
-
-            this.addProgramFromFile("code.bin");
 
             while (true)
             {
@@ -75,19 +73,25 @@ namespace UniVM {
                         continue;
 
                     ranAnything = true;
-
+                    program.registers.TIMER = Constants.TIMER_VALUE;
                     eval.registers = program.registers;
-                    eval.run(program);
+                    while (eval.registers.TIMER > 0 && eval.registers.SI == 0 && eval.registers.PI == 0)
+                    {
+                        eval.run(program);
+                    }
 
 
-                    if (eval.registers.SI > 0) handleSiInt(program, eval.registers.SI);
-                    if (eval.registers.PI > 0) handlePiInt(program, eval.registers.PI);
+                    if (eval.registers.SI > 0)
+                        handleSiInt(program, eval.registers.SI);
+                    if (eval.registers.PI > 0)
+                        handlePiInt(program, eval.registers.PI);
+
                     program.registers = eval.registers;
                 }
 
                 if (!ranAnything) break;
             }
-            
+
         }
     }
 }
