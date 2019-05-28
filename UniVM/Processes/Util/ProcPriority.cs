@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    enum ResType
+    enum ProcPriority
     {
-        FileManager,
-        OSExit,
-        Memory,
-        Storage,
-        ProgramStart,
-        Interrupt
-    };
+        JobGovernor = 95
+    }
 }

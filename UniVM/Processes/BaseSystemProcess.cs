@@ -39,7 +39,6 @@ namespace UniVM
             this.running = true;
             this.run();
             this.running = false;
-            this.IC++;
         }
 
         public abstract void run();

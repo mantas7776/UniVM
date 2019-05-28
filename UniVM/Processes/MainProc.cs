@@ -20,14 +20,24 @@ namespace UniVM.Processes
             switch (this.IC)
             {
                 case 0:
-                
                     resourceHolder.request(ResType.ProgramStart);
+                    this.IC++;
                     break;
                 case 1:
-                    Progress = resourceHolder.
-                    kernelStorage.processes.add(new JobGovernor(99, Resource.procName));
-                    break;
+                    ProgramStart programStart = resourceHolder.getFirst(ResType.ProgramStart);
+                    if(!programStart.kill)
+                    {
+                        ProgramStart programStart = resourceHolder.getFirst(ResType.ProgramStart);
+                        kernelStorage.
+                        this.IC++;
+                    }
+                case 2:
+                    ProgramStart programStart = resourceHoldes.getFirst(ResType.ProgramStart);
+                    if(programStart.kill)
+                    {
 
+                    }
+                    break;                  
             }
 
         }

@@ -3,13 +3,11 @@ namespace UniVM
 {
     class ProgramStart: Resource
     {
-        private string programName;
+        public string programName;
 
-        public ProgramStart(int creatorId): base(ResType.ProgramStart, creatorId, true)
+        public ProgramStart(int creatorId, string programName): base(ResType.ProgramStart, creatorId, true)
         {
-
+            this.programName = programName;
         }
-
-
     }
 }

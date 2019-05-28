@@ -36,6 +36,16 @@ namespace UniVM
             return resourcesAcquired.Exists(o => o.type == type);
         }
 
+        public Resource getFirst(ResType resType)
+        {
+            Resource resFound = resourcesAcquired
+                .Where(res => res.type == resType)
+                .First();
+
+            if (resFound == null) throw new Exception("The required resource with type: " + resType + " was not found!");
+            return resFound;
+        }
+
         private void requestResource(ResType type)
         {
             if (requestedResources.Contains(type)) return;
