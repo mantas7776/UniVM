@@ -28,7 +28,7 @@ namespace UniVM.Processes
                     if(!programStart.kill)
                     {
                         ProgramStart programStart = resourceHolder.getFirst(ResType.ProgramStart);
-                        kernelStorage.
+                        //kernelStorage.
                         this.IC++;
                     }
                 case 2:

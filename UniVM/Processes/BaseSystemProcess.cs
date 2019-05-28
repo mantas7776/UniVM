@@ -9,18 +9,18 @@ namespace UniVM
     abstract class BaseSystemProcess
     {
         private static int nextId = 0;
-        public uint IC = 0;
+        protected uint IC = 0;
         public readonly int id;
-        public ResourceRequestor resourceHolder { get; private set; } = new ResourceRequestor();
+        public ResourceRequestor resourceRequestor { get; private set; } = new ResourceRequestor();
         public int priority { get; set; }
         private bool running = false;
-        private KernelStorage kernelStorage;
+        protected KernelStorage kernelStorage;
         public ProcState state {
             get
             {
                 if (this.running)
                     return ProcState.running;
-                else if (resourceHolder.blocked)
+                else if (resourceRequestor.blocked)
                     return ProcState.blocked;
                 else
                     return ProcState.idle;

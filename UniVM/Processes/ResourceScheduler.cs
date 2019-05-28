@@ -8,7 +8,6 @@ namespace UniVM
 {
     class ResourceScheduler : BaseSystemProcess
     {
-        private KernelStorage kernelStorage;
 
         public ResourceScheduler(int priority, KernelStorage kernelStorage) : base (priority, kernelStorage)
         {
@@ -20,13 +19,13 @@ namespace UniVM
             var waitingProcesses = kernelStorage
                 .processes
                 .Processes
-                .Where(o => o.resourceHolder.blocked)
+                .Where(o => o.resourceRequestor.blocked)
                 .OrderByDescending(o => o.priority)
                 .ToList();
 
             foreach (var waitingProcess in waitingProcesses)
             {
-                var requestedResources = waitingProcess.resourceHolder.RequestedResources;
+                var requestedResources = waitingProcess.resourceRequestor.RequestedResources;
                 foreach (var requestedResource in requestedResources)
                 {
                     var resource = kernelStorage
@@ -39,7 +38,7 @@ namespace UniVM
                          )
                         .First();
                     resource.assign(waitingProcess);
-                    waitingProcess.resourceHolder.removeRequest(requestedResource);
+                    waitingProcess.resourceRequestor.removeRequest(requestedResource);
                 }
             }
         }

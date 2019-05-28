@@ -13,6 +13,8 @@ namespace UniVM
         Memory,
         Storage,
         ProgramStart,
-        Interrupt
+        Interrupt,
+        FileCreateRequest,
+        FileCreateResponse
     };
 }
