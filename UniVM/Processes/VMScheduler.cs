@@ -14,9 +14,9 @@ namespace UniVM
         private VirtualMemory virtualMemory;
         private Eval eval;
 
-        public VMScheduler(Memory memory) : base(10)
+        public VMScheduler(KernelStorage kernelStorage) : base(10, kernelStorage)
         {
-            this.memory = memory;
+            this.memory = kernelStorage.memory;
             this.eval = new Eval(this.storage);
             this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
         }

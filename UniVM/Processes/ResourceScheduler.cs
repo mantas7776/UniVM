@@ -10,7 +10,7 @@ namespace UniVM
     {
         private KernelStorage kernelStorage;
 
-        public ResourceScheduler(int priority, KernelStorage kernelStorage) : base (priority)
+        public ResourceScheduler(int priority, KernelStorage kernelStorage) : base (priority, kernelStorage)
         {
             this.kernelStorage = kernelStorage;
         }
@@ -39,6 +39,7 @@ namespace UniVM
                          )
                         .First();
                     resource.assign(waitingProcess);
+                    waitingProcess.resourceHolder.removeRequest(requestedResource);
                 }
             }
         }

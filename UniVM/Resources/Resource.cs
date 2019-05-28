@@ -13,8 +13,9 @@ namespace UniVM
 
         public int creatorId { get; private set; }
         public bool staticRes { get; private set; }
-        private BaseSystemProcess assignedTo = null;
+        public BaseSystemProcess assignedTo { get; private set; }
         public int messageid { get; private set; }
+        public bool expired { get; private set; }
 
         public Resource(ResType type, int creatorId, bool staticRes = false, int messageid = -1)
         {
@@ -22,16 +23,20 @@ namespace UniVM
             this.creatorId = creatorId;
             this.staticRes = staticRes;
             this.messageid = messageid;
+            this.assignedTo = null;
+            this.expired = false;
         }
 
         public Boolean isFree()
         {
-            return assignedTo == null;
+            return assignedTo == null && !expired;
         }
 
         public void release()
         {
             assignedTo = null;
+            if (staticRes)
+                expired = true;
         }
 
         public void assign(BaseSystemProcess process)
