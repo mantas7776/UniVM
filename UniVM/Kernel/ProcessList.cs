@@ -24,6 +24,7 @@ namespace UniVM
 
         public void remote(BaseSystemProcess proc)
         {
+            proc.kill();
             processes.Remove(proc);
         }
 
