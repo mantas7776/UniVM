@@ -101,5 +101,55 @@ namespace UniVM
             return totalLength;
         }
 
+        public static Boolean saveCodeToFile(StorageFile file, VMInfo info)
+        {
+            byte[] codeLengthBytes = BitConverter.GetBytes(info.code.Length);
+            byte[] dataLengthBytes = BitConverter.GetBytes(info.data.Length);
+
+            int totalLength = info.code.Length + info.data.Length + codeLengthBytes.Length + dataLengthBytes.Length; // 8 bytes for code and data size + eof
+            if (file.size() < totalLength) throw new Exception("File is too small to store code and data");
+
+            byte[] dataToWrite = new byte[totalLength];
+            int used = 0;
+
+            codeLengthBytes.CopyTo(dataToWrite, used);
+            used += codeLengthBytes.Length;
+            dataLengthBytes.CopyTo(dataToWrite, used);
+            used += dataLengthBytes.Length;
+
+            info.code.CopyTo(dataToWrite, used);
+            used += info.code.Length;
+
+            info.data.CopyTo(dataToWrite, used);
+            used += info.data.Length;
+
+            file.setBytes(dataToWrite);
+            return true;
+        }
+
+        public static int getProgramSizeInFile(VMInfo info)
+        {
+            byte[] codeLengthBytes = BitConverter.GetBytes(info.code.Length);
+            byte[] dataLengthBytes = BitConverter.GetBytes(info.data.Length);
+
+            return info.code.Length + info.data.Length + codeLengthBytes.Length + dataLengthBytes.Length; // 8 bytes for code and data size + eof
+        }
+
+        public static VMInfo readCodeFromFile(StorageFile file)
+        {
+            byte[] storageBytes = file.getAllBytes();
+            int codeLength = BitConverter.ToInt32(storageBytes, 0);
+            int dataLength = BitConverter.ToInt32(storageBytes, 4);
+            byte[] code = new byte[codeLength];
+            byte[] data = new byte[dataLength];
+            Array.Copy(storageBytes, 8, code, 0, codeLength);
+            Array.Copy(storageBytes, 8 + codeLength, data, 0, dataLength);
+            return new VMInfo
+            {
+                code = code,
+                data = data
+            };
+        }
+
     }
 }
