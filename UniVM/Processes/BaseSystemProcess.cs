@@ -56,5 +56,15 @@ namespace UniVM
             if (resFound == null) throw new Exception("The required resource with type: " + resType + " was not found!");
             return resFound;
         }
+
+        public uint getResourceTypeCount(ResType resType)
+        {
+            uint resCount = (uint)kernelStorage
+                .resources
+                .getProcessResources(this)
+                .Count(res => res.type == resType);
+
+            return resCount;
+        }
     }
 }
