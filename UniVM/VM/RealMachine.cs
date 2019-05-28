@@ -46,15 +46,16 @@ namespace UniVM {
 
         public void addProgramFromFile(string fileName)
         {
-            var codeStorage = new Storage(fileName);
+            //var codeStorage = new Storage(fileName);
 
-            byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
+            byte[] altcode = Util.getCode("MOVA 5\nMOVB 1\nADD\nLOOP 1\nHALT\n");
             byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
-            Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
+            //Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
             //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
-            uint rowCount = 10;
-            MemAccesser memAccesser = virtualMemory.reserveMemory(fileName, rowCount);
-            Program program = new Program(fileName, memAccesser);
+            //uint rowCount = 10;
+            //MemAccesser memAccesser = virtualMemory.reserveMemory(fileName, rowCount);
+            //Program program = new Program(memAccesser, fileName, codeStorage);
+
             programs.Add(program);
         }
 
