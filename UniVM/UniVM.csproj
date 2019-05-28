@@ -51,6 +51,7 @@
     <Compile Include="Processes\Util\ProcState.cs" />
     <Compile Include="Processes\VMScheduler.cs" />
     <Compile Include="Kernel\Kernel.cs" />
+    <Compile Include="Resources\Util\ResType.cs" />
     <Compile Include="VM\MemAccesser.cs" />
     <Compile Include="Kernel\Memory.cs" />
     <Compile Include="VM\Constants.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="Resources\ProgramStart.cs" />
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Processes\Util\ResourceHolder.cs" />
-    <Compile Include="Resources\Util\ResTypes.cs" />
     <Compile Include="Kernel\Storage.cs" />
     <Compile Include="Kernel\StorageFile.cs" />
     <Compile Include="VM\Util.cs" />
