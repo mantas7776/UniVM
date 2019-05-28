@@ -27,6 +27,11 @@ namespace UniVM
             return assignedTo == null;
         }
 
+        public void release()
+        {
+            assignedTo = null;
+        }
+
         public void assign(BaseSystemProcess process)
         {
             assignedTo = process;
