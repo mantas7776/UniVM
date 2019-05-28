@@ -15,20 +15,29 @@ namespace UniVM
 
         public override void run()
         {
-            for(int i = 0; i < Constants.BLOCKS_AMOUNT; i++) kernelStorage.resources.add(new Resource(ResType.Memory, this.id));
+            switch(this.IC)
+            {
+                case 0:
+                    for (int i = 0; i < Constants.BLOCKS_AMOUNT; i++) kernelStorage.resources.add(new Resource(ResType.Memory, this.id));
 
-            kernelStorage.resources.add(new Resource(ResType.Storage, this.id, true));
-            //kernelStorage.resources.add(new ProgramStart(this.id));
+                    kernelStorage.resources.add(new Resource(ResType.Storage, this.id, false));
+                    kernelStorage.resources.add(new ProgramStartKill(this.id, true, "code.bin"));
 
-            kernelStorage.processes.add(new ResourceScheduler(99, kernelStorage));
-            kernelStorage.processes.add(new VMScheduler(kernelStorage));
-            kernelStorage.processes.idle = new IdleProcess(kernelStorage);
+                    kernelStorage.processes.add(new IntHandler(kernelStorage));
+                    kernelStorage.processes.add(new MainProc(kernelStorage));
+                    kernelStorage.processes.add(new ResourceScheduler(kernelStorage));
+                    kernelStorage.processes.add(new VMScheduler(kernelStorage));
+                    kernelStorage.processes.idle = new IdleProcess(kernelStorage);
 
-            this.resourceRequestor.request(ResType.OSExit);
-                
+                    this.resourceRequestor.request(ResType.OSExit);
+                    this.IC++;
+                    break;
+                case 1:
+                    kernelStorage.processes.killAll();
+                    kernelStorage.resources.clear();
+                    break;
+            }
 
-            kernelStorage.processes.killAll();
-            kernelStorage.resources.clear();
         }
     }
 }

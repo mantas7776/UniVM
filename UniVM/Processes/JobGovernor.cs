@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UniVM.Processes
+namespace UniVM
 {
     class JobGovernor : BaseSystemProcess
     {
-        private IntHandler intHandler = new IntHandler();
+        private IntHandler intHandler;
         private VirtualMemory virtualMemory;
 
         public string programName;
@@ -20,6 +20,7 @@ namespace UniVM.Processes
             this.programName = programName;
             this.kernelStorage = kernelStorage;
             virtualMemory = new VirtualMemory(0, this.kernelStorage.memory);
+            intHandler = new IntHandler(this.kernelStorage);
         }
 
         public override void run()
@@ -38,16 +39,17 @@ namespace UniVM.Processes
                     MemAccesser memAcceser = this.virtualMemory.reserveMemory(programName, this.getResourceTypeCount(ResType.Memory));
                     Program program = new Program(programName, memAcceser);
 
-                    this.virtualMachine = new VirtualMachine(program, memAcceser, kernelStorage);
+                    this.virtualMachine = new VirtualMachine(program, memAcceser, kernelStorage, this.id);
                     kernelStorage.processes.add(virtualMachine);
 
-                    this.resourceRequestor.request(ResType.Interrupt);
+                    this.resourceRequestor.request(ResType.Interrupt, this.id);
                     this.IC++;
                     break;
                 case 2:
                     Interrupt interrupt = (Interrupt)this.getFirstResource(ResType.Interrupt);
                     if (interrupt.type != IntType.Halt)
-                        this.intHandler.handle(interrupt.type);
+                        this.destroyVM();
+                        //this.intHandler.handle(interrupt.type);
                     else
                         this.destroyVM();
                     break;
@@ -59,6 +61,7 @@ namespace UniVM.Processes
         private void destroyVM()
         {
             kernelStorage.processes.remove(this.virtualMachine);
+            kernelStorage.resources.add(new ProgramStartKill(this.id, true, this.programName));
             this.resourceRequestor.request(ResType.NonExistent);
         }
     }

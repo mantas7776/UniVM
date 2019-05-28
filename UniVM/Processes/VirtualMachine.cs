@@ -8,19 +8,19 @@ namespace UniVM
 {
     class VirtualMachine: BaseSystemProcess
     {
-        private Program program;
+        public Program program { get; private set; }
         private MemAccesser memAccesser;
+        private int creatorId;
         private List<Program> programs = new List<Program>();
         private Storage storage = new Storage("HDD.txt", 1024);
-        private Memory memory;
-        private VirtualMemory virtualMemory;
         private Eval eval;
 
-        public VirtualMachine(Program program, MemAccesser memAccesser, KernelStorage kernelStorage): base(ProcPriority.VirtualMachine, kernelStorage)
+        public VirtualMachine(Program program, MemAccesser memAccesser, KernelStorage kernelStorage, int creatorId): base(ProcPriority.VirtualMachine, kernelStorage)
         {
             programs.Add(program);
             this.program = program;
             this.memAccesser = memAccesser;
+            this.creatorId = creatorId;
         }
 
         public override void run()
@@ -47,12 +47,11 @@ namespace UniVM
                                 eval.run(program);
                             }
 
-
-                            //if (eval.registers.SI > 0)
-                            //    handleSiInt(program, eval.registers.SI);
-                            //if (eval.registers.PI > 0)
-                            //    handlePiInt(program, eval.registers.PI);
-
+                            if(eval.registers.SI > 0)
+                                this.kernelStorage.resources.add(new Interrupt(this.creatorId, (IntType)eval.registers.SI, this.program.fileName));
+                            else if(eval.registers.PI > 0)
+                                this.kernelStorage.resources.add(new Interrupt(this.creatorId, (IntType)eval.registers.PI, this.program.fileName));
+                            
                             program.registers = eval.registers;
                         }
 

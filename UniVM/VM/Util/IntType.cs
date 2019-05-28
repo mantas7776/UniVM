@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    enum SiInt
+    public enum SiInt
     {
         Halt
     }
-    enum PiInt
+    public enum PiInt
     {
         OPKUndefined,
         OperandUndefined
     }
-    enum IntType
+    public enum IntType
     {
         Halt = SiInt.Halt,
         OPKUndefined = PiInt.OPKUndefined,

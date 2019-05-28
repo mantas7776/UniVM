@@ -6,7 +6,7 @@ namespace UniVM
         public string programName;
         public bool kill;
 
-        public ProgramStartKill(int creatorId, string programName, bool kill, int messageid): base(ResType.ProgramStartKill, creatorId, true, messageid)
+        public ProgramStartKill(int creatorId, bool kill, string programName) : base(ResType.ProgramStartKill, creatorId, false)
         {
             this.kill = kill;
             this.programName = programName;

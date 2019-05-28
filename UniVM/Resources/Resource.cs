@@ -49,7 +49,7 @@ namespace UniVM
         public void release()
         {
             assignedTo = null;
-            if (staticRes)
+            if (!staticRes)
                 expired = true;
         }
 

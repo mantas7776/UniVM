@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UniVM.Processes
+namespace UniVM
 {
     class MainProc: BaseSystemProcess
     {
         private KernelStorage kernelStorage;
         private List<JobGovernor> jobGovernors = new List<JobGovernor>();
 
-        public MainProc(int priority, KernelStorage kernelStorage) : base(priority, kernelStorage)
+        public MainProc( KernelStorage kernelStorage) : base(ProcPriority.MainProc, kernelStorage)
         {
             this.kernelStorage = kernelStorage;
         }

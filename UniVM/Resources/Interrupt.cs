@@ -9,10 +9,12 @@ namespace UniVM
     class Interrupt: Resource
     {
         public IntType type;
+        public string programName;
 
-        public Interrupt(int creatorId): base(ResType.Interrupt, creatorId, true)
+        public Interrupt(int creatorId, IntType type, string programName): base(ResType.Interrupt, creatorId, true)
         {
-     
+            this.type = type;
+            this.programName = programName;
         }
     }
 }
