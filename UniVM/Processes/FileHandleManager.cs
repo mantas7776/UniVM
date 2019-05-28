@@ -8,10 +8,7 @@ namespace UniVM.Processes
 {
     class FileHandleManager : BaseSystemProcess
     {
-        public FileHandleManager(KernelStorage kernelStorage) : base(50, kernelStorage)
-        {
-
-        }
+        public FileHandleManager(KernelStorage kernelStorage) : base(50, kernelStorage) { }
 
         private void createHandle(CreateFileRequest request)
         {
@@ -20,7 +17,6 @@ namespace UniVM.Processes
             this.kernelStorage.handles.add(fh);
 
             Resource response = new FileHandleResponse(this.id, fh, request.createdByProcess);
-            response.messageid = request.createdByProcess;
 
             kernelStorage.resources.add(response);
         }

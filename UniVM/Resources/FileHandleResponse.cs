@@ -9,7 +9,7 @@ namespace UniVM
     class FileHandleResponse : Resource
     {
         FileHandle handle;
-        public FileHandleResponse(int creatorId, FileHandle handle, int messageid = -1, bool staticRes = false) : base(ResType.FileCreateResponse, creatorId, staticRes, messageid)
+        public FileHandleResponse(int creatorId, FileHandle handle, int messageid) : base(ResType.FileCreateResponse, creatorId, false, messageid)
         {
             this.handle = handle;
         }
