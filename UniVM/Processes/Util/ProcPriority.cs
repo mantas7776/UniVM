@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    enum ProcPriority
+    class ProcPriority
     {
-        JobGovernor = 95
+        public static int
+            JobGovernor = 95,
+            VirtualMachine = 99;
     }
 }

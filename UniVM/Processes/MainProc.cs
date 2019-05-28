@@ -9,8 +9,9 @@ namespace UniVM.Processes
     class MainProc: BaseSystemProcess
     {
         private KernelStorage kernelStorage;
+        private List<JobGovernor> jobGovernors = new List<JobGovernor>();
 
-        public MainProc(int priority, KernelStorage kernelStorage) : base(priority)
+        public MainProc(int priority, KernelStorage kernelStorage) : base(priority, kernelStorage)
         {
             this.kernelStorage = kernelStorage;
         }
@@ -20,24 +21,23 @@ namespace UniVM.Processes
             switch (this.IC)
             {
                 case 0:
-                    resourceHolder.request(ResType.ProgramStart);
+                    resourceHolder.request(ResType.ProgramStartKill);
                     this.IC++;
                     break;
                 case 1:
-                    ProgramStart programStart = resourceHolder.getFirst(ResType.ProgramStart);
-                    if(!programStart.kill)
+                    ProgramStartKill programStartKill = (ProgramStartKill)resourceHolder.getFirst(ResType.ProgramStartKill);
+                    if(!programStartKill.kill)
                     {
-                        ProgramStart programStart = resourceHolder.getFirst(ResType.ProgramStart);
-                        //kernelStorage.
-                        this.IC++;
-                    }
-                case 2:
-                    ProgramStart programStart = resourceHoldes.getFirst(ResType.ProgramStart);
-                    if(programStart.kill)
+                        JobGovernor jobGovernor = new JobGovernor(programStartKill.programName, this.kernelStorage);
+                        jobGovernors.Add(jobGovernor);
+                        kernelStorage.processes.add(jobGovernor);
+                    } else
                     {
-
+                        JobGovernor toDelete = jobGovernors.Find(gov => gov.programName == programStartKill.programName);
+                        kernelStorage.processes.remove(toDelete);
                     }
-                    break;                  
+                    
+                    break;              
             }
 
         }
