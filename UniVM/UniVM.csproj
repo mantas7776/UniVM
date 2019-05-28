@@ -48,7 +48,6 @@
     <Compile Include="Kernel\FileInfo.cs" />
     <Compile Include="Processes\FileHandleManager.cs" />
     <Compile Include="Kernel\IntHandler.cs" />
-    <Compile Include="Processes\FileManager.cs" />
     <Compile Include="Processes\IdleProcess.cs" />
     <Compile Include="Processes\JobGovernor.cs" />
     <Compile Include="Processes\MainProc.cs" />

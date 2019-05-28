@@ -13,7 +13,7 @@ namespace UniVM
         Memory,
         Storage,
         FileCreateRequest,
-        FileCreateResponse
+        FileCreateResponse,
         ProgramStartKill,
         Interrupt,
         NonExistent
