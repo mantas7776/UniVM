@@ -16,13 +16,14 @@ namespace UniVM
             PTR,
             IP, /* instruction pointer */
             FLAGS,
-            SI,
-            PI,
             CH1,
             CH2,
             CH3,
             CS,
             TIMER,
             DS;
+
+        public SiInt SI;
+        public PiInt PI;
     };
 }

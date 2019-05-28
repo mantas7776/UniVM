@@ -2,7 +2,7 @@
 {
     class Program
     {
-        private string fileName;
+        public string fileName { get; private set; }
         public MemAccesser memAccesser;
         public Registers registers;
         public bool completed { get; private set; } = false;

@@ -102,7 +102,7 @@ namespace UniVM
             switch (instruction)
             {
                 case "HALT":
-                    regs.SI = 1;
+                    regs.SI = SiInt.Halt;
                     regs.TIMER--;
                     break;
                 case "ADD":
@@ -301,7 +301,7 @@ namespace UniVM
                     }
                 default:
                     Console.WriteLine("Bad opcode " + args[0]);
-                    regs.PI = 2;
+                    regs.PI = PiInt.OPKUndefined;
                     regs.TIMER--;
                     break;
             }

@@ -9,7 +9,10 @@ namespace UniVM
     class ProcPriority
     {
         public static int
+            ResourceScheduler = 99,
+            MainProc = 97,
             JobGovernor = 95,
-            VirtualMachine = 99;
+            IntHandler = 98,
+            VirtualMachine = 50;
     }
 }

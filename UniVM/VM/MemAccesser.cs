@@ -54,8 +54,8 @@ namespace UniVM
         {
             uint offset = virtAddr % Constants.BLOCK_SIZE;
             uint rowNr = virtAddr / Constants.BLOCK_SIZE;
-            uint virtRowNr = allowedVirtRows[rowNr];
-            uint realRowNr = memory.get(PTR + virtRowNr);
+            uint translTableIndex = allowedVirtRows[rowNr];
+            uint realRowNr = memory.get(PTR + translTableIndex);
             uint realMemAddr = realRowNr * Constants.BLOCK_SIZE + offset;
             return realMemAddr;
         }

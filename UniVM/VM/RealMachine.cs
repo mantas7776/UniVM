@@ -16,11 +16,11 @@ namespace UniVM {
             this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
         }
 
-        public void handleSiInt(Program program, uint siNr)
+        public void handleSiInt(Program program, SiInt siNr)
         {
             switch(siNr)
             {
-                case 1:
+                case SiInt.Halt:
                     {
                         program.setDone();
                         break;
@@ -30,15 +30,18 @@ namespace UniVM {
             return;
         }
 
-        public void handlePiInt(Program program, uint siNr)
+        public void handlePiInt(Program program, PiInt PiNr)
         {
-            switch (siNr)
+            switch (PiNr)
             {
-                case 2:
+                case PiInt.OperandUndefined:
                     {
                         program.setDone();
                         break;
                     }
+                case PiInt.OPKUndefined:
+                    program.setDone();
+                    break;
             }
 
             return;
