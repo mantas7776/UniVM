@@ -9,7 +9,6 @@ namespace UniVM
 {
     class IdleProcess : BaseSystemProcess
     {
-        int IC = 0;
         public IdleProcess() : base(1) { }
         public override void run()
         {
@@ -18,6 +17,7 @@ namespace UniVM
                 case 0:
                     Debug.Print("SleepProcess: Sleeping for 200 ms");
                     System.Threading.Thread.Sleep(200);
+                    this.IC = 0;
                     break;
             }
         }

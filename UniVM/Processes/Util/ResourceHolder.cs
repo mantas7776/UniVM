@@ -9,7 +9,7 @@ namespace UniVM
     class ResourceHolder
     {
 
-        private List<ResTypes> requestedResources = new List<ResTypes>();
+        private List<ResType> requestedResources = new List<ResType>();
         private List<Resource> resourcesAcquired = new List<Resource>();
 
         public void giveResource(Resource resource)
@@ -26,28 +26,28 @@ namespace UniVM
             }
         }
 
-        public void request(ResTypes type)
+        public void request(ResType type)
         {
             requestedResources.Add(type);
         }
 
-        public Boolean haveResource(ResTypes type)
+        public Boolean haveResource(ResType type)
         {
             return resourcesAcquired.Exists(o => o.type == type);
         }
 
-        private void requestResource(ResTypes type)
+        private void requestResource(ResType type)
         {
             if (requestedResources.Contains(type)) return;
             if (haveResource(type)) return;
 
         }
 
-        public List<ResTypes> RequestedResources
+        public List<ResType> RequestedResources
         {
             get
             {
-                return new List<ResTypes>(requestedResources);
+                return new List<ResType>(requestedResources);
             }
         }
     }

@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    enum ResTypes
+    enum ProcState
     {
-        FileManager = 0,
-        OSExit = 1,
-        Memory,
-        Storage,
-        ProgramStart
+        blocked,
+        running,
+        idle
     };
 }
