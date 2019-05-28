@@ -8,135 +8,59 @@ namespace UniVM
 {
     class Validate
     {
-        public void run(Program program)
+
+        public static Boolean valid(String allCode)
         {
-            string codeString = Encoding.ASCII.GetString(codeSegBytes);
-            string[] code = codeString.Split('\n');
-
-            string instructionLine = code[regs.IP++]; //cia reikia kodo kad isgauna eilute viena is codesego, vienas int32 laiko 4 simbolius atminty
-            string[] args = getArgs(instructionLine);
-            string instruction = args[0];
-
-            uint res;
-            switch (instruction)
+            string[] code = allCode.Split('\n');
+            int codeLine = 0;
+            
+            while (true)
             {
-                case "HALT":
-                    regs.SI = 1;
-                    regs.TIMER--;
-                    break;
-                case "ADD":
-                    regs.A += regs.B;
-                    updateFlags(regs.A);
-                    regs.TIMER--;
-                    break;
-                case "SUB":
-                    res = regs.A - regs.B;
-                    updateFlags(res);
-                    updateOF(regs.A, res);
-                    regs.A = res;
-                    regs.TIMER--;
-                    break;
-                case "MUL":
-                    regs.A *= regs.B;
-                    updateFlags(regs.A);
-                    regs.TIMER--;
-                    break;
-                case "DIV":
-                    regs.A /= regs.B;
-                    updateFlags(regs.A);
-                    regs.TIMER--;
-                    break;
-                case "CMP":
-                    res = regs.A - regs.B;
-                    updateFlags(res);
-                    updateOF(regs.A, res);
-                    regs.TIMER--;
-                    break;
-                case "JMP":
-                    {
-                        uint lineNr = uint.Parse(args[1]);
-                        regs.IP = lineNr;
-                        regs.TIMER--;
+                string instructionLine = code[codeLine++]; //cia reikia kodo kad isgauna eilute viena is codesego, vienas int32 laiko 4 simbolius atminty
+                string[] args = getArgs(instructionLine);
+                string instruction = args[0];
+                switch (instruction)
+                {
+                    //no args
+                    case "HALT":
+                        return true;
+                    //single arg int
+                    case "ADD":
+                    case "SUB":
+                    case "MUL":
+                    case "DIV":
+                    case "CMP":
                         break;
-                    }
-                case "JL":
-                    {
-                        uint lineNr = uint.Parse(args[1]);
-                        bool jump = getFlagByName("SF") != getFlagByName("OF");
-                        if (jump) regs.IP = lineNr;
-                        regs.TIMER--;
+                    case "JMP":
+                    case "JL":
+                    case "JE":
+                    case "MOVA":
+                    case "MOVB":
+                    case "MOVD":
+                        {
+                            int parseResult;
+                            bool success = int.TryParse(args[1], out parseResult);
+                            if (!success) return false;
+                            break;
+                        }
+                    //no idea
+                    case "READ":
+                    case "WRITE":
+                    case "OPENFILEHANDLE":
+                    case "DELETEFILE":
+                    case "CLOSEFILEHANDLE":
                         break;
-                    }
-                case "JE":
-                    {
-                        uint lineNr = uint.Parse(args[1]);
-                        bool jump = getFlagByName("ZF");
-                        if (jump) regs.IP = lineNr;
-                        regs.TIMER--;
-                        break;
-                    }
-                case "MOVA":
-                case "MOVB":
-                    {
-                        uint location = uint.Parse(args[1]);
-                        byte[] dataToTransfer = program.memAccesser.readFromAddr(location, 4);
-                        uint value = BitConverter.ToUInt32(dataToTransfer, 0);
-
-                        if (instruction == "MOVA")
-                            regs.A = value;
-                        else if (instruction == "MOVB")
-                            regs.B = value;
-                        regs.TIMER--;
-                        break;
-                    }
-                case "MOVD":
-                    {
-                        int location = int.Parse(args[1]);
-                        byte[] converted = BitConverter.GetBytes(regs.A);
-                        program.memAccesser.writeFromAddr((uint)location, converted);
-                        regs.TIMER--;
-                        break;
-                    }
-                case "READ": // read from console
-                    {
-                        regs.A = handles[(int)regs.B].read();
-                        regs.TIMER--;
-                        break;
-                    }
-                case "WRITE": // write to console
-                    {
-                        handles[(int)regs.B].write((byte)regs.A);
-                        regs.TIMER--;
-                        break;
-                    }
-                case "OPENFILEHANDLE":
-                    {
-                        int location = int.Parse(args[1]);
-                        uint handleNr = (uint)handles.add(new HddDevice(this.storage, location));
-                        regs.B = handleNr;
-                        regs.TIMER--;
-                        break;
-                    }
-                case "DELETEFILE":
-                    {
-                        int location = int.Parse(args[1]);
-                        handles[(int)regs.B].delete(location);
-                        regs.TIMER--;
-                        break;
-                    }
-                case "CLOSEFILEHANDLE":
-                    {
-                        Handle handleToDelete = handles[(int)regs.B];
-                        handles.remove(handleToDelete);
-                        regs.TIMER--;
-                        break;
-                    }
-                default:
-                    Console.WriteLine("Bad opcode " + args[0]);
-                    regs.PI = 2;
-                    regs.TIMER--;
-                    break;
+                    default:
+                        Console.WriteLine("Bad opcode " + args[0]);
+                        return false;
+                }
+                
             }
+        }
+
+        private static string[] getArgs(string instructionLine)
+        {
+            return instructionLine.Split(' ');
         }
     }
 }
