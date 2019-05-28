@@ -19,9 +19,6 @@ namespace UniVM
         public Eval(Storage storage)
         {
             //TODO: cia perduoti is isores hanldlestorage kai bus daugiau evalu;
-            this.storage = storage;
-            this.handles = new HandleStorage();
-            handles.add(new ConsoleDevice());
             //handles.add()
         }
 
@@ -141,6 +138,30 @@ namespace UniVM
                         uint lineNr = uint.Parse(args[1]);
                         bool jump = getFlagByName("ZF");
                         if (jump) regs.IP = lineNr;
+                        regs.TIMER--;
+                        break;
+                    }
+                case "LOOP":
+                    {
+                        if (regs.CX <= 0)
+                            break;
+                        uint lineNr = uint.Parse(args[1]);
+                        regs.B--;
+                        regs.IP = lineNr;
+                        regs.TIMER--;
+                        break;
+                    }
+                case "STOSB":
+                    {
+                        program.memAccesser.set(regs.B, regs.A);
+                        regs.B++;
+                        regs.TIMER--;
+                        break;
+                    }
+                case "LODSB":
+                    {
+                        regs.A = program.memAccesser.get(regs.B);
+                        regs.B++;
                         regs.TIMER--;
                         break;
                     }

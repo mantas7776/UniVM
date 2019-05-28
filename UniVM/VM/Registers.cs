@@ -11,6 +11,7 @@ namespace UniVM
         public uint
             A,
             B,
+            CX,
             MODE,
             PTR,
             IP, /* instruction pointer */

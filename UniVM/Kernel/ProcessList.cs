@@ -24,6 +24,7 @@ namespace UniVM
 
         public void remove(BaseSystemProcess proc)
         {
+            proc.kill();
             processes.Remove(proc);
         }
 
