@@ -12,6 +12,8 @@ namespace UniVM
         OSExit,
         Memory,
         Storage,
+        FileCreateRequest,
+        FileCreateResponse
         ProgramStartKill,
         Interrupt,
         NonExistent

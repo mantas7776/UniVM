@@ -9,17 +9,18 @@ namespace UniVM
     abstract class BaseSystemProcess
     {
         private static int nextId = 0;
-        public uint IC = 0;
+        protected uint IC = 0;
         public readonly int id;
-        public ResourceHolder resourceHolder { get; private set; } = new ResourceHolder();
+        public ResourceRequestor resourceRequestor { get; private set; } = new ResourceRequestor();
         public int priority { get; set; }
         private bool running = false;
+        protected KernelStorage kernelStorage;
         public ProcState state {
             get
             {
                 if (this.running)
                     return ProcState.running;
-                else if (resourceHolder.blocked)
+                else if (resourceRequestor.blocked)
                     return ProcState.blocked;
                 else
                     return ProcState.idle;
@@ -28,10 +29,11 @@ namespace UniVM
             }
         }
 
-        protected BaseSystemProcess(int priority)
+        protected BaseSystemProcess(int priority, KernelStorage kernelStorage)
         {
             this.id = nextId++;
             this.priority = priority;
+            this.kernelStorage = kernelStorage;
         }
 
         public void execute()
@@ -42,5 +44,17 @@ namespace UniVM
         }
 
         public abstract void run();
+
+        public Resource getFirstResource(ResType resType, int messageid = -1)
+        {
+            Resource resFound = kernelStorage
+                .resources
+                .getProcessResources(this)
+                .Where(res => res.type == resType)
+                .First();
+
+            if (resFound == null) throw new Exception("The required resource with type: " + resType + " was not found!");
+            return resFound;
+        }
     }
 }

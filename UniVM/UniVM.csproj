@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Handles\FileHandle.cs" />
     <Compile Include="Kernel\FileInfo.cs" />
+    <Compile Include="Processes\FileHandleManager.cs" />
     <Compile Include="Kernel\IntHandler.cs" />
     <Compile Include="Processes\FileManager.cs" />
     <Compile Include="Processes\IdleProcess.cs" />
@@ -58,6 +59,8 @@
     <Compile Include="Processes\VirtualMachine.cs" />
     <Compile Include="Processes\VMScheduler.cs" />
     <Compile Include="Kernel\Kernel.cs" />
+    <Compile Include="Resources\FileHandleRequest.cs" />
+    <Compile Include="Resources\FileHandleResponse.cs" />
     <Compile Include="Resources\Util\ResType.cs" />
     <Compile Include="VM\MemAccesser.cs" />
     <Compile Include="Kernel\Memory.cs" />

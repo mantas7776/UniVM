@@ -24,6 +24,13 @@ namespace UniVM
             }
         }
 
+        public List<Resource> getProcessResources(BaseSystemProcess process)
+        {
+            return resourceList
+                .Where(res => res.assignedTo == process)
+                .ToList();
+        }
+
         public void add(Resource resource)
         {
             resourceList.Add(resource);

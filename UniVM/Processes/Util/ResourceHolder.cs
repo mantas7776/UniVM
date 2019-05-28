@@ -6,16 +6,14 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class ResourceHolder
+    class ResourceRequestor
     {
 
         private List<ResourceDesc> requestedResources = new List<ResourceDesc>();
-        private List<Resource> resourcesAcquired = new List<Resource>();
 
-        public void giveResource(Resource resource)
+        public void removeRequest(ResourceDesc resourceDesc)
         {
-            resourcesAcquired.Add(resource);
-            requestedResources.Find(o => o.messageid == resource.messageid && o.type == resource.type);
+            requestedResources.Remove(resourceDesc);
         }
 
         public Boolean blocked
@@ -31,20 +29,6 @@ namespace UniVM
             requestedResources.Add(new ResourceDesc() { type = type, messageid = messageId });
         }
 
-        public Boolean haveResource(ResType type)
-        {
-            return resourcesAcquired.Exists(o => o.type == type);
-        }
-
-        public Resource getFirst(ResType resType)
-        {
-            Resource resFound = resourcesAcquired
-                .Where(res => res.type == resType)
-                .First();
-
-            if (resFound == null) throw new Exception("The required resource with type: " + resType + " was not found!");
-            return resFound;
-        }
 
         public List<ResourceDesc> RequestedResources
         {
