@@ -151,18 +151,24 @@ namespace UniVM
                         regs.TIMER--;
                         break;
                     }
-                case "STOSB":
+                case "STOSW":
                     {
-                        program.memAccesser.set(regs.B, regs.A);
-                        regs.B++;
+                        program.memAccesser.writeFromAddr(regs.B, BitConverter.GetBytes(regs.A));
+                        regs.B += 4;
                         regs.TIMER--;
                         break;
                     }
-                case "LODSB":
+                case "LODSW":
                     {
-                        regs.A = program.memAccesser.get(regs.B);
-                        regs.B++;
+                        byte[] word = program.memAccesser.readFromAddr(regs.B, 4);
+                        regs.A = BitConverter.ToUInt32(word, 0);
+                        regs.B += 4;
                         regs.TIMER--;
+                        break;
+                    }
+                case "MOVATOCX":
+                    {
+                        regs.A = regs.CX;
                         break;
                     }
                 case "MOVA":
