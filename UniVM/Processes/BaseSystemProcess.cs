@@ -66,5 +66,15 @@ namespace UniVM
         {
             this.getResources().ForEach(res => res.release());
         }
+
+        public uint getResourceTypeCount(ResType resType)
+        {
+            uint resCount = (uint)kernelStorage
+                .resources
+                .getProcessResources(this)
+                .Count(res => res.type == resType);
+
+            return resCount;
+        }
     }
 }

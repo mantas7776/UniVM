@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class ResInterrupt: Resource
+    class Interrupt: Resource
     {
         public IntType type;
 
-        public ResInterrupt(int creatorId): base(ResType.Interrupt, creatorId, true)
+        public Interrupt(int creatorId): base(ResType.Interrupt, creatorId, true)
         {
      
         }

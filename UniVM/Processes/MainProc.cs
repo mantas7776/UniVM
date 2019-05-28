@@ -21,11 +21,11 @@ namespace UniVM.Processes
             switch (this.IC)
             {
                 case 0:
-                    resourceHolder.request(ResType.ProgramStartKill);
+                    resourceRequestor.request(ResType.ProgramStartKill);
                     this.IC++;
                     break;
                 case 1:
-                    ProgramStartKill programStartKill = (ProgramStartKill)resourceHolder.getFirst(ResType.ProgramStartKill);
+                    ProgramStartKill programStartKill = (ProgramStartKill)this.getFirstResource(ResType.ProgramStartKill);
                     if(!programStartKill.kill)
                     {
                         JobGovernor jobGovernor = new JobGovernor(programStartKill.programName, this.kernelStorage);
@@ -36,7 +36,9 @@ namespace UniVM.Processes
                         JobGovernor toDelete = jobGovernors.Find(gov => gov.programName == programStartKill.programName);
                         kernelStorage.processes.remove(toDelete);
                     }
-                    
+
+                    programStartKill.release();
+                    this.IC = 0;
                     break;              
             }
 

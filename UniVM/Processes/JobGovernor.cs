@@ -9,15 +9,17 @@ namespace UniVM.Processes
     class JobGovernor : BaseSystemProcess
     {
         private IntHandler intHandler = new IntHandler();
+        private VirtualMemory virtualMemory;
 
         public string programName;
         private KernelStorage kernelStorage;
         private VirtualMachine virtualMachine;
 
-        public JobGovernor(string programName, KernelStorage kernelStorage) : base(ProcPriority.JobGovernor)
+        public JobGovernor(string programName, KernelStorage kernelStorage) : base(ProcPriority.JobGovernor, kernelStorage)
         {
             this.programName = programName;
             this.kernelStorage = kernelStorage;
+            virtualMemory = new VirtualMemory(0, this.kernelStorage.memory);
         }
 
         public override void run()
@@ -29,20 +31,23 @@ namespace UniVM.Processes
                     if (fileSize == 0) throw new Exception($"File {programName} is empty!");
 
                     uint rowCount = (uint)(fileSize / Constants.BLOCK_SIZE);
-                    for (int i = 0; i < rowCount; i++) this.resourceHolder.request(ResType.Memory);
+                    for (int i = 0; i < rowCount; i++) this.resourceRequestor.request(ResType.Memory);
                     this.IC++;
                     break;
                 case 1:
-                    this.virtualMachine = new VirtualMachine(programName);
+                    MemAccesser memAcceser = this.virtualMemory.reserveMemory(programName, this.getResourceTypeCount(ResType.Memory));
+                    Program program = new Program(programName, memAcceser);
+
+                    this.virtualMachine = new VirtualMachine(program, memAcceser, kernelStorage);
                     kernelStorage.processes.add(virtualMachine);
 
-                    this.resourceHolder.request(ResType.Interrupt);
+                    this.resourceRequestor.request(ResType.Interrupt);
                     this.IC++;
                     break;
                 case 2:
-                    ResInterrupt resInterrupt = (ResInterrupt)resourceHolder.getFirst(ResType.Interrupt);
-                    if (resInterrupt.type != IntType.Halt)
-                        this.intHandler.handle(resInterrupt.type);
+                    Interrupt interrupt = (Interrupt)this.getFirstResource(ResType.Interrupt);
+                    if (interrupt.type != IntType.Halt)
+                        this.intHandler.handle(interrupt.type);
                     else
                         this.destroyVM();
                     break;
@@ -54,8 +59,7 @@ namespace UniVM.Processes
         private void destroyVM()
         {
             kernelStorage.processes.remove(this.virtualMachine);
-            this.resourceHolder.releaseAllResources();
-            this.resourceHolder.request(ResType.NonExistent);
+            this.resourceRequestor.request(ResType.NonExistent);
         }
     }
 }
