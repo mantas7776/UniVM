@@ -12,7 +12,8 @@ namespace UniVM
         OSExit,
         Memory,
         Storage,
-        ProgramStart,
-        Interrupt
+        ProgramStartKill,
+        Interrupt,
+        NonExistent
     };
 }

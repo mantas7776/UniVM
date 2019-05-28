@@ -22,7 +22,7 @@ namespace UniVM
             processes.Add(proc);
         }
 
-        public void remote(BaseSystemProcess proc)
+        public void remove(BaseSystemProcess proc)
         {
             processes.Remove(proc);
         }

@@ -53,5 +53,10 @@ namespace UniVM
                 return new List<ResourceDesc>(requestedResources);
             }
         }
+
+        public void releaseAllResources()
+        {
+            resourcesAcquired.ForEach(res => res.release());
+        }
     }
 }

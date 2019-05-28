@@ -46,11 +46,16 @@
   <ItemGroup>
     <Compile Include="Handles\FileHandle.cs" />
     <Compile Include="Kernel\FileInfo.cs" />
+    <Compile Include="Kernel\IntHandler.cs" />
     <Compile Include="Processes\FileManager.cs" />
     <Compile Include="Processes\IdleProcess.cs" />
+    <Compile Include="Processes\JobGovernor.cs" />
+    <Compile Include="Processes\MainProc.cs" />
     <Compile Include="Processes\ProgramLoader.cs" />
+    <Compile Include="Processes\Util\ProcPriority.cs" />
     <Compile Include="Processes\Util\ProcState.cs" />
     <Compile Include="Processes\Util\ResourceDesc.cs" />
+    <Compile Include="Processes\VirtualMachine.cs" />
     <Compile Include="Processes\VMScheduler.cs" />
     <Compile Include="Kernel\Kernel.cs" />
     <Compile Include="Resources\Util\ResType.cs" />
@@ -73,15 +78,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Kernel\ResourceList.cs" />
     <Compile Include="VM\Registers.cs" />
-    <Compile Include="Resources\ProgramStart.cs" />
+    <Compile Include="Resources\ProgramStartKill.cs" />
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Processes\Util\ResourceHolder.cs" />
     <Compile Include="Kernel\Storage.cs" />
     <Compile Include="Kernel\StorageFile.cs" />
     <Compile Include="VM\Util.cs" />
     <Compile Include="VM\RealMachine.cs" />
+    <Compile Include="VM\Util\IntType.cs" />
     <Compile Include="VM\Validate.cs" />
     <Compile Include="VM\VirtualMemory.cs" />
+    <Compile Include="VM\VM.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

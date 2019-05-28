@@ -8,11 +8,13 @@ namespace UniVM.Processes
 {
     class JobGovernor : BaseSystemProcess
     {
-        private string programName;
+        private IntHandler intHandler = new IntHandler();
+
+        public string programName;
         private KernelStorage kernelStorage;
         private VirtualMachine virtualMachine;
 
-        public JobGovernor(int priority, string programName, KernelStorage kernelStorage) : base(priority)
+        public JobGovernor(string programName, KernelStorage kernelStorage) : base(ProcPriority.JobGovernor)
         {
             this.programName = programName;
             this.kernelStorage = kernelStorage;
@@ -40,22 +42,20 @@ namespace UniVM.Processes
                 case 2:
                     ResInterrupt resInterrupt = (ResInterrupt)resourceHolder.getFirst(ResType.Interrupt);
                     if (resInterrupt.type != IntType.Halt)
-                        this.handleInt(resInterrupt.type);
+                        this.intHandler.handle(resInterrupt.type);
                     else
                         this.destroyVM();
                     break;
+                default:
+                    throw new NotImplementedException();
             }
-        }
-
-        private void handleInt(IntType intType)
-        {
-
         }
 
         private void destroyVM()
         {
             kernelStorage.processes.remove(this.virtualMachine);
-            kernelStorage.resources.remove()
+            this.resourceHolder.releaseAllResources();
+            this.resourceHolder.request(ResType.NonExistent);
         }
     }
 }
