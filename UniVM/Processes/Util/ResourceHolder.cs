@@ -9,13 +9,13 @@ namespace UniVM
     class ResourceHolder
     {
 
-        private List<ResType> requestedResources = new List<ResType>();
+        private List<ResourceDesc> requestedResources = new List<ResourceDesc>();
         private List<Resource> resourcesAcquired = new List<Resource>();
 
         public void giveResource(Resource resource)
         {
             resourcesAcquired.Add(resource);
-            requestedResources.Remove(resource.type);
+            requestedResources.Find(o => o.messageid == resource.messageid && o.type == resource.type);
         }
 
         public Boolean blocked
@@ -26,9 +26,9 @@ namespace UniVM
             }
         }
 
-        public void request(ResType type)
+        public void request(ResType type, int messageId = -1)
         {
-            requestedResources.Add(type);
+            requestedResources.Add(new ResourceDesc() { type = type, messageid = messageId });
         }
 
         public Boolean haveResource(ResType type)
@@ -46,18 +46,11 @@ namespace UniVM
             return resFound;
         }
 
-        private void requestResource(ResType type)
-        {
-            if (requestedResources.Contains(type)) return;
-            if (haveResource(type)) return;
-
-        }
-
-        public List<ResType> RequestedResources
+        public List<ResourceDesc> RequestedResources
         {
             get
             {
-                return new List<ResType>(requestedResources);
+                return new List<ResourceDesc>(requestedResources);
             }
         }
     }

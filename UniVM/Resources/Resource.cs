@@ -14,12 +14,14 @@ namespace UniVM
         public int creatorId { get; private set; }
         public bool staticRes { get; private set; }
         private BaseSystemProcess assignedTo = null;
+        public int messageid { get; private set; }
 
-        public Resource(ResType type, int creatorId, bool staticRes = false)
+        public Resource(ResType type, int creatorId, bool staticRes = false, int messageid = -1)
         {
             this.type = type;
             this.creatorId = creatorId;
             this.staticRes = staticRes;
+            this.messageid = messageid;
         }
 
         public Boolean isFree()
