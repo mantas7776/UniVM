@@ -5,8 +5,8 @@ namespace UniVM
 
         public ProgramLoader(int priority) : base(priority)
         {
-            resourceHolder.request(ResTypes.ProgramStart);
-            resourceHolder.request(ResTypes.Memory);
+            resourceHolder.request(ResType.ProgramStart);
+            resourceHolder.request(ResType.Memory);
         }
 
         public override void run()

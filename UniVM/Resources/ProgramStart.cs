@@ -5,7 +5,7 @@ namespace UniVM
     {
         private string programName;
 
-        public ProgramStart(int creatorId): base(ResTypes.ProgramStart, creatorId, true)
+        public ProgramStart(int creatorId): base(ResType.ProgramStart, creatorId, true)
         {
 
         }

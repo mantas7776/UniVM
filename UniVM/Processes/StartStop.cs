@@ -8,24 +8,25 @@ namespace UniVM
 {
     class StartStop : BaseSystemProcess
     {
-        private bool first = true;
+        private uint IC = 0;
         private KernelStorage kernelStorage;
 
         public StartStop(int priority, KernelStorage kernelStorage) : base(priority) {
             this.kernelStorage = kernelStorage;
         }
+
         public override void run()
         {
-            first = false;
-            kernelStorage.resources.add(new Resource(ResTypes.Memory, this.id, true));
-            kernelStorage.resources.add(new Resource(ResTypes.Storage, this.id, true));
+            for(int i = 0; i < Constants.BLOCKS_AMOUNT; i++) kernelStorage.resources.add(new Resource(ResType.Memory, this.id, true));
+
+            kernelStorage.resources.add(new Resource(ResType.Storage, this.id, true));
             //kernelStorage.resources.add(new ProgramStart(this.id));
 
             kernelStorage.processes.add(new ResourceScheduler(99, kernelStorage));
             kernelStorage.processes.add(new VMScheduler(kernelStorage.memory));
             kernelStorage.processes.idle = new IdleProcess();
 
-            this.resourceHolder.request(ResTypes.OSExit);
+            this.resourceHolder.request(ResType.OSExit);
                 
 
             kernelStorage.processes.killAll();

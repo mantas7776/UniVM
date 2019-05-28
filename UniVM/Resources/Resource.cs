@@ -9,13 +9,13 @@ namespace UniVM
     class Resource
     {
         public int id { get; private set; }
-        public ResTypes type { get; private set; }
+        public ResType type { get; private set; }
 
         public int creatorId { get; private set; }
         public bool staticRes { get; private set; }
         private BaseSystemProcess assignedTo = null;
 
-        public Resource(ResTypes type, int creatorId, bool staticRes = false)
+        public Resource(ResType type, int creatorId, bool staticRes = false)
         {
             this.type = type;
             this.creatorId = creatorId;

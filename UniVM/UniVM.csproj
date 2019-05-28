@@ -47,6 +47,7 @@
     <Compile Include="Kernel\FileInfo.cs" />
     <Compile Include="Processes\IdleProcess.cs" />
     <Compile Include="Processes\ProgramLoader.cs" />
+    <Compile Include="Processes\Util\ProcState.cs" />
     <Compile Include="Processes\VMScheduler.cs" />
     <Compile Include="Kernel\Kernel.cs" />
     <Compile Include="VM\MemAccesser.cs" />
