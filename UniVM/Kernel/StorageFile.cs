@@ -17,14 +17,14 @@ namespace UniVM
 
         public int size()
         {
-            return fileInfo.length;
+            return fileInfo.start + fileInfo.length - dataStart;
         }
 
         private StorageFile(Storage storage, FileInfo fileInfo)
         {
             this.storage = storage;
             this.fileInfo = fileInfo;
-            this.dataStart = fileInfo.start + fileInfo.FileName.Length + 1; // start offset + 1 byte per char + null terminator;
+            this.dataStart = fileInfo.start + Encoding.ASCII.GetByteCount(fileInfo.FileName + "\0") + sizeof(int) * 2; // start offset + 1 byte per char + null terminator + length;
         }
 
         private static string AsciiBytesToString(byte[] buffer, int offset)
@@ -118,8 +118,10 @@ namespace UniVM
             return files.Exists(o => o.FileName == name);
         }
 
-        public static StorageFile createFile(Storage storage, string name, int length)
+        public static StorageFile createFile(Storage storage, string name, int requestedLength)
         {
+            int overheadLength = Encoding.ASCII.GetByteCount(name + "\0") + sizeof(int) + sizeof(int); //fileinfo struct overhead
+            int length = requestedLength + overheadLength;
             byte[] storageBytes = storage.getBytes();
             List<FileInfo> files = getFileTable(storageBytes);
             int available = getFreeFileIndex(files);
@@ -155,7 +157,7 @@ namespace UniVM
                 {
                     newFileStart = endOfLastFile;
                 }
-                //TODO: check with last file to storage end!
+                
                 if (newFileStart == -1)
                     throw new Exception("Not enough space for file or storage is too fragmented.");
             }
@@ -188,6 +190,27 @@ namespace UniVM
                 throw new Exception("File was not found");
             }
 
+        }
+
+        public byte[] getAllBytes()
+        {
+            byte[] fileBytes = new byte[size()];
+            for (int i = 0; i < size(); i++)
+            {
+                fileBytes[i] = this[i];
+            }
+            return fileBytes;
+        }
+
+
+        public bool setBytes(byte[] bytes)
+        {
+            if (bytes.Length != size()) return false;
+            for (int i = 0; i < size(); i++)
+            {
+                this[i] = bytes[i];
+            }
+            return true;
         }
 
         public byte this[int key]

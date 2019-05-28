@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handles\FileHandle.cs" />
     <Compile Include="Kernel\FileInfo.cs" />
     <Compile Include="Processes\IdleProcess.cs" />
     <Compile Include="Processes\ProgramLoader.cs" />
