@@ -35,7 +35,7 @@ namespace UniVM.Processes
                     this.IC++;
                     break;
                 case 1:
-                    MemAccesser memAcceser = this.virtualMemory.reserveMemory(programName, this.getResourceTypeCount(ResType.Memory));
+                    MemAccesser memAcceser = this.virtualMemory.reserveMemory(this.getResourceTypeCount(ResType.Memory));
                     Program program = new Program(programName, memAcceser);
 
                     this.virtualMachine = new VirtualMachine(program, memAcceser, kernelStorage);

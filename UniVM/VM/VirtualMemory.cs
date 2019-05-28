@@ -27,7 +27,7 @@ namespace UniVM
             }
         }
 
-        public MemAccesser reserveMemory(string progName, uint rowCount)
+        public MemAccesser reserveMemory(uint rowCount)
         {
             uint[] reservedTranslIndexes = this.reserveVirtRows(rowCount);
             return new MemAccesser(reservedTranslIndexes, memory, PTR);

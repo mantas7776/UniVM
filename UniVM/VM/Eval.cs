@@ -14,7 +14,15 @@ namespace UniVM
         private Registers regs = new Registers();
         private HandleStorage handles;
 
-        public Registers registers { get; set; }
+        public Registers registers {
+            get
+            {
+                return regs;
+            }
+            set {
+                regs = value;
+            }
+        }
 
         public Eval(Storage storage)
         {
@@ -38,9 +46,10 @@ namespace UniVM
             switch(flagName)
             {
                     
-                case "SF": return getFlagByLoc(32);
-                case "ZF": return getFlagByLoc(31);
-                case "OF": return getFlagByLoc(30);
+                case "SF": return getFlagByLoc(31);
+                case "ZF": return getFlagByLoc(30);
+                case "OF": return getFlagByLoc(29);
+                case "CF": return getFlagByLoc(28);
                 default: throw new Exception($"Provided flag: {flagName} does not exist");
             }
         }
@@ -54,6 +63,11 @@ namespace UniVM
         {
             bool OF = operator1 >> 31 != result >> 31;
             setFlag(29, OF);
+        }
+        private void updateCF(uint operator1, uint operator2)
+        {
+            bool CF = operator2 > operator1;
+            setFlag(28, CF);
         }
         private void updateFlags(uint number)
         {
@@ -74,14 +88,15 @@ namespace UniVM
         public void run(Program program)
         {
 
-            uint codeSegByteCount = this.registers.DS - this.registers.CS;
-            byte[] codeSegBytes = program.memAccesser.readFromAddr(this.registers.CS, codeSegByteCount);
+            uint codeSegByteCount = this.regs.DS - this.regs.CS;
+            byte[] codeSegBytes = program.memAccesser.readFromAddr(this.regs.CS, codeSegByteCount);
             string codeString = Encoding.ASCII.GetString(codeSegBytes);
             string[] code = codeString.Split('\n');
 
-                string instructionLine = code[regs.IP++]; //cia reikia kodo kad isgauna eilute viena is codesego, vienas int32 laiko 4 simbolius atminty
-                string[] args = getArgs(instructionLine);
-                string instruction = args[0];
+            string instructionLine = code[regs.IP++]; //cia reikia kodo kad isgauna eilute viena is codesego, vienas int32 laiko 4 simbolius atminty
+            string[] args = getArgs(instructionLine);
+            
+            string instruction = args[0];
 
             uint res;
             switch (instruction)
@@ -91,14 +106,17 @@ namespace UniVM
                     regs.TIMER--;
                     break;
                 case "ADD":
+                    res = regs.A - regs.B;
                     regs.A += regs.B;
                     updateFlags(regs.A);
+                    regs.A = res;
                     regs.TIMER--;
                     break;
                 case "SUB":
                     res = regs.A - regs.B;
                     updateFlags(res);
                     updateOF(regs.A, res);
+                    updateCF(regs.A, regs.B);
                     regs.A = res;
                     regs.TIMER--;
                     break;
@@ -116,6 +134,28 @@ namespace UniVM
                     res = regs.A - regs.B;
                     updateFlags(res);
                     updateOF(regs.A, res);
+                    updateCF(regs.A, regs.B);
+                    regs.TIMER--;
+                    break;
+                case "XOR":
+                    res = regs.A ^ regs.B;
+                    updateFlags(res);
+                    updateOF(0, 0);
+                    regs.A = res;
+                    regs.TIMER--;
+                    break;
+                case "AND":
+                    res = regs.A & regs.B;
+                    updateFlags(res);
+                    updateOF(0, 0);
+                    regs.A = res;
+                    regs.TIMER--;
+                    break;
+                case "OR":
+                    res = regs.A | regs.B;
+                    updateFlags(res);
+                    updateOF(0, 0);
+                    regs.A = res;
                     regs.TIMER--;
                     break;
                 case "JMP":
@@ -141,12 +181,44 @@ namespace UniVM
                         regs.TIMER--;
                         break;
                     }
+                case "JG":
+                    {
+                        uint lineNr = uint.Parse(args[1]);
+                        bool jump = (!getFlagByName("ZF") && getFlagByName("SF") == getFlagByName("OF"));
+                        if (jump) regs.IP = lineNr;
+                        regs.TIMER--;
+                        break;
+                    }
+                case "JC":
+                    {
+                        uint lineNr = uint.Parse(args[1]);
+                        bool jump = getFlagByName("JC");
+                        if (jump) regs.IP = lineNr;
+                        regs.TIMER--;
+                        break;
+                    }
+                case "JZ":
+                    {
+                        uint lineNr = uint.Parse(args[1]);
+                        bool jump = getFlagByName("ZF");
+                        if (jump) regs.IP = lineNr;
+                        regs.TIMER--;
+                        break;
+                    }
+                case "JNZ":
+                    {
+                        uint lineNr = uint.Parse(args[1]);
+                        bool jump = !getFlagByName("ZF");
+                        if (jump) regs.IP = lineNr;
+                        regs.TIMER--;
+                        break;
+                    }
                 case "LOOP":
                     {
                         if (regs.CX <= 0)
                             break;
                         uint lineNr = uint.Parse(args[1]);
-                        regs.B--;
+                        regs.CX--;
                         regs.IP = lineNr;
                         regs.TIMER--;
                         break;
@@ -168,14 +240,14 @@ namespace UniVM
                     }
                 case "MOVATOCX":
                     {
-                        regs.A = regs.CX;
+                        regs.CX = regs.A;
                         break;
                     }
                 case "MOVA":
                 case "MOVB":
                     {
                         uint location = uint.Parse(args[1]);
-                        byte[] dataToTransfer = program.memAccesser.readFromAddr(location, 4);
+                        byte[] dataToTransfer = program.memAccesser.readFromAddr(regs.DS + location * 4, 4);
                         uint value = BitConverter.ToUInt32(dataToTransfer, 0);
 
                         if (instruction == "MOVA")

@@ -14,8 +14,8 @@ namespace UniVM
             var codeFile = StorageFile.Open(randomStorage, "program1");
             //Util.saveCodeToFile(codeFile, codeInfo);
             VMInfo info = Util.readCodeFromFile(codeFile);
-            //realMachine.start();
-            var k = new Kernel();
+            realMachine.start();
+            //var k = new Kernel();
             
         }
     }

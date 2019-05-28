@@ -44,23 +44,29 @@ namespace UniVM {
             return;
         }
 
-        public void addProgramFromFile(string fileName)
+        public void addProgramFromFile()
         {
             //var codeStorage = new Storage(fileName);
 
-            byte[] altcode = Util.getCode("MOVA 5\nMOVB 1\nADD\nLOOP 1\nHALT\n");
-            byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
+            byte[] altcode = Util.getCode("MOVA 0\nMOVATOCX\nMOVB 1\nADD\nLOOP 3\nHALT\n");
+            byte[] altdata = Util.getData("0000000500000001");
             //Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
             //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
             //uint rowCount = 10;
-            //MemAccesser memAccesser = virtualMemory.reserveMemory(fileName, rowCount);
-            //Program program = new Program(memAccesser, fileName, codeStorage);
+            MemAccesser memAccesser = virtualMemory.reserveMemory(5);
+            memAccesser.writeFromAddr(0, altcode);
+            memAccesser.writeFromAddr((uint)altcode.Length, altdata);
+            Program program = new Program("a", memAccesser);
+            program.registers.CS = 0;
+            program.registers.DS = 0 + (uint)altcode.Length;
 
             programs.Add(program);
         }
 
         public void start()
         {
+            //DEBUG
+            addProgramFromFile();
             var regs = new Registers();
             regs.PTR = 0;
             eval.registers = regs;
@@ -90,7 +96,8 @@ namespace UniVM {
                     program.registers = eval.registers;
                 }
 
-                if (!ranAnything) break;
+                if (!ranAnything)
+                    break;
             }
 
         }
