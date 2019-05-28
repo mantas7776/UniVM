@@ -44,12 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RealMachine\FileInfo.cs" />
+    <Compile Include="Kernel\FileInfo.cs" />
+    <Compile Include="Processes\IdleProcess.cs" />
     <Compile Include="Processes\ProgramLoader.cs" />
     <Compile Include="Processes\VMScheduler.cs" />
-    <Compile Include="RealMachine\Kernel.cs" />
+    <Compile Include="Kernel\Kernel.cs" />
     <Compile Include="VM\MemAccesser.cs" />
-    <Compile Include="RealMachine\Memory.cs" />
+    <Compile Include="Kernel\Memory.cs" />
     <Compile Include="VM\Constants.cs" />
     <Compile Include="VM\Eval.cs" />
     <Compile Include="Handles\Console.cs" />
@@ -57,22 +58,22 @@
     <Compile Include="Handles\HandleStorage.cs" />
     <Compile Include="Handles\Hdd.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="RealMachine\KernelStorage.cs" />
+    <Compile Include="Kernel\KernelStorage.cs" />
     <Compile Include="Processes\BaseSystemProcess.cs" />
-    <Compile Include="RealMachine\ProcessList.cs" />
-    <Compile Include="Processes\ProcessScheduler.cs" />
+    <Compile Include="Kernel\ProcessList.cs" />
+    <Compile Include="Kernel\ProcessScheduler.cs" />
     <Compile Include="Processes\ResourceScheduler.cs" />
     <Compile Include="Processes\StartStop.cs" />
     <Compile Include="VM\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RealMachine\ResourceList.cs" />
+    <Compile Include="Kernel\ResourceList.cs" />
     <Compile Include="VM\Registers.cs" />
     <Compile Include="Resources\ProgramStart.cs" />
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Processes\Util\ResourceHolder.cs" />
     <Compile Include="Resources\Util\ResTypes.cs" />
-    <Compile Include="RealMachine\Storage.cs" />
-    <Compile Include="RealMachine\StorageFile.cs" />
+    <Compile Include="Kernel\Storage.cs" />
+    <Compile Include="Kernel\StorageFile.cs" />
     <Compile Include="VM\Util.cs" />
     <Compile Include="VM\RealMachine.cs" />
     <Compile Include="VM\VirtualMemory.cs" />

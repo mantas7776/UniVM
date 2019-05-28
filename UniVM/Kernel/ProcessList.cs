@@ -9,6 +9,7 @@ namespace UniVM
     class ProcessList
     {
         private List<BaseSystemProcess> processes = new List<BaseSystemProcess>();
+        public BaseSystemProcess idle { get; set; }
         public List<BaseSystemProcess> Processes
         {
             get

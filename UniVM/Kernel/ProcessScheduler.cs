@@ -3,20 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace UniVM
 {
-    class ProcessScheduler : BaseSystemProcess
+    class ProcessScheduler
     {
         private KernelStorage kernelStorage;
 
-        public ProcessScheduler(KernelStorage kernelStorage) : base(-1)
+        public ProcessScheduler(KernelStorage kernelStorage)
         {
             this.kernelStorage = kernelStorage;
         }
 
-        public override void run()
+        public void start()
         {
+
             List<BaseSystemProcess> processes = kernelStorage
                 .processes
                 .Processes
@@ -26,7 +28,12 @@ namespace UniVM
 
             foreach (var process in processes)
             {
+                Debug.Print("Running: " + process.GetType());
                 process.run();
+            }
+            if (processes.Count == 0)
+            {
+                kernelStorage.processes.idle.run();
             }
            
 

@@ -12,7 +12,6 @@ namespace UniVM
         public readonly int id;
         public ResourceHolder resourceHolder { get; private set; } = new ResourceHolder();
         public int priority { get; set; }
-        public KernelStorage kernelStorage = new KernelStorage();
 
         protected BaseSystemProcess(int priority)
         {

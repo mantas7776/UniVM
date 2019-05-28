@@ -21,17 +21,11 @@ namespace UniVM
             kernelStorage.resources.add(new Resource(ResTypes.Storage, this.id, true));
             //kernelStorage.resources.add(new ProgramStart(this.id));
 
-            //kernelStorage.processes.add(this);
-            var scheduler = new ProcessScheduler(kernelStorage);
-            kernelStorage.processes.add(scheduler);
             kernelStorage.processes.add(new ResourceScheduler(99, kernelStorage));
             kernelStorage.processes.add(new VMScheduler(kernelStorage.memory));
+            kernelStorage.processes.idle = new IdleProcess();
 
             this.resourceHolder.request(ResTypes.OSExit);
-            while (!this.resourceHolder.haveResource(ResTypes.OSExit))
-            {
-                scheduler.run();
-            }
                 
 
             kernelStorage.processes.killAll();

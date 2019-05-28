@@ -12,8 +12,14 @@ namespace UniVM
 
         public Kernel()
         {
+            ProcessScheduler scheduler = new ProcessScheduler(kernelStorage);
             BaseSystemProcess startStop = new StartStop(100, kernelStorage);
-            startStop.run();
+            kernelStorage.processes.add(startStop);
+            while (true)
+            {
+                scheduler.start();
+            }
+            
             
         }
 
