@@ -10,6 +10,7 @@ namespace UniVM.Processes
     {
         private string programName;
         private KernelStorage kernelStorage;
+        private VirtualMachine virtualMachine;
 
         public JobGovernor(int priority, string programName, KernelStorage kernelStorage) : base(priority)
         {
@@ -30,7 +31,9 @@ namespace UniVM.Processes
                     this.IC++;
                     break;
                 case 1:
-                    kernelStorage.processes.add(new VirtualMachine(programName));
+                    this.virtualMachine = new VirtualMachine(programName);
+                    kernelStorage.processes.add(virtualMachine);
+
                     this.resourceHolder.request(ResType.Interrupt);
                     this.IC++;
                     break;
@@ -51,7 +54,8 @@ namespace UniVM.Processes
 
         private void destroyVM()
         {
-
+            kernelStorage.processes.remove(this.virtualMachine);
+            kernelStorage.resources.remove()
         }
     }
 }

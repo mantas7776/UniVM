@@ -22,6 +22,11 @@ namespace UniVM
             processes.Add(proc);
         }
 
+        public void remote(BaseSystemProcess proc)
+        {
+            processes.Remove(proc);
+        }
+
         public void killAll()
         {
             processes.Clear();
