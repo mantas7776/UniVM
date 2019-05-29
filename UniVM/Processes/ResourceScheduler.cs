@@ -32,7 +32,7 @@ namespace UniVM
                         .resources
                         .Resources
                         .Where(o => 
-                            o.type == requestedResource.type && 
+                            (requestedResource.type == ResType.Any || requestedResource.type == o.type) && 
                             o.isFree() &&
                             o.Messageid == requestedResource.messageid
                          )

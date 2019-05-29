@@ -21,6 +21,9 @@ namespace UniVM
         ProgramStartKill,
         Interrupt,
         NonExistent,
-        InterruptRes
+        InterruptRes,
+        Any
     };
+
+
 }
