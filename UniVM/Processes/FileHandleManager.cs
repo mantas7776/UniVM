@@ -10,9 +10,9 @@ namespace UniVM.Processes
     {
         public FileHandleManager(KernelStorage kernelStorage) : base(50, kernelStorage) { }
 
-        private void createHandle(CreateFileRequest request)
+        private void createHandle(FileHandleRequest request)
         {
-            StorageFile file = StorageFile.Open(this.kernelStorage.virtualHdd, request.filename);
+            StorageFile file = StorageFile.Open(this.kernelStorage.virtualHdd, request.fileName);
             FileHandle fh = new FileHandle(file);
             this.kernelStorage.handles.add(fh);
 
@@ -26,11 +26,13 @@ namespace UniVM.Processes
             switch(this.IC)
             {
                 case 0:
-                    this.resourceRequestor.request(ResType.FileCreateRequest);
+                    this.resourceRequestor.request(ResType.BaseFileResource);
+                    this.IC++;
                     break;
                 case 1:
-                    CreateFileRequest req = getFirstResource(ResType.FileCreateRequest) as CreateFileRequest;
+                    FileHandleRequest req = getFirstResource(ResType.BaseFileResource) as FileHandleRequest;
                     createHandle(req);
+                    this.IC = 0;
                     break;
             }
         }

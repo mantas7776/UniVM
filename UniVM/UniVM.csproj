@@ -57,11 +57,13 @@
     <Compile Include="Processes\VirtualMachine.cs" />
     <Compile Include="Processes\VMScheduler.cs" />
     <Compile Include="Kernel\Kernel.cs" />
-    <Compile Include="Resources\FileHandleRequest.cs" />
-    <Compile Include="Resources\FileHandleResponse.cs" />
+    <Compile Include="Resources\Interrupts\BaseFileResource.cs" />
+    <Compile Include="Resources\Interrupts\File\FileHandleRequest.cs" />
+    <Compile Include="Resources\Interrupts\File\FileHandleResponse.cs" />
     <Compile Include="Resources\Interrupt.cs" />
     <Compile Include="Resources\InterruptRes.cs" />
     <Compile Include="Resources\Interrupts\CreateFileInt.cs" />
+    <Compile Include="Resources\Util\FileResourceType.cs" />
     <Compile Include="Resources\Util\ResType.cs" />
     <Compile Include="VM\MemAccesser.cs" />
     <Compile Include="Kernel\Memory.cs" />

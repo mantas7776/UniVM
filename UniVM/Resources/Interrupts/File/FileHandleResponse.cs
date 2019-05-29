@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class FileHandleResponse : Resource
+    class FileHandleResponse : BaseFileResource
     {
         FileHandle handle;
-        public FileHandleResponse(int creatorId, FileHandle handle, int messageid) : base(ResType.FileCreateResponse, creatorId, false, messageid)
+        public FileHandleResponse(int creatorId, FileHandle handle, int messageid) : base(ResType.FileHandleResponse, FileResourceType.CreateHandle, creatorId, messageid)
         {
             this.handle = handle;
         }
