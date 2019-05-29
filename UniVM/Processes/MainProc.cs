@@ -8,12 +8,10 @@ namespace UniVM
 {
     class MainProc: BaseSystemProcess
     {
-        private KernelStorage kernelStorage;
         private List<JobGovernor> jobGovernors = new List<JobGovernor>();
 
         public MainProc( KernelStorage kernelStorage) : base(ProcPriority.MainProc, kernelStorage)
         {
-            this.kernelStorage = kernelStorage;
         }
 
         public override void run()

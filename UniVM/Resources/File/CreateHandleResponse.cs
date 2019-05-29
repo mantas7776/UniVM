@@ -8,8 +8,8 @@ namespace UniVM
 {
     class CreateHandleResponse : BaseHandleResource
     {
-        FileHandle handle;
-        public CreateHandleResponse(int creatorId, FileHandle handle, int messageid) : base(ResType.CreateHandleResponse, HandleOperationType.CreateHandle, creatorId, messageid)
+        int handle;
+        public CreateHandleResponse(int creatorId, int handle, int messageid) : base(ResType.CreateHandleResponse, HandleOperationType.CreateHandle, creatorId, messageid)
         {
             this.handle = handle;
         }

@@ -12,13 +12,11 @@ namespace UniVM
         private VirtualMemory virtualMemory;
 
         public string programName;
-        private KernelStorage kernelStorage;
         private VirtualMachine virtualMachine;
 
         public JobGovernor(string programName, KernelStorage kernelStorage) : base(ProcPriority.JobGovernor, kernelStorage)
         {
             this.programName = programName;
-            this.kernelStorage = kernelStorage;
             virtualMemory = new VirtualMemory(0, this.kernelStorage.memory);
             intHandler = new IntHandler(this.kernelStorage, this);
         }
