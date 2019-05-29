@@ -17,7 +17,7 @@ namespace UniVM
             this.process = process;
         }
 
-        public void handle(Interrupt interrupt)
+        public void handleInt(Interrupt interrupt)
         {
             if (Enum.IsDefined(typeof(SiInt), interrupt.type) == true)
                 handleSiInt(interrupt);
@@ -64,12 +64,26 @@ namespace UniVM
             return;
         }
 
-        public void handleRes(Resource resource)
+        public void handleResponse(Resource resource)
         {
-            if(resource.type ===)
+            switch(resource.type)
             {
+                case ResType.CreateHandleResponse:
 
+                    break;
+                case ResType.CloseHandleResponse:
+                    
+                    break;
+                case ResType.ReadHandleResponse:
+
+                    break;
+                case ResType.WriteHandleResponse:
+
+                    break;
+                default:
+                    throw new NotFiniteNumberException();
             }
+
         }
     }
 }

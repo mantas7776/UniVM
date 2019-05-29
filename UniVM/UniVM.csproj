@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="Handles\FileHandle.cs" />
     <Compile Include="Kernel\FileInfo.cs" />
-    <Compile Include="Processes\IntHandler.cs" />
     <Compile Include="Processes\HandleManager.cs" />
     <Compile Include="Kernel\IntHandler.cs" />
     <Compile Include="Processes\IntHandlerLegacy.cs" />

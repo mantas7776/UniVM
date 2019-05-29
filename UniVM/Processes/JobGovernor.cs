@@ -51,10 +51,10 @@ namespace UniVM
                     Resource resource = this.getFirstResource(ResType.Any);
                     if(resource.type == ResType.Interrupt)
                     {
-                        this.intHandler.handle((Interrupt)resource);
-                    } else (resource.type == ResType.)
+                        this.intHandler.handleInt((Interrupt)resource);
+                    } else 
                     {
-                        this.intHandler.resHandle(resource);
+                        this.intHandler.handleResponse(resource);
                     }
                     break;
                 //case 4:
