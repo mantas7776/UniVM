@@ -46,11 +46,11 @@ namespace UniVM
                 case 2:
                     InterruptRes interrupt = (InterruptRes)this.getFirstResource(ResType.InterruptRes);
 
-                    if (interrupt.type != IntType.Halt)
-                        this.destroyVM();
-                        //this.intHandler.handle(interrupt.type);
-                    else
-                        this.destroyVM();
+                    //if (interrupt.type != IntType.Halt)
+                    //    this.destroyVM();
+                    //    //this.intHandler.handle(interrupt.type);
+                    //else
+                    //    this.destroyVM();
                     break;
                 default:
                     throw new NotImplementedException();

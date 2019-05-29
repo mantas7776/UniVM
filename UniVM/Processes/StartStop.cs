@@ -27,6 +27,7 @@ namespace UniVM
                     kernelStorage.processes.add(new MainProc(kernelStorage));
                     kernelStorage.processes.add(new ResourceScheduler(kernelStorage));
                     kernelStorage.processes.add(new VMScheduler(kernelStorage));
+                    kernelStorage.processes.add(new HandleManager(kernelStorage));
                     kernelStorage.processes.idle = new IdleProcess(kernelStorage);
 
                     this.resourceRequestor.request(ResType.OSExit);

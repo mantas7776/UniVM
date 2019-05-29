@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UniVM.Processes
+namespace UniVM
 {
     class HandleManager : BaseSystemProcess
     {
@@ -14,23 +14,26 @@ namespace UniVM.Processes
         {
             StorageFile file = StorageFile.Open(this.kernelStorage.virtualHdd, request.fileName);
             FileHandle fh = new FileHandle(file);
-            this.kernelStorage.handles.add(fh);
+            int hndl = this.kernelStorage.handles.add(fh);
 
-            Resource response = new CreateHandleResponse(this.id, fh, request.createdByProcess);
+            Resource response = new CreateHandleResponse(this.id, hndl, request.createdByProcess);
 
             kernelStorage.resources.add(response);
         }
 
         private void readHandle(HandleOperationRequest request)
         {
-            Resource response = new ReadHandleResponse(this.id, request.handle.read(), request.createdByProcess);
+            Handle handle = this.kernelStorage.handles[request.handle];
+            Resource response = new ReadHandleResponse(this.id, handle.read(), request.createdByProcess);
 
             kernelStorage.resources.add(response);
         }
 
         private void closeHandle(HandleOperationRequest request)
         {
-            request.handle.close();
+            Handle handle = this.kernelStorage.handles[request.handle];
+            this.kernelStorage.handles.remove(handle);
+            handle.close();
             Resource response = new HandleOperationResponse(this.id, HandleOperationType.Close, request.createdByProcess);
 
             kernelStorage.resources.add(response);
@@ -38,8 +41,9 @@ namespace UniVM.Processes
 
         private void writeHandle(WriteHandleRequest request)
         {
-            request.handle.write(request.toWrite);
-            Resource response = new ReadHandleResponse(this.id, request.handle.read(), request.createdByProcess);
+            Handle handle = this.kernelStorage.handles[request.handle];
+            handle.write(request.toWrite);
+            Resource response = new ReadHandleResponse(this.id, handle.read(), request.createdByProcess);
 
             kernelStorage.resources.add(response);
         }
