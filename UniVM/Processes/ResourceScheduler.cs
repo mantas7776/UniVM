@@ -34,7 +34,7 @@ namespace UniVM
                         .Where(o => 
                             (requestedResource.type == ResType.Any || requestedResource.type == o.type) && 
                             o.isFree() &&
-                            o.messageid == requestedResource.messageid
+                            o.Messageid == requestedResource.messageid
                          )
                         .First();
                     resource.assign(waitingProcess);

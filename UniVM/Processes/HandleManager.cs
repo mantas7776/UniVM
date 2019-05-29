@@ -12,7 +12,7 @@ namespace UniVM
 
         private void createHandle(CreateHandleRequest request)
         {
-            StorageFile file = StorageFile.Open(this.kernelStorage.virtualHdd, request.fileName);
+            StorageFile file = StorageFile.createFile(this.kernelStorage.virtualHdd, request.fileName, 200);
             FileHandle fh = new FileHandle(file);
             int hndl = this.kernelStorage.handles.add(fh);
 

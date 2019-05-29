@@ -52,6 +52,7 @@
     <Compile Include="Processes\IdleProcess.cs" />
     <Compile Include="Processes\JobGovernor.cs" />
     <Compile Include="Processes\MainProc.cs" />
+    <Compile Include="Processes\Test.cs" />
     <Compile Include="Processes\Util\ProcPriority.cs" />
     <Compile Include="Processes\Util\ProcState.cs" />
     <Compile Include="Processes\Util\ResourceDesc.cs" />
