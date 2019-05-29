@@ -9,7 +9,7 @@ namespace UniVM
     class Resource
     {
         public int id { get; private set; }
-        public ResType type { get; private set; }
+        public ResType type { get; protected set; }
 
         public int createdByProcess { get; private set; }
         public bool staticRes { get; private set; }
