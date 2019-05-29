@@ -12,7 +12,7 @@ namespace UniVM {
         public RealMachine()
         {
             this.memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCK_SIZE);
-            this.eval = new Eval(this.storage);
+            this.eval = new Eval();
             this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
         }
 
@@ -34,14 +34,11 @@ namespace UniVM {
         {
             switch (PiNr)
             {
-                case PiInt.OperandUndefined:
+                case PiInt.InvalidCommand:
                     {
                         program.setDone();
                         break;
                     }
-                case PiInt.OPKUndefined:
-                    program.setDone();
-                    break;
             }
 
             return;

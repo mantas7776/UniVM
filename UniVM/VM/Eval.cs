@@ -24,13 +24,6 @@ namespace UniVM
             }
         }
 
-        public Eval(Storage storage)
-        {
-            //TODO: cia perduoti is isores hanldlestorage kai bus daugiau evalu;
-            //handles.add()
-        }
-
-
         // 32bit - sign flag
         // 31bit - OF Flag
         // 30bit - zero Flag
@@ -265,16 +258,18 @@ namespace UniVM
                         regs.TIMER--;
                         break;
                     }
-                case "READ": // read from console
+                case "READ":
                     {
                         regs.A = handles[(int)regs.B].read();
                         regs.TIMER--;
+                        regs.SI = SiInt.ReadFromHandle;
                         break;
                     }
-                case "WRITE": // write to console
+                case "WRITE":
                     {
                         handles[(int)regs.B].write((byte)regs.A);
                         regs.TIMER--;
+                        regs.SI = SiInt.WriteToHandle;
                         break;
                     }
                 case "OPENFILEHANDLE": 
@@ -283,6 +278,7 @@ namespace UniVM
                         uint handleNr = (uint)handles.add(new HddDevice(this.storage, location));
                         regs.B = handleNr;
                         regs.TIMER--;
+                        regs.SI = SiInt.OpenFileHandle;
                         break;
                     }
                 case "DELETEFILE":
@@ -290,6 +286,7 @@ namespace UniVM
                         int location = int.Parse(args[1]);
                         handles[(int)regs.B].delete(location);
                         regs.TIMER--;
+                        regs.SI = SiInt.DeleteFile;
                         break;
                     }
                 case "CLOSEFILEHANDLE":
@@ -297,11 +294,12 @@ namespace UniVM
                         Handle handleToDelete = handles[(int)regs.B];
                         handles.remove(handleToDelete);
                         regs.TIMER--;
+                        regs.SI = SiInt.CloseFileHandle;
                         break;
                     }
                 default:
                     Console.WriteLine("Bad opcode " + args[0]);
-                    regs.PI = PiInt.OPKUndefined;
+                    regs.PI = PiInt.InvalidCommand;
                     regs.TIMER--;
                     break;
             }

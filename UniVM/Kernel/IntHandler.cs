@@ -35,15 +35,19 @@ namespace UniVM
                 case SiInt.Halt:
                     {
                         process.destroyVM();
-                        kernelStorage.resources.add(new ProgramStartKill(interrupt.createdByProcess, true, interrupt.programName));
                         break;
                     }
                 case SiInt.CreateFileHandle:
                     {
-                        CreateFileInt createFileInt = (CreateFileInt)interrupt;
-                        kernelStorage.resources.add(new FileHandleRequest(process.id, createFileInt.fileName));
-                        //this.kernelStorage.processes.Processes.Find(proc => proc.id == );
-                        process.resourceRequestor.request(ResType.FileCreateResponse, process.id);
+                        CreateHandleRequest createHandleRequest = (CreateHandleRequest)interrupt;
+                        kernelStorage.resources.add(new CreateHandleRequest(process.id, createHandleRequest.fileName));
+                        process.resourceRequestor.request(ResType.CreateHandleRequest, process.id);
+                        break;
+                    }
+                case SiInt.CloseFileHandle:
+                    {
+                        kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, createHandleRequest.handle));
+                        process.resourceRequestor.request(ResType.CreateHandleRequest, process.id);
                         break;
                     }
             }
@@ -55,10 +59,9 @@ namespace UniVM
         {
             switch ((PiInt)interrupt.type)
             {
-                case PiInt.OperandUndefined:
-                    {
-                        break;
-                    }
+                case PiInt.InvalidCommand:
+                    process.destroyVM();
+                    break;
             }
 
             return;
@@ -69,19 +72,28 @@ namespace UniVM
             switch(resource.type)
             {
                 case ResType.CreateHandleResponse:
-
-                    break;
-                case ResType.CloseHandleResponse:
-                    
-                    break;
+                    {
+                        Program program = process.virtualMachine.program;
+                        CreateHandleResponse createHandleResponse = (CreateHandleResponse)resource;
+                        program.registers.B = (uint)(createHandleResponse.handle);
+                        break;
+                    }
                 case ResType.ReadHandleResponse:
-
-                    break;
+                    {
+                        Program program = process.virtualMachine.program;
+                        ReadHandleResponse readHandleResponse = (ReadHandleResponse)resource;
+                        program.registers.A = (uint)(readHandleResponse.result);
+                        break;
+                    }
                 case ResType.WriteHandleResponse:
-
-                    break;
+                case ResType.CloseHandleResponse:
+                case ResType.DeleteFileResponse:
+                    {
+                        // do nothing - just wait and release
+                        break;
+                    }
                 default:
-                    throw new NotFiniteNumberException();
+                    throw new NotImplementedException();
             }
 
         }

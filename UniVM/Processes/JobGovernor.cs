@@ -10,9 +10,9 @@ namespace UniVM
     {
         private IntHandler intHandler;
         private VirtualMemory virtualMemory;
+        public VirtualMachine virtualMachine;
 
         public string programName;
-        private VirtualMachine virtualMachine;
 
         public JobGovernor(string programName, KernelStorage kernelStorage) : base(ProcPriority.JobGovernor, kernelStorage)
         {
@@ -54,12 +54,10 @@ namespace UniVM
                     {
                         this.intHandler.handleResponse(resource);
                     }
+
+                    resource.release();
+                    this.IC = 2;
                     break;
-                //case 4:
-                //    InterruptRes interruptRes = (InterruptRes)this.getFirstResource(ResType.InterruptRes);
-                //    intHandler.resHandle(InterruptRes);
-                //    this.IC = 2;
-                //    break;
                 default:
                     throw new NotImplementedException();
             }
