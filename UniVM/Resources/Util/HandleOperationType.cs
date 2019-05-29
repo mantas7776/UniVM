@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    public enum FileResourceType
+    public enum HandleOperationType
     {
         CreateHandle,
         Read,

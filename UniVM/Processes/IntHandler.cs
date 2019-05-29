@@ -53,8 +53,8 @@ namespace UniVM
                 case SiInt.CreateFileHandle:
                     {
                         CreateFileInt createFileInt = interrupt as CreateFileInt;
-                        kernelStorage.resources.add(new FileHandleRequest(this.id, createFileInt.fileName));
-                        this.resourceRequestor.request(ResType.FileHandleResponse, this.id);
+                        kernelStorage.resources.add(new CreateHandleRequest(this.id, createFileInt.fileName));
+                        this.resourceRequestor.request(ResType.CreateHandleResponse, this.id);
                         break;
                     }
             }

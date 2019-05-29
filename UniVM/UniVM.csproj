@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Handles\FileHandle.cs" />
     <Compile Include="Kernel\FileInfo.cs" />
-    <Compile Include="Processes\FileHandleManager.cs" />
+    <Compile Include="Processes\HandleManager.cs" />
     <Compile Include="Processes\IntHandler.cs" />
     <Compile Include="Processes\IdleProcess.cs" />
     <Compile Include="Processes\JobGovernor.cs" />
@@ -57,13 +57,16 @@
     <Compile Include="Processes\VirtualMachine.cs" />
     <Compile Include="Processes\VMScheduler.cs" />
     <Compile Include="Kernel\Kernel.cs" />
-    <Compile Include="Resources\Interrupts\BaseFileResource.cs" />
-    <Compile Include="Resources\Interrupts\File\FileHandleRequest.cs" />
-    <Compile Include="Resources\Interrupts\File\FileHandleResponse.cs" />
+    <Compile Include="Resources\Interrupts\BaseHandleResource.cs" />
+    <Compile Include="Resources\Interrupts\File\CreateHandleRequest.cs" />
+    <Compile Include="Resources\Interrupts\File\CreateHandleResponse.cs" />
     <Compile Include="Resources\Interrupt.cs" />
     <Compile Include="Resources\InterruptRes.cs" />
     <Compile Include="Resources\Interrupts\CreateFileInt.cs" />
-    <Compile Include="Resources\Util\FileResourceType.cs" />
+    <Compile Include="Resources\Interrupts\File\HandleOperationResponse.cs" />
+    <Compile Include="Resources\Interrupts\File\ReadHandleResponse.cs" />
+    <Compile Include="Resources\Interrupts\File\HandleOperationRequest.cs" />
+    <Compile Include="Resources\Util\HandleOperationType.cs" />
     <Compile Include="Resources\Util\ResType.cs" />
     <Compile Include="VM\MemAccesser.cs" />
     <Compile Include="Kernel\Memory.cs" />
@@ -99,6 +102,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\Interrupts\Handle\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
