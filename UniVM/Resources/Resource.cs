@@ -16,7 +16,9 @@ namespace UniVM
         public BaseSystemProcess assignedTo { get; private set; }
         public bool expired { get; private set; }
 
-        public int messageid
+        private int messageid;
+
+        public int Messageid
         {
             get
             {

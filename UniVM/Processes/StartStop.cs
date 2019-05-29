@@ -30,6 +30,9 @@ namespace UniVM
                     kernelStorage.processes.add(new HandleManager(kernelStorage));
                     kernelStorage.processes.idle = new IdleProcess(kernelStorage);
 
+                    //test
+                    kernelStorage.processes.add(new Test(kernelStorage));
+
                     this.resourceRequestor.request(ResType.OSExit);
                     this.IC++;
                     break;
