@@ -8,7 +8,8 @@ namespace UniVM
 {
     public enum SiInt
     {
-        Halt
+        Halt,
+        CreateFileHandle
     }
     public enum PiInt
     {
@@ -19,6 +20,7 @@ namespace UniVM
     {
         Halt = SiInt.Halt,
         OPKUndefined = PiInt.OPKUndefined,
-        OperandUndefined = PiInt.OperandUndefined
+        OperandUndefined = PiInt.OperandUndefined,
+        CreateFileHandle = SiInt.CreateFileHandle
     }
 }

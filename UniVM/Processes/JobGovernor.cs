@@ -42,11 +42,12 @@ namespace UniVM
                     this.virtualMachine = new VirtualMachine(program, memAcceser, kernelStorage, this.id);
                     kernelStorage.processes.add(virtualMachine);
 
-                    this.resourceRequestor.request(ResType.Interrupt, this.id);
+                    this.resourceRequestor.request(ResType.InterruptRes, this.id);
                     this.IC++;
                     break;
                 case 2:
-                    Interrupt interrupt = (Interrupt)this.getFirstResource(ResType.Interrupt);
+                    InterruptRes interrupt = (InterruptRes)this.getFirstResource(ResType.InterruptRes);
+
                     if (interrupt.type != IntType.Halt)
                         this.destroyVM();
                         //this.intHandler.handle(interrupt.type);

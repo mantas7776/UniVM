@@ -60,6 +60,8 @@
     <Compile Include="Resources\FileHandleRequest.cs" />
     <Compile Include="Resources\FileHandleResponse.cs" />
     <Compile Include="Resources\Interrupt.cs" />
+    <Compile Include="Resources\InterruptRes.cs" />
+    <Compile Include="Resources\Interrupts\CreateFileInt.cs" />
     <Compile Include="Resources\Util\ResType.cs" />
     <Compile Include="VM\MemAccesser.cs" />
     <Compile Include="Kernel\Memory.cs" />

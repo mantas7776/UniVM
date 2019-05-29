@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class CreateFileRequest : Resource
+    class FileHandleRequest : Resource
     {
-        public string filename { get; private set; }
-        public CreateFileRequest(int creatorId, string filename, bool staticRes = false, int messageid = -1) : base(ResType.FileCreateRequest, creatorId, staticRes, messageid)
+        public string fileName { get; private set; }
+        public FileHandleRequest(int creatorId, string fileName) : base(ResType.FileCreateRequest, creatorId, true, -1)
         {
-            this.filename = filename;
+            this.fileName = fileName;
         }
     }
 }

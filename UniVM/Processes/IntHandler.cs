@@ -50,6 +50,13 @@ namespace UniVM
                         kernelStorage.resources.add(new ProgramStartKill(interrupt.createdByProcess, true, interrupt.programName));
                         break;
                     }
+                case SiInt.CreateFileHandle:
+                    {
+                        CreateFileInt createFileInt = interrupt as CreateFileInt;
+                        kernelStorage.resources.add(new FileHandleRequest(this.id, createFileInt.fileName));
+                        this.resourceRequestor.request(ResType.FileCreateResponse, this.id);
+                        break;
+                    }
             }
 
             return;

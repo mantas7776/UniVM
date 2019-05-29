@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    enum ResType
+    public enum ResType
     {
         FileManager,
         OSExit,
         Memory,
         Storage,
+        CreateFileInt,
         FileCreateRequest,
         FileCreateResponse,
         ProgramStartKill,
         Interrupt,
-        NonExistent
+        NonExistent,
+        InterruptRes
     };
 }
