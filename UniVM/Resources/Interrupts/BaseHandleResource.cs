@@ -8,7 +8,7 @@ namespace UniVM
 {
     class BaseHandleResource : Resource
     {
-        protected HandleOperationType handleResourceType;
+        public HandleOperationType handleResourceType { get; protected set; }
         public BaseHandleResource(ResType type, HandleOperationType handleResourceType, int createdByProcess, int messageid) : base(type, createdByProcess, false, messageid) {
             this.handleResourceType = handleResourceType;
         }

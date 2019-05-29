@@ -8,8 +8,8 @@ namespace UniVM
 {
     class ReadHandleResponse : BaseHandleResource
     {
-        char result;
-        public ReadHandleResponse(int creatorId, char readResult, int messageid) : base(ResType.ReadHandleResponse, HandleOperationType.Read, creatorId, messageid)
+        byte result;
+        public ReadHandleResponse(int creatorId, byte readResult, int messageid) : base(ResType.ReadHandleResponse, HandleOperationType.Read, creatorId, messageid)
         {
             this.result = readResult;
         }
