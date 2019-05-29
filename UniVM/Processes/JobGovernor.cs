@@ -20,7 +20,7 @@ namespace UniVM
             this.programName = programName;
             this.kernelStorage = kernelStorage;
             virtualMemory = new VirtualMemory(0, this.kernelStorage.memory);
-            intHandler = new IntHandler(this.kernelStorage);
+            intHandler = new IntHandler(this.kernelStorage, this);
         }
 
         public override void run()
@@ -41,25 +41,33 @@ namespace UniVM
 
                     this.virtualMachine = new VirtualMachine(program, memAcceser, kernelStorage, this.id);
                     kernelStorage.processes.add(virtualMachine);
-
-                    this.resourceRequestor.request(ResType.InterruptRes, this.id);
                     this.IC++;
                     break;
                 case 2:
-                    InterruptRes interrupt = (InterruptRes)this.getFirstResource(ResType.InterruptRes);
-
-                    if (interrupt.type != IntType.Halt)
-                        this.destroyVM();
-                        //this.intHandler.handle(interrupt.type);
-                    else
-                        this.destroyVM();
+                    this.resourceRequestor.request(ResType.Any, this.id);
+                    this.IC++;
                     break;
+                case 3:
+                    Resource resource = this.getFirstResource(ResType.Any);
+                    if(resource.type == ResType.Interrupt)
+                    {
+                        this.intHandler.handle((Interrupt)resource);
+                    } else (resource.type == ResType.)
+                    {
+                        this.intHandler.resHandle(resource);
+                    }
+                    break;
+                //case 4:
+                //    InterruptRes interruptRes = (InterruptRes)this.getFirstResource(ResType.InterruptRes);
+                //    intHandler.resHandle(InterruptRes);
+                //    this.IC = 2;
+                //    break;
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        private void destroyVM()
+        public void destroyVM()
         {
             kernelStorage.processes.remove(this.virtualMachine);
             kernelStorage.resources.add(new ProgramStartKill(this.id, true, this.programName));

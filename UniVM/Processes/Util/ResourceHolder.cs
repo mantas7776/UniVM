@@ -26,6 +26,7 @@ namespace UniVM
 
         public void request(ResType type, int messageId = -1)
         {
+            if (type == ResType.Any && messageId == -1) throw new Exception("You probably dont want to reserve all the resources!");
             requestedResources.Add(new ResourceDesc() { type = type, messageid = messageId });
         }
 

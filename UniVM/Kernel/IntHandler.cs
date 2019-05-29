@@ -6,31 +6,18 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class IntHandler: BaseSystemProcess
+    class IntHandler 
     {
-        public IntHandler(KernelStorage kernelStorage): base(ProcPriority.IntHandler, kernelStorage)
+        private KernelStorage kernelStorage;
+        private JobGovernor process;
+
+        public IntHandler(KernelStorage kernelStorage, JobGovernor process)
         {
             this.kernelStorage = kernelStorage;
+            this.process = process;
         }
 
-        public override void run()
-        {
-            switch(this.IC) {
-                case 0:
-                    this.resourceRequestor.request(ResType.Interrupt);
-                    this.IC++;
-                    break;
-                case 1:
-                    Interrupt interrupt = (Interrupt)this.getFirstResource(ResType.Interrupt);
-                    this.handle(interrupt);
-                    interrupt.release();
-                    this.IC = 0;
-                    break;
-            } 
-
-        }
-
-        private void handle(Interrupt interrupt)
+        public void handle(Interrupt interrupt)
         {
             if (Enum.IsDefined(typeof(SiInt), interrupt.type) == true)
                 handleSiInt(interrupt);
@@ -41,20 +28,22 @@ namespace UniVM
 
         }
 
-        private void handleSiInt(Interrupt interrupt)
+        public void handleSiInt(Interrupt interrupt)
         {
             switch ((SiInt)interrupt.type)
             {
                 case SiInt.Halt:
                     {
+                        process.destroyVM();
                         kernelStorage.resources.add(new ProgramStartKill(interrupt.createdByProcess, true, interrupt.programName));
                         break;
                     }
                 case SiInt.CreateFileHandle:
                     {
-                        CreateFileInt createFileInt = interrupt as CreateFileInt;
-                        kernelStorage.resources.add(new FileHandleRequest(this.id, createFileInt.fileName));
-                        this.resourceRequestor.request(ResType.FileCreateResponse, this.id);
+                        CreateFileInt createFileInt = (CreateFileInt)interrupt;
+                        kernelStorage.resources.add(new FileHandleRequest(process.id, createFileInt.fileName));
+                        //this.kernelStorage.processes.Processes.Find(proc => proc.id == );
+                        process.resourceRequestor.request(ResType.FileCreateResponse, process.id);
                         break;
                     }
             }
@@ -62,7 +51,7 @@ namespace UniVM
             return;
         }
 
-        private void handlePiInt(Interrupt interrupt)
+        public void handlePiInt(Interrupt interrupt)
         {
             switch ((PiInt)interrupt.type)
             {
@@ -73,6 +62,14 @@ namespace UniVM
             }
 
             return;
+        }
+
+        public void handleRes(Resource resource)
+        {
+            if(resource.type ===)
+            {
+
+            }
         }
     }
 }
