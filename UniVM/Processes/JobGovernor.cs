@@ -23,7 +23,7 @@ namespace UniVM
 
         public override void run()
         {
-            int testblocks = 5;
+            int testblocks = 10;
             switch(this.IC)
             {
                 case 0:
@@ -42,15 +42,23 @@ namespace UniVM
                         uint rowCount = this.getResourceTypeCount(ResType.Memory);
                         MemAccesser memAccesser = this.virtualMemory.reserveMemory(rowCount);
 
-                        byte[] altcode = Util.getCode("MOVA 0\nMOVATOCX\nMOVB 1\nADD\nLOOP 3\nHALT\n");
-                        byte[] altdata = Util.getData("000000050000000166696C652E747874");
+                        //byte[] altcode = Util.getCode("MOVA 0\nMOVATOCX\nMOVB 1\nADD\nLOOP 3\nHALT\n");
+                        //byte[] altdata = Util.getData("000000050000000166696C652E747874");
+
+                        byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nHALT\n");
+                        //byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nREAD\nCLOSEHANDLE\nHALT\n");
+                        //byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n");
+                        //byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nREADC\nHALT\n");
+                        string t = "0000001000000008\"big\0\"00000000FFFFFFFF00000004";
+                        //string t2 = "0000001000000008\"big\0\"00000000BBBBBBBB00000004";
+                        byte[] altdata = Util.getData(t);
 
                         memAccesser.writeFromAddr(0, altcode);
                         memAccesser.writeFromAddr((uint)altcode.Length, altdata);
                         Program program = new Program("a", memAccesser);
 
                         byte[] PTRIInfo = new byte[] { (byte)rowCount, (byte)Constants.MAX_BLOCK_COUNT };
-                        program.registers.PTRI = BitConverter.ToUInt32(PTRIInfo, 0);
+                        //program.registers.PTRI = BitConverter.ToUInt32(PTRIInfo, 0);
 
                         program.registers.CS = 0;
                         program.registers.DS = 0 + (uint)altcode.Length;
