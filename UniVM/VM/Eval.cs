@@ -259,8 +259,8 @@ namespace UniVM
                 case "READ":
                     {
                         //regs.A = handles[(int)regs.B].read();
-                        regs.TIMER--;
                         regs.SI = SiInt.ReadFromHandle;
+                        regs.TIMER--;
                         break;
                     }
                 case "WRITE":
@@ -284,27 +284,27 @@ namespace UniVM
                     }
                 case "OPENFILEHANDLE": 
                     {
-                        int location = int.Parse(args[1]);
+                        //int location = int.Parse(args[1]);
                         //uint handleNr = (uint)handles.add(new HddDevice(this.storage, location));
                         //regs.B = handleNr;
-                        regs.TIMER--;
                         regs.SI = SiInt.OpenFileHandle;
+                        regs.TIMER--;
                         break;
                     }
                 case "DELETEFILE":
                     {
-                        int location = int.Parse(args[1]);
+                        //int location = int.Parse(args[1]);
                         //handles[(int)regs.B].delete(location);
-                        regs.TIMER--;
                         regs.SI = SiInt.DeleteFile;
+                        regs.TIMER--;
                         break;
                     }
                 case "CLOSEFILEHANDLE":
                     {
                         //Handle handleToDelete = handles[(int)regs.B];
                         //handles.remove(handleToDelete);
-                        regs.TIMER--;
                         regs.SI = SiInt.CloseFileHandle;
+                        regs.TIMER--;
                         break;
                     }
                 default:

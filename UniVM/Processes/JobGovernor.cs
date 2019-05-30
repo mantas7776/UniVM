@@ -14,7 +14,7 @@ namespace UniVM
         public VirtualMachine virtualMachine;
         public string programName { get; private set;  }
 
-        public JobGovernor(string programName, KernelStorage kernelStorage) : base(ProcPriority.JobGovernor, kernelStorage)
+        public JobGovernor(string programName, KernelStorage kernelStorage, int creatorId) : base(ProcPriority.JobGovernor, kernelStorage, creatorId)
         {
             this.programName = programName;
             virtualMemory = new VirtualMemory(Constants.PTR, this.kernelStorage.memory);

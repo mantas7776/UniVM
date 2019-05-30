@@ -12,7 +12,6 @@ namespace UniVM
             A,
             B,
             CX,
-            MODE,
             PTR,
             PTRI,
             IP, /* instruction pointer */
@@ -20,7 +19,6 @@ namespace UniVM
             CS,
             TIMER,
             DS;
-
         public SiInt SI;
         public PiInt PI;
     };

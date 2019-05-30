@@ -8,7 +8,7 @@ namespace UniVM
 {
     class HandleManager : BaseSystemProcess
     {
-        public HandleManager(KernelStorage kernelStorage) : base(50, kernelStorage) { }
+        public HandleManager(KernelStorage kernelStorage, int creatorId) : base(50, kernelStorage, creatorId) { }
 
         public void createFileHandle(CreateHandleRequest request)
         {

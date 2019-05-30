@@ -13,6 +13,7 @@ namespace UniVM
         public readonly int id;
         public ResourceRequestor resourceRequestor { get; private set; } = new ResourceRequestor();
         public int priority { get; set; }
+        public readonly int creatorId;
         private bool running = false;
         protected KernelStorage kernelStorage;
         public ProcState state {
@@ -29,9 +30,10 @@ namespace UniVM
             }
         }
 
-        protected BaseSystemProcess(int priority, KernelStorage kernelStorage)
+        protected BaseSystemProcess(int priority, KernelStorage kernelStorage, int creatorId)
         {
             this.id = nextId++;
+            this.creatorId = creatorId;
             this.priority = priority;
             this.kernelStorage = kernelStorage;
         }

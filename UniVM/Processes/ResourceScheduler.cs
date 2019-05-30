@@ -9,7 +9,7 @@ namespace UniVM
     class ResourceScheduler : BaseSystemProcess
     {
 
-        public ResourceScheduler(KernelStorage kernelStorage) : base (ProcPriority.ResourceScheduler, kernelStorage)
+        public ResourceScheduler(KernelStorage kernelStorage, int creatorId) : base (ProcPriority.ResourceScheduler, kernelStorage, creatorId)
         {
             this.kernelStorage = kernelStorage;
         }

@@ -9,7 +9,7 @@ namespace UniVM
     class StartStop : BaseSystemProcess
     {
 
-        public StartStop(int priority, KernelStorage kernelStorage) : base(priority, kernelStorage) {
+        public StartStop(int priority, KernelStorage kernelStorage, int creatorId) : base(priority, kernelStorage, creatorId) {
             this.kernelStorage = kernelStorage;
         }
 
@@ -23,10 +23,10 @@ namespace UniVM
                     kernelStorage.resources.add(new Resource(ResType.Storage, this.id, false));
                     kernelStorage.resources.add(new ProgramStartKill(this.id, false, "code.bin"));
 
-                    kernelStorage.processes.add(new MainProc(kernelStorage));
-                    kernelStorage.processes.add(new ResourceScheduler(kernelStorage));
-                    kernelStorage.processes.add(new HandleManager(kernelStorage));
-                    kernelStorage.processes.idle = new IdleProcess(kernelStorage);
+                    kernelStorage.processes.add(new MainProc(kernelStorage, this.id));
+                    kernelStorage.processes.add(new ResourceScheduler(kernelStorage, this.id));
+                    kernelStorage.processes.add(new HandleManager(kernelStorage, this.id));
+                    kernelStorage.processes.idle = new IdleProcess(kernelStorage, this.id);
 
                     //test
                     //kernelStorage.processes.add(new Test(kernelStorage));
