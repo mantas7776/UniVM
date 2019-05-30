@@ -52,6 +52,8 @@ namespace UniVM
                     resource.release();
                     this.IC = 0;
                     break;
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

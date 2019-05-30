@@ -26,14 +26,6 @@ namespace UniVM
                 handlePiInt(program.registers.PI);
             else
                 throw new Exception("Jobgovernor expected an int, but was not found inside the program.");
-
-
-            //if (Enum.IsDefined(typeof(SiInt), interrupt.type) == true)
-            //    handleSiInt(interrupt);
-            //else if (Enum.IsDefined(typeof(PiInt), interrupt.type) == true)
-            //    handlePiInt(interrupt);
-            //else
-            //    throw new NotImplementedException("Invalid int type was provided");
         }
 
         private void handleSiInt(SiInt intNr)
@@ -50,12 +42,6 @@ namespace UniVM
                         kernelStorage.resources.add(new CreateHandleRequest(process.id, process.programName));
                         break;
                     }
-                case SiInt.CloseFileHandle:
-                    {
-                        Program program = process.virtualMachine.program;
-                        kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, (int)program.registers.B, process.programName));
-                        break;
-                    }
                 case SiInt.WriteToHandle:
                     {
                         Program program = process.virtualMachine.program;
@@ -66,9 +52,14 @@ namespace UniVM
                         this.kernelStorage.resources.add(new WriteHandleRequest(process.id, (int)program.registers.B, bytesToWrite));
                         break;
                     }
+                case SiInt.CloseFileHandle:
+                    {
+                        Program program = process.virtualMachine.program;
+                        kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, (int)program.registers.B, process.programName));
+                        break;
+                    }
                 case SiInt.ReadFromHandle:
                     {
-
                         Program program = process.virtualMachine.program;
                         this.kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Read, (int)program.registers.B, process.programName));
                         break;
@@ -91,6 +82,8 @@ namespace UniVM
                 case PiInt.InvalidCommand:
                     process.destroyVM();
                     break;
+                default:
+                    throw new NotImplementedException();
             }
 
             return;

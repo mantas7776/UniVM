@@ -24,7 +24,7 @@ namespace UniVM
                 else if (resourceRequestor.blocked)
                     return ProcState.blocked;
                 else
-                    return ProcState.idle;
+                    return ProcState.ready;
 
                 throw new NotImplementedException();
             }

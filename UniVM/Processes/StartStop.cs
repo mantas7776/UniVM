@@ -18,10 +18,15 @@ namespace UniVM
             switch(this.IC)
             {
                 case 0:
-                    for (int i = 0; i < Constants.BLOCKS_AMOUNT; i++) kernelStorage.resources.add(new Resource(ResType.Memory, this.id));
-
-                    kernelStorage.resources.add(new Resource(ResType.Storage, this.id, false));
-                    kernelStorage.resources.add(new ProgramStartKill(this.id, false, "code.bin"));
+                    for (int i = 0; i < Constants.BLOCKS_AMOUNT; i++)
+                    {
+                        kernelStorage.resources.add(
+                            new Resource(ResType.Memory, this.id)
+                        );
+                    }
+                    kernelStorage.resources.add(
+                        new ProgramStartKill(this.id, false, "code.bin")
+                    );
 
                     kernelStorage.processes.add(new MainProc(kernelStorage, this.id));
                     kernelStorage.processes.add(new ResourceScheduler(kernelStorage, this.id));

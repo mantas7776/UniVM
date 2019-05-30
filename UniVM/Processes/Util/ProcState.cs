@@ -10,6 +10,6 @@ namespace UniVM
     {
         blocked,
         running,
-        idle
+        ready
     };
 }

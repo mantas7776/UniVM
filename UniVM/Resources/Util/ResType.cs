@@ -8,14 +8,8 @@ namespace UniVM
 {
     public enum ResType
     {
-        FileManager,
         OSExit,
         Memory,
-        Storage,
-        CreateFileInt,
-        CreateHandleRequest,
-        HandleOperationRequest,
-        WriteHandleRequest,
         BaseHandleResource,
         CreateHandleResponse,
         ReadHandleResponse,
@@ -25,9 +19,8 @@ namespace UniVM
         ProgramStartKill,
         Interrupt,
         NonExistent,
-        InterruptRes,
+        FromInterrupt,
         Any,
-        FromInterrupt
     };
 
 
