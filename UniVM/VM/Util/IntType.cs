@@ -14,7 +14,9 @@ namespace UniVM
         WriteToHandle,
         OpenFileHandle,
         DeleteFile,
-        CloseFileHandle
+        CloseFileHandle,
+        PrintConsole,
+        ReadConsole
     }
     public enum PiInt
     {

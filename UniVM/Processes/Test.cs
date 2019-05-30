@@ -8,6 +8,7 @@ namespace UniVM
 {
     class Test : BaseSystemProcess
     {
+        CreateHandleResponse created;
         public Test(KernelStorage kernelStorage) : base(30, kernelStorage) { }
         public override void run()
         {
@@ -22,8 +23,15 @@ namespace UniVM
                     this.IC++;
                     break;
                 case 1:
-                    Resource res = this.getFirstResource(ResType.CreateHandleResponse, this.id);
-                    //asd
+                    created = this.getFirstResource(ResType.CreateHandleResponse, this.id) as CreateHandleResponse;
+                    
+                    this.kernelStorage.resources.add(new WriteHandleRequest(this.id, created.handle, 1));
+
+                    this.resourceRequestor.request(ResType.WriteHandleResponse, this.id);
+                    this.IC++;
+                    break;
+                case 2:
+                    Resource response = this.getFirstResource(ResType.CreateHandleResponse);
                     break;
             }
 

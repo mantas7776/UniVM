@@ -20,6 +20,12 @@ namespace UniVM
             return fileInfo.start + fileInfo.length - dataStart;
         }
 
+        public string name()
+        {
+            return fileInfo.FileName;
+        }
+
+
         private StorageFile(Storage storage, FileInfo fileInfo)
         {
             this.storage = storage;
@@ -110,6 +116,17 @@ namespace UniVM
             Buffer.BlockCopy(start, 0, storageBytes, FileHeaderStart + 4 * fileIndex, 4);
             Buffer.BlockCopy(length, 0, storageBytes, fileInfo.start, length.Length);
             Buffer.BlockCopy(name, 0, storageBytes, fileInfo.start + 4, name.Length);
+            storage.setStorage(storageBytes);
+        }
+
+        public static void DeleteFile(Storage storage, string fileName)
+        {
+            byte[] storageBytes = storage.getBytes();
+            List<FileInfo> fileInfo = getFileTable(storageBytes);
+            int fileIndex = fileInfo.FindIndex(file => file.FileName == fileName);
+
+            byte[] empty = new byte[4];
+            Buffer.BlockCopy(empty, 0, storageBytes, FileHeaderStart + 4 * fileIndex, 4);
             storage.setStorage(storageBytes);
         }
 

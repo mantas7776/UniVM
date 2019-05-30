@@ -272,6 +272,16 @@ namespace UniVM
                         regs.SI = SiInt.WriteToHandle;
                         break;
                     }
+                case "PRINTC": //prints reg A to console
+                    {
+                        regs.SI = SiInt.PrintConsole;
+                        break;
+                    }
+                case "READC":
+                    {
+                        regs.SI = SiInt.ReadConsole;
+                        break;
+                    }
                 case "OPENFILEHANDLE": 
                     {
                         int location = int.Parse(args[1]);
