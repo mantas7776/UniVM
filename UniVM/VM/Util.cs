@@ -50,7 +50,7 @@ namespace UniVM
                 if (str[i] == '"')
                 {
                     if (str[i + 5] != '"') throw new Exception("Invalid symbol.");
-                    string symbols = str.Substring(i, 4);
+                    string symbols = str.Substring(i+1, 4);
                     byte[] symbolArr = Encoding.ASCII.GetBytes(symbols);
                     memory.AddRange(symbolArr);
                     i += 6;

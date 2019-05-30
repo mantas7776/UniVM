@@ -216,14 +216,14 @@ namespace UniVM
                     }
                 case "STOSW":
                     {
-                        program.memAccesser.writeFromAddr(regs.B, BitConverter.GetBytes(regs.A));
+                        program.memAccesser.writeFromAddr(regs.DS + regs.B, BitConverter.GetBytes(regs.A));
                         regs.B += 4;
                         regs.TIMER--;
                         break;
                     }
                 case "LODSW":
                     {
-                        byte[] word = program.memAccesser.readFromAddr(regs.B, 4);
+                        byte[] word = program.memAccesser.readFromAddr(regs.DS + regs.B, 4);
                         regs.A = BitConverter.ToUInt32(word, 0);
                         regs.B += 4;
                         regs.TIMER--;
@@ -248,43 +248,59 @@ namespace UniVM
                         regs.TIMER--;
                         break;
                     }
-                case "MOVD":
+                case "SAVEA":
                     {
-                        int location = int.Parse(args[1]);
+                        uint location = uint.Parse(args[1]);
                         byte[] converted = BitConverter.GetBytes(regs.A);
-                        program.memAccesser.writeFromAddr((uint)location, converted);
+                        program.memAccesser.writeFromAddr(regs.DS + location, converted);
+                        regs.TIMER--;
+                        break;
+                    }
+                case "SAVEB":
+                    {
+                        uint location = uint.Parse(args[1]);
+                        byte[] converted = BitConverter.GetBytes(regs.B);
+                        program.memAccesser.writeFromAddr(regs.DS + location, converted);
                         regs.TIMER--;
                         break;
                     }
                 case "READ":
                     {
-                        //regs.A = handles[(int)regs.B].read();
+                        //regs.A = read to where
+                        //regs.B = hndl
+                        //regs.CX = how many to read
                         regs.TIMER--;
                         regs.SI = SiInt.ReadFromHandle;
                         break;
                     }
                 case "WRITE":
                     {
+                        //regs.A = read to where
+                        //regs.B = hndl
+                        //regs.CX = how many to write
                         //handles[(int)regs.B].write((byte)regs.A);
                         regs.TIMER--;
                         regs.SI = SiInt.WriteToHandle;
                         break;
                     }
-                case "PRINTC": //prints reg A to console
+                case "PRINTC": //prints reg A adr to console
                     {
+                        //WRITES FROM ADR TO \0
                         regs.B = 0;
                         regs.SI = SiInt.PrintConsole;
                         break;
                     }
                 case "READC":
                     {
+                        //READS WHOLE LINE TO reg A adr
+                        //CX = limit
                         regs.B = 0;
                         regs.SI = SiInt.ReadConsole;
                         break;
                     }
                 case "OPENFILEHANDLE": 
                     {
-                        int location = int.Parse(args[1]);
+                        //int location = int.Parse(args[1]);
                         //uint handleNr = (uint)handles.add(new HddDevice(this.storage, location));
                         //regs.B = handleNr;
                         regs.TIMER--;
@@ -299,7 +315,7 @@ namespace UniVM
                         regs.SI = SiInt.DeleteFile;
                         break;
                     }
-                case "CLOSEFILEHANDLE":
+                case "CLOSEHANDLE":
                     {
                         //Handle handleToDelete = handles[(int)regs.B];
                         //handles.remove(handleToDelete);

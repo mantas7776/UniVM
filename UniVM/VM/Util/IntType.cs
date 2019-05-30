@@ -8,6 +8,7 @@ namespace UniVM
 {
     public enum SiInt
     {
+        None,
         Halt,
         CreateFileHandle,
         ReadFromHandle,
@@ -20,6 +21,7 @@ namespace UniVM
     }
     public enum PiInt
     {
+        None,
         InvalidCommand,
     }
     public enum IntType

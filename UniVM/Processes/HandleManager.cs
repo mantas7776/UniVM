@@ -84,7 +84,7 @@ namespace UniVM
                     //TODO GET ALL ASSIGNED RESOURCES
                     switch (req.handleResourceType)
                     {
-                        case HandleOperationType.CreateHandle:
+                        case HandleOperationType.CreateFileHandle:
                             createHandle(req as CreateHandleRequest);
                             break;
                         case HandleOperationType.Read:
