@@ -9,7 +9,7 @@ namespace UniVM
     class Test : BaseSystemProcess
     {
         CreateHandleResponse created;
-        public Test(KernelStorage kernelStorage) : base(30, kernelStorage) { }
+        public Test(KernelStorage kernelStorage) : base(30, kernelStorage, -1) { }
         public override void run()
         {
             switch (this.IC)

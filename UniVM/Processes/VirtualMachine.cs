@@ -10,15 +10,13 @@ namespace UniVM
     {
         public Program program { get; private set; }
         private MemAccesser memAccesser;
-        private int creatorId;
         private Storage storage = new Storage("HDD.txt", 1024);
         private Eval eval = new Eval();
 
-        public VirtualMachine(Program program, MemAccesser memAccesser, KernelStorage kernelStorage, int creatorId) : base(ProcPriority.VirtualMachine, kernelStorage)
+        public VirtualMachine(Program program, MemAccesser memAccesser, KernelStorage kernelStorage, int creatorId) : base(ProcPriority.VirtualMachine, kernelStorage, creatorId)
         {
             this.program = program;
             this.memAccesser = memAccesser;
-            this.creatorId = creatorId;
         }
 
         public override void run()
@@ -42,7 +40,7 @@ namespace UniVM
 
                     if (eval.registers.SI > 0 || eval.registers.PI > 0)
                     {
-                        this.kernelStorage.resources.add(new Interrupt(this.creatorId, this.program.fileName, this.creatorId));
+                        this.kernelStorage.resources.add(new Interrupt(this.id, this.program.fileName, this.creatorId));
                     }
 
                     program.registers = eval.registers;

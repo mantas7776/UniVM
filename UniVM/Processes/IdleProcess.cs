@@ -9,7 +9,7 @@ namespace UniVM
 {
     class IdleProcess : BaseSystemProcess
     {
-        public IdleProcess(KernelStorage kernelStorage) : base(1, kernelStorage) { }
+        public IdleProcess(KernelStorage kernelStorage, int creatorId) : base(1, kernelStorage, creatorId) { }
         public override void run()
         {
             switch(IC)

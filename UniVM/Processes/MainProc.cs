@@ -10,7 +10,7 @@ namespace UniVM
     {
         private List<JobGovernor> jobGovernors = new List<JobGovernor>();
 
-        public MainProc( KernelStorage kernelStorage) : base(ProcPriority.MainProc, kernelStorage)
+        public MainProc(KernelStorage kernelStorage, int creatorId) : base(ProcPriority.MainProc, kernelStorage, creatorId)
         {
         }
 
@@ -26,7 +26,7 @@ namespace UniVM
                     ProgramStartKill programStartKill = (ProgramStartKill)this.getFirstResource(ResType.ProgramStartKill);
                     if(!programStartKill.kill)
                     {
-                        JobGovernor jobGovernor = new JobGovernor(programStartKill.programName, this.kernelStorage);
+                        JobGovernor jobGovernor = new JobGovernor(programStartKill.programName, this.kernelStorage, this.id);
                         jobGovernors.Add(jobGovernor);
                         kernelStorage.processes.add(jobGovernor);
                     } else
