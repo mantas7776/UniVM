@@ -87,7 +87,7 @@ namespace UniVM
                     }
                 case ResType.WriteHandleResponse:
                 case ResType.CloseHandleResponse:
-                case ResType.DeleteFileResponse:
+                case ResType.DeleteHandleResponse:
                     {
                         // do nothing - just wait and release
                         break;

@@ -4,8 +4,9 @@ namespace UniVM {
     class RealMachine
     {
         private List<Program> programs = new List<Program>();
-        private Storage storage = new Storage("HDD.txt", 1024);
+        private Storage storage = new Storage("HDD.txt", 30000);
         private Memory memory;
+        private HandleStorage handleStorage = new HandleStorage();
         private VirtualMemory virtualMemory;
         private Eval eval;
 
@@ -21,10 +22,10 @@ namespace UniVM {
             switch(siNr)
             {
                 case SiInt.Halt:
-                    {
-                        program.setDone();
-                        break;
-                    }
+                    program.setDone();
+                    break;
+                case SiInt.OpenFileHandle:
+                    break;
             }
 
             return;

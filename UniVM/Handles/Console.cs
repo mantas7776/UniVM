@@ -19,5 +19,16 @@ namespace UniVM
             Console.Write(b);
             return true;
         }
+
+        public byte[] readLine()
+        {
+            return Encoding.ASCII.GetBytes(Console.ReadLine());
+        }
+
+        public bool writeLine(byte[] bytes)
+        {
+            Console.WriteLine(Encoding.ASCII.GetString(bytes));
+            return true;
+        }
     }
 }

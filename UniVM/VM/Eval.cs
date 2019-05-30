@@ -10,9 +10,7 @@ namespace UniVM
 {
     class Eval
     {
-        private Storage storage;
         private Registers regs = new Registers();
-        private HandleStorage handles;
 
         public Registers registers {
             get
@@ -260,14 +258,14 @@ namespace UniVM
                     }
                 case "READ":
                     {
-                        regs.A = handles[(int)regs.B].read();
+                        //regs.A = handles[(int)regs.B].read();
                         regs.TIMER--;
                         regs.SI = SiInt.ReadFromHandle;
                         break;
                     }
                 case "WRITE":
                     {
-                        handles[(int)regs.B].write((byte)regs.A);
+                        //handles[(int)regs.B].write((byte)regs.A);
                         regs.TIMER--;
                         regs.SI = SiInt.WriteToHandle;
                         break;
@@ -285,8 +283,8 @@ namespace UniVM
                 case "OPENFILEHANDLE": 
                     {
                         int location = int.Parse(args[1]);
-                        uint handleNr = (uint)handles.add(new HddDevice(this.storage, location));
-                        regs.B = handleNr;
+                        //uint handleNr = (uint)handles.add(new HddDevice(this.storage, location));
+                        //regs.B = handleNr;
                         regs.TIMER--;
                         regs.SI = SiInt.OpenFileHandle;
                         break;
@@ -294,15 +292,15 @@ namespace UniVM
                 case "DELETEFILE":
                     {
                         int location = int.Parse(args[1]);
-                        handles[(int)regs.B].delete(location);
+                        //handles[(int)regs.B].delete(location);
                         regs.TIMER--;
                         regs.SI = SiInt.DeleteFile;
                         break;
                     }
                 case "CLOSEFILEHANDLE":
                     {
-                        Handle handleToDelete = handles[(int)regs.B];
-                        handles.remove(handleToDelete);
+                        //Handle handleToDelete = handles[(int)regs.B];
+                        //handles.remove(handleToDelete);
                         regs.TIMER--;
                         regs.SI = SiInt.CloseFileHandle;
                         break;
