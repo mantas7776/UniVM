@@ -80,7 +80,7 @@ namespace UniVM
                     } else if(resource is BaseHandleResource) // we are only looking at responses. Should be impossible for request to get here.
                     {
                         this.intHandler.handleResponse(resource);
-                        this.kernelStorage.resources.add(new Resource(ResType.FromInterrupt, this.id, false, this.id));
+                        this.kernelStorage.resources.add(new Resource(ResType.FromInterrupt, this.id, false, virtualMachine.id));
                     } else
                     {
                         throw new NotImplementedException();

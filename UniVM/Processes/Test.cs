@@ -25,13 +25,13 @@ namespace UniVM
                 case 1:
                     created = this.getFirstResource(ResType.CreateHandleResponse, this.id) as CreateHandleResponse;
                     
-                    //this.kernelStorage.resources.add(new WriteHandleRequest(this.id, created.handle, 1));
+                    this.kernelStorage.resources.add(new WriteHandleRequest(this.id, created.handle, new byte[]{ 5, 5, 5, 5 }));
 
                     this.resourceRequestor.request(ResType.WriteHandleResponse, this.id);
                     this.IC++;
                     break;
                 case 2:
-                    Resource response = this.getFirstResource(ResType.CreateHandleResponse);
+                    Resource response = this.getFirstResource(ResType.WriteHandleResponse, this.id);
                     break;
             }
 

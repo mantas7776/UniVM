@@ -48,7 +48,7 @@ namespace UniVM
                     program.registers = eval.registers;
                     break;
                 case 1:
-                    Resource resource = this.getFirstResource(ResType.FromInterrupt, this.creatorId);
+                    Resource resource = this.getFirstResource(ResType.FromInterrupt, this.id);
                     resource.release();
                     this.IC = 0;
                     break;
