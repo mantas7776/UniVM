@@ -197,6 +197,22 @@ namespace UniVM
 
         }
 
+        public static StorageFile OpenOrCreate(Storage storage, string fileName, int size = 256)
+        {
+            StorageFile file;
+            try
+            {
+                file = createFile(storage, fileName, size);
+            }
+            catch (Exception e)
+            {
+                if (!e.Message.Contains("already exists"))
+                    throw e;
+                file = Open(storage, fileName);
+            }
+            return file;
+        }
+
         public byte[] getAllBytes()
         {
             byte[] fileBytes = new byte[size()];

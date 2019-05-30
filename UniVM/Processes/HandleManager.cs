@@ -16,18 +16,9 @@ namespace UniVM
             if (this.kernelStorage.handles.isFileTaken(request.fileName))
                 return;
 
-            StorageFile file;
-            try
-            {
-                file = StorageFile.createFile(this.kernelStorage.virtualHdd, request.fileName, 256);
-            }
-            catch (Exception e)
-            {
-                if (!e.Message.Contains("already exists"))
-                    throw e;
-                file = StorageFile.Open(this.kernelStorage.virtualHdd, request.fileName);
-            }
-            
+            StorageFile file = StorageFile.OpenOrCreate(this.kernelStorage.virtualHdd, request.fileName);
+
+
             FileHandle fh = new FileHandle(file);
             int hndl = this.kernelStorage.handles.add(fh);
 

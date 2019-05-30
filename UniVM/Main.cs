@@ -3,6 +3,10 @@ namespace UniVM
     class MainWrapper {
         public static void Main(string[] args) {
 
+            RealMachine realMachine = new RealMachine();
+            var randomStorage = new Storage("test.bin");
+            byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
+            byte[] altdata = Util.getData("FFFFFFFFAAAABBBB66696C652E74787400000000");
             //RealMachine realMachine = new RealMachine();
             //var randomStorage = new Storage("test.bin");
             //byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
