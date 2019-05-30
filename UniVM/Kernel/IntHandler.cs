@@ -105,6 +105,7 @@ namespace UniVM
                         Program program = process.virtualMachine.program;
                         CreateHandleResponse createHandleResponse = (CreateHandleResponse)resource;
                         program.registers.B = (uint)(createHandleResponse.handle);
+                        program.registers.SI = SiInt.None;
                         break;
                     }
                 case ResType.ReadHandleResponse:
@@ -115,6 +116,7 @@ namespace UniVM
                         {
                             program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, response.readBytes, response.bytesRequested);
                             program.registers.CX = response.bytesRequested;
+                            program.registers.SI = SiInt.None;
                         }
                         else
                         {
@@ -122,8 +124,10 @@ namespace UniVM
                             program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, response.readBytes, len);
                             program.registers.CX = len;
                         }
-                            program.registers.A = response.status;
-                        
+
+                        program.registers.A = response.status;
+                        program.registers.SI = SiInt.None;
+
                         break;
                     }
                 case ResType.WriteHandleResponse:
@@ -132,11 +136,14 @@ namespace UniVM
                         WriteHandleResponse writeHandleResponse = (WriteHandleResponse)resource;
                         program.registers.A = writeHandleResponse.status;
                         program.registers.CX = writeHandleResponse.amountWritten;
+                        program.registers.SI = SiInt.None;
                         break;
                     }
                 case ResType.CloseHandleResponse:
                 case ResType.DeleteHandleResponse:
                     {
+                        Program program = process.virtualMachine.program;
+                        program.registers.SI = SiInt.None;
                         // do nothing - just wait and release
                         break;
                     }

@@ -23,7 +23,7 @@ namespace UniVM
             //var codeFile = StorageFile.Open(randomStorage, "program1");
             //Util.saveCodeToFile(codeFile, codeInfo);
             //VMInfo info = Util.readCodeFromFile(codeFile);
-            realMachine.start();
+            //realMachine.start();
             //var k = new Kernel();
 
             //var randomStorage = new Storage("test.bin");
