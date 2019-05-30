@@ -25,6 +25,7 @@ namespace UniVM {
                     program.setDone();
                     break;
                 case SiInt.OpenFileHandle:
+
                     break;
             }
 
@@ -50,7 +51,7 @@ namespace UniVM {
             //var codeStorage = new Storage(fileName);
 
             byte[] altcode = Util.getCode("MOVA 0\nMOVATOCX\nMOVB 1\nADD\nLOOP 3\nHALT\n");
-            byte[] altdata = Util.getData("0000000500000001");
+            byte[] altdata = Util.getData("000000050000000166696C652E747874");
             //Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
             //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
             //uint rowCount = 10;

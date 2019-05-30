@@ -238,7 +238,7 @@ namespace UniVM
                 case "MOVB":
                     {
                         uint location = uint.Parse(args[1]);
-                        byte[] dataToTransfer = program.memAccesser.readFromAddr(regs.DS + location * 4, 4);
+                        byte[] dataToTransfer = program.memAccesser.readFromAddr(regs.DS + location, 4);
                         uint value = BitConverter.ToUInt32(dataToTransfer, 0);
 
                         if (instruction == "MOVA")
@@ -272,11 +272,13 @@ namespace UniVM
                     }
                 case "PRINTC": //prints reg A to console
                     {
+                        regs.B = 0;
                         regs.SI = SiInt.PrintConsole;
                         break;
                     }
                 case "READC":
                     {
+                        regs.B = 0;
                         regs.SI = SiInt.ReadConsole;
                         break;
                     }

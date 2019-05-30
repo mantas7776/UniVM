@@ -11,8 +11,22 @@ namespace UniVM
         public byte[] data;
         public byte[] code;
     }
+
     class Util
     {
+        public static string AsciiBytesToString(byte[] buffer, int offset)
+        {
+            List<byte> list = new List<byte>();
+            int end = offset;
+            while (end < buffer.Length && buffer[end] != 0)
+            {
+                list.Add(buffer[end]);
+                end++;
+            }
+
+
+            return Encoding.ASCII.GetString(list.ToArray());
+        }
         //public static uint genRandomNum(uint min, uint max)
         //{
         //    Random random = new Random();

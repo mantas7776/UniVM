@@ -33,19 +33,7 @@ namespace UniVM
             this.dataStart = fileInfo.start + Encoding.ASCII.GetByteCount(fileInfo.FileName + "\0") + sizeof(int) * 2; // start offset + 1 byte per char + null terminator + length;
         }
 
-        private static string AsciiBytesToString(byte[] buffer, int offset)
-        {
-            List<byte> list = new List<byte>();
-            int end = offset;
-            while (end < buffer.Length && buffer[end] != 0)
-            {
-                list.Add(buffer[end]);
-                end++;
-            }
-           
-
-            return Encoding.ASCII.GetString(list.ToArray());
-        }
+        
 
         private static List<FileInfo> getFileTable(byte[] storageBytes)
         {
@@ -65,7 +53,7 @@ namespace UniVM
                 } else
                 {
                     int length = BitConverter.ToInt32(storageBytes, loc);
-                    string name = AsciiBytesToString(storageBytes, loc + 4);
+                    string name = Util.AsciiBytesToString(storageBytes, loc + 4);
                     FileInfo fileInfo = new FileInfo()
                     {
                         FileName = name,
