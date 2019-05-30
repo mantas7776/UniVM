@@ -39,17 +39,30 @@ namespace UniVM
                     }
                 case SiInt.CreateFileHandle:
                     {
-                        CreateHandleRequest createHandleRequest = (CreateHandleRequest)interrupt;
-                        kernelStorage.resources.add(new CreateHandleRequest(process.id, createHandleRequest.fileName));
-                        process.resourceRequestor.request(ResType.CreateHandleRequest, process.id);
+                        kernelStorage.resources.add(new CreateHandleRequest(process.id, process.programName));
                         break;
                     }
                 case SiInt.CloseFileHandle:
                     {
-                        kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, createHandleRequest.handle));
-                        process.resourceRequestor.request(ResType.CreateHandleRequest, process.id);
+                        Program program = process.virtualMachine.program;
+                        kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, (int)program.registers.B, process.programName));
                         break;
                     }
+                case SiInt.WriteToHandle:
+                    {
+                        Program program = process.virtualMachine.program;
+                        this.kernelStorage.resources.add(new WriteHandleRequest(process.id, (int)program.registers.B, (byte)program.registers.A));
+                        break;
+                    }
+                case SiInt.ReadFromHandle:
+                    {
+                        Program program = process.virtualMachine.program;
+                        this.kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Read, (int)program.registers.B, process.programName));
+                        break;
+                    }
+                case SiInt.DeleteFile:
+                    //this.kernelStorage.resources.add(new HandleOperationRequest(this.creatorId, HandleOperationType., (int)eval.registers.B));
+                    break;
             }
 
             return;

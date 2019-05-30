@@ -57,15 +57,13 @@
     <Compile Include="Processes\Util\ProcState.cs" />
     <Compile Include="Processes\Util\ResourceDesc.cs" />
     <Compile Include="Processes\VirtualMachine.cs" />
-    <Compile Include="Processes\VMScheduler.cs" />
     <Compile Include="Kernel\Kernel.cs" />
+    <Compile Include="Resources\BaseHandleResource.cs" />
     <Compile Include="Resources\File\WriteHandleRequest.cs" />
-    <Compile Include="Resources\Interrupts\BaseHandleResource.cs" />
     <Compile Include="Resources\File\CreateHandleRequest.cs" />
     <Compile Include="Resources\File\CreateHandleResponse.cs" />
     <Compile Include="Resources\Interrupt.cs" />
     <Compile Include="Resources\InterruptRes.cs" />
-    <Compile Include="Resources\Interrupts\CreateFileInt.cs" />
     <Compile Include="Resources\File\HandleOperationResponse.cs" />
     <Compile Include="Resources\File\ReadHandleResponse.cs" />
     <Compile Include="Resources\File\HandleOperationRequest.cs" />

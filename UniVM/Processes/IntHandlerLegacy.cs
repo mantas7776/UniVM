@@ -12,7 +12,7 @@ namespace UniVM
         public IntHandlerLegacy(KernelStorage kernelStorage): base(ProcPriority.IntHandler, kernelStorage)
         {
             this.kernelStorage = kernelStorage;
-            intHandler = new IntHandler(kernelStorage, this);
+            //intHandler = new IntHandler(kernelStorage, this);
         }
 
         public override void run()
@@ -24,7 +24,7 @@ namespace UniVM
                     break;
                 case 1:
                     Interrupt interrupt = (Interrupt)this.getFirstResource(ResType.Interrupt);
-                    intHandler.handle(interrupt);
+                    //intHandler.handle(interrupt);
                     interrupt.release();
                     this.IC = 0;
                     break;

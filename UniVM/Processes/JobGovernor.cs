@@ -10,9 +10,9 @@ namespace UniVM
     {
         private IntHandler intHandler;
         private VirtualMemory virtualMemory;
-        public VirtualMachine virtualMachine;
 
-        public string programName;
+        public VirtualMachine virtualMachine;
+        public string programName { get; private set;  }
 
         public JobGovernor(string programName, KernelStorage kernelStorage) : base(ProcPriority.JobGovernor, kernelStorage)
         {
