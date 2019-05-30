@@ -18,6 +18,9 @@ namespace UniVM
                 case HandleOperationType.Close:
                     this.type = ResType.CloseHandleResponse;
                     break;
+                case HandleOperationType.Delete:
+                    this.type = ResType.DeleteHandleResponse;
+                    break;
             }
         }
     }

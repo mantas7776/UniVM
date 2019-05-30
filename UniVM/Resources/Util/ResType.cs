@@ -21,7 +21,7 @@ namespace UniVM
         ReadHandleResponse,
         WriteHandleResponse,
         CloseHandleResponse,
-        DeleteFileResponse,
+        DeleteHandleResponse,
         ProgramStartKill,
         Interrupt,
         NonExistent,
