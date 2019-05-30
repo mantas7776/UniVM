@@ -50,6 +50,25 @@ namespace UniVM
             return bytesRead;
         }
 
+        public int size()
+        {
+            return allowedVirtRows.Length * 16;
+        }
+
+        public byte[] getAllBytes()
+        {
+            int sz = size();
+            return readFromAddr(0, checked((uint)sz));
+        }
+        public bool setAllBytes(byte[] toWrite)
+        {
+            int sz = size();
+            if (sz != toWrite.Length)
+                throw new Exception("Memory size is different from array toWrite");
+            writeFromAddr(0, toWrite);
+            return true;
+        }
+
         private uint virtAddrToRealAddr(uint virtAddr)
         {
             uint offset = virtAddr % Constants.BLOCK_SIZE;
