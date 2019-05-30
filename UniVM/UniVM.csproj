@@ -63,7 +63,6 @@
     <Compile Include="Resources\File\CreateHandleRequest.cs" />
     <Compile Include="Resources\File\CreateHandleResponse.cs" />
     <Compile Include="Resources\Interrupt.cs" />
-    <Compile Include="Resources\InterruptRes.cs" />
     <Compile Include="Resources\File\HandleOperationResponse.cs" />
     <Compile Include="Resources\File\ReadHandleResponse.cs" />
     <Compile Include="Resources\File\HandleOperationRequest.cs" />
@@ -103,8 +102,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Interrupts\Handle\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
