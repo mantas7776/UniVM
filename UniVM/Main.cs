@@ -10,12 +10,13 @@ namespace UniVM
 
             VMInfo codeInfo = new VMInfo() { code = altcode, data = altdata };
             int size = Util.getProgramSizeInFile(codeInfo);
-            //var file = StorageFile.createFile(randomStorage, "program1", Util.getProgramSizeInFile(codeInfo));
-            var codeFile = StorageFile.Open(randomStorage, "program1");
+            StorageFile.DeleteFile(randomStorage, "program1");
+            var file = StorageFile.createFile(randomStorage, "program1", Util.getProgramSizeInFile(codeInfo));
+            //var codeFile = StorageFile.Open(randomStorage, "program1");
             //Util.saveCodeToFile(codeFile, codeInfo);
-            VMInfo info = Util.readCodeFromFile(codeFile);
+            //VMInfo info = Util.readCodeFromFile(codeFile);
             //realMachine.start();
-            var k = new Kernel();
+            //var k = new Kernel();
             
         }
     }

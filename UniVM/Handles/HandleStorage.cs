@@ -9,6 +9,7 @@ namespace UniVM
     class HandleStorage
     {
         List<Handle> handles = new List<Handle>();
+        
 
         public int add(Handle hndl)
         {
@@ -29,6 +30,16 @@ namespace UniVM
         {
             hndl.close();
             return handles.Remove(hndl);
+        }
+
+        public bool isFileTaken(string fileName)
+        {
+            int count = handles.Where(hndl =>
+                hndl.GetType() == typeof(FileHandle) &&
+                ((FileHandle)hndl).fileName == fileName
+            ).Count();
+
+            return count > 0;
         }
     }
 }

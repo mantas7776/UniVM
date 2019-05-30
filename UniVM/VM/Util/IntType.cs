@@ -9,7 +9,9 @@ namespace UniVM
     public enum SiInt
     {
         Halt,
-        CreateFileHandle
+        CreateFileHandle,
+        PrintConsole,
+        ReadConsole
     }
     public enum PiInt
     {
@@ -18,9 +20,9 @@ namespace UniVM
     }
     public enum IntType
     {
-        Halt = SiInt.Halt,
-        OPKUndefined = PiInt.OPKUndefined,
-        OperandUndefined = PiInt.OperandUndefined,
-        CreateFileHandle = SiInt.CreateFileHandle
+        Halt,
+        OPKUndefined,
+        OperandUndefined,
+        CreateFileHandle,
     }
 }

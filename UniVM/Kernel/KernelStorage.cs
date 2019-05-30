@@ -13,6 +13,7 @@ namespace UniVM
         public Memory memory { get; private set; }
         public HandleStorage handles { get; private set; }
         public Storage virtualHdd { get; private set; }
+        public ChannelDevice channelDevice { get; private set; }
 
         public KernelStorage()
         {
@@ -21,6 +22,7 @@ namespace UniVM
             memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCK_SIZE);
             handles = new HandleStorage();
             virtualHdd = new Storage("main.bin", 65535);
+            channelDevice = new ChannelDevice();
         }
     }
 }

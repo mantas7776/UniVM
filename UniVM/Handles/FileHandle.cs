@@ -9,7 +9,16 @@ namespace UniVM
     class FileHandle : Handle
     {
         private StorageFile file;
-        int seek = 0;
+
+        private int seek = 0;
+
+        public string fileName 
+        {
+            get
+            {
+                return file.name();
+            }
+        }
 
         public FileHandle(StorageFile file)
         {
@@ -26,5 +35,6 @@ namespace UniVM
             file[seek++] = c;
             return true;
         }
+
     }
 }

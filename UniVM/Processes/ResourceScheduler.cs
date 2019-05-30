@@ -28,17 +28,21 @@ namespace UniVM
                 var requestedResources = waitingProcess.resourceRequestor.RequestedResources;
                 foreach (var requestedResource in requestedResources)
                 {
-                    var resource = kernelStorage
+                    var foundResources = kernelStorage
                         .resources
                         .Resources
-                        .Where(o => 
-                            (requestedResource.type == ResType.Any || requestedResource.type == o.type) && 
+                        .Where(o =>
+                            (requestedResource.type == ResType.Any || requestedResource.type == o.type) &&
                             o.isFree() &&
                             o.Messageid == requestedResource.messageid
-                         )
-                        .First();
-                    resource.assign(waitingProcess);
-                    waitingProcess.resourceRequestor.removeRequest(requestedResource);
+                         );
+                    if (foundResources.Count() > 0)
+                    {
+                        var resource = foundResources.First();
+                        resource.assign(waitingProcess);
+                        waitingProcess.resourceRequestor.removeRequest(requestedResource);
+                    }
+                    
                 }
             }
         }

@@ -11,6 +11,7 @@ namespace UniVM
         CreateHandle,
         Read,
         Write,
-        Close
+        Close,
+        Delete
     }
 }
