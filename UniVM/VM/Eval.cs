@@ -323,6 +323,18 @@ namespace UniVM
                         regs.TIMER--;
                         break;
                     }
+                case "MOUNT":
+                    {
+                        uint device = uint.Parse(args[1]);
+                        if (device != 0)
+                        {
+                            regs.PI = PiInt.InvalidCommand;
+                            break;
+                        }
+                        regs.B = device;
+                        regs.SI = SiInt.MountBattery;
+                        break;
+                    }
                 default:
                     Console.WriteLine("Bad opcode " + args[0]);
                     regs.PI = PiInt.InvalidCommand;

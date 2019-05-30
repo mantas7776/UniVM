@@ -44,34 +44,45 @@ namespace UniVM {
                 case SiInt.ReadFromHandle:
                     {
                         int bytesToReadAmount = checked((int)program.registers.CX);
-                        FileHandle hndl = (FileHandle)handles[checked((int)program.registers.B)];
-
-                        channelDevice.storage = 1;
-                        byte[] readBytes = new byte[program.registers.CX];
-
-                        uint amountRead = 0;
-                        try
+                        Handle handle = handles[checked((int)program.registers.B)];
+                        //handle battery, special case
+                        if (handle is Battery)
                         {
-                            for (uint i = 0; i < program.registers.CX; i++)
+                            byte[] batStatus = ((Battery)handle).getStatus();
+                            program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, batStatus);
+                        }
+                        else
+                        {
+                            //else handle other
+                            FileHandle hndl = (FileHandle)handles[checked((int)program.registers.B)];
+
+                            channelDevice.storage = 1;
+                            byte[] readBytes = new byte[program.registers.CX];
+
+                            uint amountRead = 0;
+                            try
                             {
-                                amountRead++;
-                                readBytes[i] = hndl.read();
+                                for (uint i = 0; i < program.registers.CX; i++)
+                                {
+                                    amountRead++;
+                                    readBytes[i] = hndl.read();
+                                }
+                                program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
+                                program.registers.A = 0;
                             }
-                            program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
-                            program.registers.A = 0;
+                            catch (Exception e)
+                            {
+                                if (!e.Message.Contains("Reading file out of bounds"))
+                                    throw e;
+                                program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
+                                program.registers.A = 1;
+                                break;
+                            }
+                            program.registers.CX = amountRead;
+                            channelDevice.storage = 0;
                         }
-                        catch (Exception e)
-                        {
-                            if (!e.Message.Contains("Reading file out of bounds"))
-                                throw e;
-                            program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
-                            program.registers.A = 1;
-                            break;
-                        }
-
-
-                        channelDevice.storage = 0;
-                        program.registers.CX = amountRead;
+                        
+                        
                         program.registers.SI = SiInt.None;
                         break;
                     }
@@ -103,6 +114,14 @@ namespace UniVM {
                     {
                         uint bytesToWriteAmount = program.registers.CX;
                         Handle hndl = handles[checked((int)program.registers.B)];
+                        //handle battery, special case
+                        if (hndl is Battery)
+                        {
+                            ((Battery)hndl).setStatus((byte)program.registers.A);
+                            program.registers.SI = SiInt.None;
+                            return;
+                        }
+                        //handle others else
 
                         channelDevice.storage = 1;
                         byte[] bytesToWrite = program.memAccesser.readFromAddr(program.registers.DS + program.registers.A, bytesToWriteAmount);
@@ -137,6 +156,8 @@ namespace UniVM {
                         if (program.registers.B == 0)
                             throw new Exception("Default handle closing is not allowed!");
                         Handle handle = handles[checked((int)program.registers.B)];
+                        if (handle is Battery)
+                            this.channelDevice.battery = 0;
                         this.handles.remove(handle);
                         program.registers.SI = SiInt.None;
                         break;
@@ -156,6 +177,19 @@ namespace UniVM {
                         program.registers.SI = SiInt.None;
                         break;
                     }
+                case SiInt.MountBattery:
+                    {
+                        //wait till free
+                        if (channelDevice.battery == 1)
+                                break;
+                        channelDevice.battery = 1;          
+                        int hndl = handles.add(new Battery());
+                        program.registers.B = checked((uint)hndl);
+                        program.registers.SI = SiInt.None;
+                        break;
+                    }
+                default:
+                    throw new NotImplementedException();
             }
 
             return;
@@ -179,14 +213,15 @@ namespace UniVM {
         {
             //var codeStorage = new Storage(fileName);
 
-            //byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nHALT\n");3
+            byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nHALT\n");3
             //byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nREAD\nCLOSEHANDLE\nHALT\n");
             //byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n");
-            byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nREADC\nHALT\n");
-            //string t = "0000001000000008\"big\0\"00000000FFFFFFFF00000004";
+            //byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nREADC\nHALT\n");
+            //byte[] altcode = Util.getCode("MOUNT 0\nMOVA 0\nMOVATOCX\nMOVA 8\nWRITE\nMOVA 4\nREAD\nHALT\n");
+            string t = "0000001000000008\"big\0\"00000000FFFFFFFF00000004";
             //string t2 = "0000001000000008\"big\0\"00000000BBBBBBBB00000004";
             //string t = "0000000C00000008\"big\0\"00000000BBBBBBBB00000004";
-            string t = "0000000C00000008\"big\0\"00000000BBBBBBBB00000004";
+            //string t = "000000040000000100000004";
             byte[] altdata = Util.getData(t);
             //Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
             //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);

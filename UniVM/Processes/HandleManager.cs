@@ -117,7 +117,16 @@ namespace UniVM
                 readHandleFile(hndl as FileHandle, request);
             else if (hndl is ConsoleDevice)
                 readHandleConsole(hndl as ConsoleDevice, request);
+            else if (hndl is Battery)
+                readHandleBattery(hndl as Battery, request);
 
+        }
+
+        private void readHandleBattery(Battery battery, ReadHandleRequest request)
+        {
+            Resource response = new ReadHandleResponse(this.id, battery.getStatus(), 0, checked((uint)request.amount), request.createdByProcess);
+            kernelStorage.resources.add(response);
+            request.release();
         }
 
         private void closeHandle(HandleOperationRequest request)
@@ -125,11 +134,23 @@ namespace UniVM
             this.kernelStorage.channelDevice.storage = 1;
             Handle handle = this.kernelStorage.handles[request.handle];
             this.kernelStorage.handles.remove(handle);
-            
+
+            if (handle is Battery)
+                this.kernelStorage.channelDevice.battery = 0;
+
             Resource response = new HandleOperationResponse(this.id, HandleOperationType.Close, request.createdByProcess);
 
             this.kernelStorage.channelDevice.storage = 0;
             kernelStorage.resources.add(response);
+            request.release();
+        }
+
+        private void writeBattery(WriteHandleRequest request)
+        {
+            Handle handle = this.kernelStorage.handles[request.handle];
+            ((Battery)handle).setStatus(request.bytesToWrite[0]);
+            Resource response = new WriteHandleResponse(this.id, 0, 4, request.createdByProcess);
+            this.kernelStorage.resources.add(response);
             request.release();
         }
 
@@ -138,6 +159,12 @@ namespace UniVM
             
             Handle handle = this.kernelStorage.handles[request.handle];
             Resource response;
+
+            if (handle is Battery)
+            {
+                writeBattery(request);
+                return;
+            }
 
             setDevice(handle, 1);
 
@@ -175,31 +202,50 @@ namespace UniVM
                     this.IC++;
                     break;
                 case 1:
-                    BaseHandleResource req = getFirstResource(ResType.BaseHandleResource) as BaseHandleResource;
-                    //TODO GET ALL ASSIGNED RESOURCES
-                    switch (req.handleResourceType)
+                    List<Resource> reqs = getAllResources(ResType.BaseHandleResource);
+                    foreach (Resource baseReq in reqs)
                     {
-                        case HandleOperationType.CreateFileHandle:
-                            createHandle(req as CreateHandleRequest);
-                            break;
-                        case HandleOperationType.Read:
-                            readHandle(req as ReadHandleRequest);
-                            break;
-                        case HandleOperationType.Write:
-                            writeHandle(req as WriteHandleRequest);
-                            break;
-                        case HandleOperationType.Close:
-                            closeHandle(req as HandleOperationRequest);
-                            break;
-                        case HandleOperationType.Delete:
-                            deleteHandle(req as HandleOperationRequest);
-                            break;
-                        default:
-                            throw new NotImplementedException();
+                        BaseHandleResource req = baseReq as BaseHandleResource;
+
+                        switch (req.handleResourceType)
+                        {
+                            case HandleOperationType.CreateFileHandle:
+                                createHandle(req as CreateHandleRequest);
+                                break;
+                            case HandleOperationType.Read:
+                                readHandle(req as ReadHandleRequest);
+                                break;
+                            case HandleOperationType.Write:
+                                writeHandle(req as WriteHandleRequest);
+                                break;
+                            case HandleOperationType.Close:
+                                closeHandle(req as HandleOperationRequest);
+                                break;
+                            case HandleOperationType.Delete:
+                                deleteHandle(req as HandleOperationRequest);
+                                break;
+                            case HandleOperationType.CreateBatteryHandle:
+                                mountBattery(req);
+                                break;
+                            default:
+                                throw new NotImplementedException();
+                        }
                     }
                     this.IC = 0;
                     break;
             }
+        }
+
+        private void mountBattery(BaseHandleResource request)
+        {
+            if (this.kernelStorage.channelDevice.battery == 1)
+                return;
+            this.kernelStorage.channelDevice.battery = 1;
+            int hndl = this.kernelStorage.handles.add(new Battery());
+
+            Resource response = new CreateHandleResponse(this.id, hndl, request.createdByProcess, HandleType.Battery);
+            kernelStorage.resources.add(response);
+            request.release();
         }
 
         private void deleteHandle(HandleOperationRequest request)
