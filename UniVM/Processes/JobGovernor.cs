@@ -17,7 +17,7 @@ namespace UniVM
         public JobGovernor(string programName, KernelStorage kernelStorage) : base(ProcPriority.JobGovernor, kernelStorage)
         {
             this.programName = programName;
-            virtualMemory = new VirtualMemory(0, this.kernelStorage.memory);
+            virtualMemory = new VirtualMemory(Constants.PTR, this.kernelStorage.memory);
             intHandler = new IntHandler(this.kernelStorage, this);
         }
 

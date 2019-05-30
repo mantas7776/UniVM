@@ -8,6 +8,7 @@ namespace UniVM
 {
     public enum SiInt
     {
+        None,
         Halt,
         CreateFileHandle,
         ReadFromHandle,
@@ -20,17 +21,18 @@ namespace UniVM
     }
     public enum PiInt
     {
+        None,
         InvalidCommand,
     }
-    public enum IntType
-    {
-        Halt = SiInt.Halt,
-        InvalidCommand = PiInt.InvalidCommand,
-        CreateFileHandle = SiInt.CreateFileHandle,
-        ReadFromHandle = SiInt.ReadFromHandle,
-        WriteToHandle = SiInt.WriteToHandle,
-        OpenFileHandle = SiInt.OpenFileHandle,
-        DeleteFile = SiInt.DeleteFile,
-        CloseFileHandle = SiInt.CloseFileHandle,
-    }
+    //public enum IntType
+    //{
+    //    Halt = SiInt.Halt,
+    //    InvalidCommand = PiInt.InvalidCommand,
+    //    CreateFileHandle = SiInt.CreateFileHandle,
+    //    ReadFromHandle = SiInt.ReadFromHandle,
+    //    WriteToHandle = SiInt.WriteToHandle,
+    //    OpenFileHandle = SiInt.OpenFileHandle,
+    //    DeleteFile = SiInt.DeleteFile,
+    //    CloseFileHandle = SiInt.CloseFileHandle,
+    //}
 }

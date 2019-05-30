@@ -70,7 +70,7 @@ namespace UniVM {
             //DEBUG
             addProgramFromFile();
             var regs = new Registers();
-            regs.PTR = 0;
+            regs.PTR = Constants.PTR;
             eval.registers = regs;
 
             while (true)

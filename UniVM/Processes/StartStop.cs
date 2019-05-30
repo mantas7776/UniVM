@@ -21,7 +21,7 @@ namespace UniVM
                     for (int i = 0; i < Constants.BLOCKS_AMOUNT; i++) kernelStorage.resources.add(new Resource(ResType.Memory, this.id));
 
                     kernelStorage.resources.add(new Resource(ResType.Storage, this.id, false));
-                    kernelStorage.resources.add(new ProgramStartKill(this.id, true, "code.bin"));
+                    kernelStorage.resources.add(new ProgramStartKill(this.id, false, "code.bin"));
 
                     kernelStorage.processes.add(new MainProc(kernelStorage));
                     kernelStorage.processes.add(new ResourceScheduler(kernelStorage));
@@ -29,7 +29,7 @@ namespace UniVM
                     kernelStorage.processes.idle = new IdleProcess(kernelStorage);
 
                     //test
-                    kernelStorage.processes.add(new Test(kernelStorage));
+                    //kernelStorage.processes.add(new Test(kernelStorage));
 
                     this.resourceRequestor.request(ResType.OSExit);
                     this.IC++;
