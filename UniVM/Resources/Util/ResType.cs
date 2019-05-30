@@ -13,16 +13,20 @@ namespace UniVM
         Memory,
         Storage,
         CreateFileInt,
+        CreateHandleRequest,
+        HandleOperationRequest,
+        WriteHandleRequest,
         BaseHandleResource,
         CreateHandleResponse,
         ReadHandleResponse,
         WriteHandleResponse,
         CloseHandleResponse,
+        DeleteFileResponse,
         ProgramStartKill,
         Interrupt,
         NonExistent,
         InterruptRes,
-        Any
+        Any,
     };
 
 
