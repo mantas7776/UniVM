@@ -50,9 +50,12 @@ namespace UniVM
                     if(resource.type == ResType.Interrupt)
                     {
                         this.intHandler.handleInt((Interrupt)resource);
-                    } else 
+                    } else if(resource is BaseHandleResource) // we are only looking at responses. Should be impossible for request to get here.
                     {
                         this.intHandler.handleResponse(resource);
+                    } else
+                    {
+                        throw new NotImplementedException();
                     }
 
                     resource.release();
