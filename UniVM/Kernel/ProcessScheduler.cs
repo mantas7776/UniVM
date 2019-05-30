@@ -29,14 +29,13 @@ namespace UniVM
             foreach (var process in processes)
             {
                 Debug.Print("Running: " + process.GetType());
+                //GUI.ShowMainMenu();
                 process.run();
             }
             if (processes.Count == 0)
             {
                 kernelStorage.processes.idle.run();
             }
-           
-
         }
     }
 }

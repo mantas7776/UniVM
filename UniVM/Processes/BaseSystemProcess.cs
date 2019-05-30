@@ -55,7 +55,7 @@ namespace UniVM
         protected Resource getFirstResource(ResType resType, int messageid = -1)
         {
             Resource resFound = getResources()
-                .Where(res => res.type == resType)
+                .Where(res => ((res.type == resType || resType == ResType.Any) && res.Messageid == messageid))
                 .First();
 
             if (resFound == null) throw new Exception("The required resource with type: " + resType + " was not found!");
