@@ -27,6 +27,7 @@ namespace UniVM
         NonExistent,
         InterruptRes,
         Any,
+        FromInterrupt
     };
 
 

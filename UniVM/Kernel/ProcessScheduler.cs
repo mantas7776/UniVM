@@ -30,7 +30,7 @@ namespace UniVM
             {
                 Debug.Print("Running: " + process.GetType());
                 //GUI.ShowMainMenu();
-                process.run();
+                process.execute();
             }
             if (processes.Count == 0)
             {
