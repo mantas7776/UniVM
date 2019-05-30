@@ -60,7 +60,7 @@ namespace UniVM
                     amountRead++;
                     readBytes[i] = hndl.read();
                 }
-                response = new ReadHandleResponse(this.id, readBytes, 0, request.createdByProcess);
+                response = new ReadHandleResponse(this.id, readBytes, 0, checked((uint)request.amount), request.createdByProcess);
                 //program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
             }
             catch (Exception e)
@@ -68,9 +68,8 @@ namespace UniVM
                 if (!e.Message.Contains("Reading file out of bounds"))
                     throw e;
 
-                response = new ReadHandleResponse(this.id, readBytes, 1, request.createdByProcess);
+                response = new ReadHandleResponse(this.id, readBytes, 1, checked((uint)request.amount), request.createdByProcess);
                 //program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
-                break;
             }
 
 
