@@ -39,14 +39,14 @@ namespace UniVM
                     }
                 case SiInt.CreateFileHandle:
                     {
-                        CreateHandleRequest createHandleRequest = (CreateHandleRequest)interrupt;
-                        kernelStorage.resources.add(new CreateHandleRequest(process.id, createHandleRequest.fileName));
+                        //CreateHandleRequest createHandleRequest = (CreateHandleRequest)interrupt;
+                        //kernelStorage.resources.add(new CreateHandleRequest(process.id, createHandleRequest.fileName));
                         process.resourceRequestor.request(ResType.CreateHandleRequest, process.id);
                         break;
                     }
                 case SiInt.CloseFileHandle:
                     {
-                        kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, createHandleRequest.handle));
+                        //kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, createHandleRequest.handle));
                         process.resourceRequestor.request(ResType.CreateHandleRequest, process.id);
                         break;
                     }
