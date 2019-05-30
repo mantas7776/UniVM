@@ -12,15 +12,14 @@ namespace UniVM
         {
             switch (operation)
             {
-                case HandleOperationType.Write:
-                    this.type = ResType.WriteHandleResponse;
-                    break;
                 case HandleOperationType.Close:
                     this.type = ResType.CloseHandleResponse;
                     break;
                 case HandleOperationType.Delete:
                     this.type = ResType.DeleteHandleResponse;
                     break;
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

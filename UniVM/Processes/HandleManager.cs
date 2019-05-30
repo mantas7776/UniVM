@@ -10,6 +10,17 @@ namespace UniVM
     {
         public HandleManager(KernelStorage kernelStorage) : base(50, kernelStorage) { }
 
+        private void setDevice(Handle handle, int status)
+        {
+            if (handle is FileHandle)
+                this.kernelStorage.channelDevice.storage = status;
+            else if (handle is ConsoleDevice)
+                this.kernelStorage.channelDevice.storage = status;
+            else
+                throw new NotImplementedException();
+
+        }
+
         public void createFileHandle(CreateHandleRequest request)
         {
             //wait until realeased
@@ -35,15 +46,79 @@ namespace UniVM
             this.kernelStorage.channelDevice.storage = 0;
         }
 
-        private void readHandle(HandleOperationRequest request)
+        private void readHandleFile(FileHandle hndl,ReadHandleRequest request)
         {
             this.kernelStorage.channelDevice.storage = 1;
-            Handle handle = this.kernelStorage.handles[request.handle];
-            Resource response = new ReadHandleResponse(this.id, handle.read(), request.createdByProcess);
+            byte[] readBytes = new byte[request.amount];
+
+            Resource response;
+            uint amountRead = 0;
+            try
+            {
+                for (uint i = 0; i < request.amount; i++)
+                {
+                    amountRead++;
+                    readBytes[i] = hndl.read();
+                }
+                response = new ReadHandleResponse(this.id, readBytes, 0, request.createdByProcess);
+                //program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
+            }
+            catch (Exception e)
+            {
+                if (!e.Message.Contains("Reading file out of bounds"))
+                    throw e;
+
+                response = new ReadHandleResponse(this.id, readBytes, 1, request.createdByProcess);
+                //program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
+                break;
+            }
+
 
             this.kernelStorage.channelDevice.storage = 0;
             kernelStorage.resources.add(response);
             request.release();
+        }
+
+        private void readHandleConsole(ConsoleDevice hndl, ReadHandleRequest request)
+        {
+            this.kernelStorage.channelDevice.console = 1;
+            byte[] readBytes = hndl.readLine();
+
+            Resource response;
+            if (readBytes.Length > request.amount)
+            {
+
+                //program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes, program.registers.CX);
+                //program.registers.A = 1;
+                response = new ReadHandleResponse(this.id, readBytes, 1, checked((uint)request.amount), request.createdByProcess);
+            }
+            else
+            {
+                uint len = checked((uint)readBytes.Length);
+                response = new ReadHandleResponse(this.id, readBytes, 0, checked((uint)request.amount), request.createdByProcess);
+                //program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes, len);
+                //program.registers.CX = len;
+                //program.registers.A = 0;
+            }
+
+            this.kernelStorage.channelDevice.console = 0;
+            //program.registers.A = 0;
+            //program.registers.SI = SiInt.None;
+            kernelStorage.resources.add(response);
+            request.release();
+        }
+
+        private void readHandle(ReadHandleRequest request)
+        {
+
+            int bytesToReadAmount = request.amount;
+            Handle hndl = this.kernelStorage.handles[request.handle];
+
+            if (hndl is FileHandle)
+                readHandleFile(hndl as FileHandle, request);
+            else if (hndl is ConsoleDevice)
+                readHandleConsole(hndl as ConsoleDevice, request);
+
         }
 
         private void closeHandle(HandleOperationRequest request)
@@ -61,11 +136,32 @@ namespace UniVM
 
         private void writeHandle(WriteHandleRequest request)
         {
-            this.kernelStorage.channelDevice.storage = 1;
+            
             Handle handle = this.kernelStorage.handles[request.handle];
-            handle.write(request.toWrite);
-            Resource response = new HandleOperationResponse(this.id, HandleOperationType.Write, request.createdByProcess);
-            this.kernelStorage.channelDevice.storage = 0;
+            Resource response;
+
+            setDevice(handle, 1);
+
+            uint amountWritten = 0;
+            try
+            {
+                for (uint i = 0; i < request.bytesToWrite.Length; i++)
+                {
+                    amountWritten++;
+                    handle.write(request.bytesToWrite[i]);
+                }
+
+                response = new WriteHandleResponse(this.id, 0, amountWritten, request.createdByProcess);
+            }
+            catch (Exception e)
+            {
+                if (!e.Message.Contains("Writing file out of bounds"))
+                    throw e;
+
+                response = new WriteHandleResponse(this.id, 1, amountWritten, request.createdByProcess);
+            }
+
+            setDevice(handle, 0);
 
             kernelStorage.resources.add(response);
             request.release();
@@ -88,7 +184,7 @@ namespace UniVM
                             createHandle(req as CreateHandleRequest);
                             break;
                         case HandleOperationType.Read:
-                            readHandle(req as HandleOperationRequest);
+                            readHandle(req as ReadHandleRequest);
                             break;
                         case HandleOperationType.Write:
                             writeHandle(req as WriteHandleRequest);

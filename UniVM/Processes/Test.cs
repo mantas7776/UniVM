@@ -25,7 +25,7 @@ namespace UniVM
                 case 1:
                     created = this.getFirstResource(ResType.CreateHandleResponse, this.id) as CreateHandleResponse;
                     
-                    this.kernelStorage.resources.add(new WriteHandleRequest(this.id, created.handle, 1));
+                    //this.kernelStorage.resources.add(new WriteHandleRequest(this.id, created.handle, 1));
 
                     this.resourceRequestor.request(ResType.WriteHandleResponse, this.id);
                     this.IC++;

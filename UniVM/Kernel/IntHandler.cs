@@ -59,11 +59,16 @@ namespace UniVM
                 case SiInt.WriteToHandle:
                     {
                         Program program = process.virtualMachine.program;
-                        this.kernelStorage.resources.add(new WriteHandleRequest(process.id, (int)program.registers.B, (byte)program.registers.A));
+
+                        uint bytesToWriteAmount = program.registers.CX;
+                        byte[] bytesToWrite = program.memAccesser.readFromAddr(program.registers.DS + program.registers.A, bytesToWriteAmount);
+
+                        this.kernelStorage.resources.add(new WriteHandleRequest(process.id, (int)program.registers.B, bytesToWrite));
                         break;
                     }
                 case SiInt.ReadFromHandle:
                     {
+
                         Program program = process.virtualMachine.program;
                         this.kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Read, (int)program.registers.B, process.programName));
                         break;
@@ -105,11 +110,30 @@ namespace UniVM
                 case ResType.ReadHandleResponse:
                     {
                         Program program = process.virtualMachine.program;
-                        ReadHandleResponse readHandleResponse = (ReadHandleResponse)resource;
-                        program.registers.A = (uint)(readHandleResponse.result);
+                        ReadHandleResponse response = (ReadHandleResponse)resource;
+                        if (response.readBytes.Length > response.bytesRequested)
+                        {
+                            program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, response.readBytes, response.bytesRequested);
+                            program.registers.CX = response.bytesRequested;
+                        }
+                        else
+                        {
+                            uint len = checked((uint)response.readBytes.Length);
+                            program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, response.readBytes, len);
+                            program.registers.CX = len;
+                        }
+                            program.registers.A = response.status;
+                        
                         break;
                     }
                 case ResType.WriteHandleResponse:
+                    {
+                        Program program = process.virtualMachine.program;
+                        WriteHandleResponse writeHandleResponse = (WriteHandleResponse)resource;
+                        program.registers.A = writeHandleResponse.status;
+                        program.registers.CX = writeHandleResponse.amountWritten;
+                        break;
+                    }
                 case ResType.CloseHandleResponse:
                 case ResType.DeleteHandleResponse:
                     {

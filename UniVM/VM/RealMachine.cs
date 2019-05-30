@@ -77,7 +77,6 @@ namespace UniVM {
                     }
                 case SiInt.ReadConsole:
                     {
-                        //todo indicate if read more than had size
                         this.channelDevice.console = 1;
                         ConsoleDevice hndl = (ConsoleDevice)handles[checked((int)program.registers.B)];
                         byte[] readBytes = hndl.readLine();
@@ -121,7 +120,7 @@ namespace UniVM {
                         }
                         catch (Exception e)
                         {
-                            if (!e.Message.Contains("Reading file out of bounds"))
+                            if (!e.Message.Contains("Writing file out of bounds."))
                                 throw e;
                             program.registers.A = 1;
                             break;

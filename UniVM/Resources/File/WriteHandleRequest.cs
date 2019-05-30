@@ -9,10 +9,10 @@ namespace UniVM
     class WriteHandleRequest : BaseHandleResource
     {
         public int handle { get; private set; }
-        public byte toWrite { get; private set; }
-        public WriteHandleRequest(int creatorId, int handle, byte toWrite) : base(ResType.BaseHandleResource, HandleOperationType.Write, creatorId, -1)
+        public byte[] bytesToWrite { get; private set; }
+        public WriteHandleRequest(int creatorId, int handle, byte[] bytesToWrite) : base(ResType.BaseHandleResource, HandleOperationType.Write, creatorId, -1)
         {
-            this.toWrite = toWrite;
+            this.bytesToWrite = bytesToWrite;
             this.handle = handle;
         }
     }
