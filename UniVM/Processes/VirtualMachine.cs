@@ -46,51 +46,17 @@ namespace UniVM
 
                         if (eval.registers.SI > 0 || eval.registers.PI > 0)
                         {
-                            intCreator();
+                            this.kernelStorage.resources.add(new Interrupt(this.creatorId, this.program.fileName, this.creatorId));
                         }
-                        program.registers = eval.registers;
 
+                        program.registers = eval.registers;
                         if (!ranAnything) break;
                     }
                     break;
             }
         }
-
-        private void intCreator()
-        {
-            if(eval.registers.SI > 0)
-            {
-                switch(eval.registers.SI)
-                {
-                    case SiInt.CreateFileHandle:
-                        this.kernelStorage.resources.add(new CreateHandleRequest(this.creatorId, this.program.fileName));
-                        break;
-                    case SiInt.WriteToHandle:
-                        this.kernelStorage.resources.add(new WriteHandleRequest(this.creatorId, (int)eval.registers.B, (byte)eval.registers.A));
-                        break;
-                    case SiInt.ReadFromHandle:
-                        //this.kernelStorage.resources.add(new HandleOperationRequest(this.creatorId, HandleOperationType.Read, (int)eval.registers.B));
-                        break;
-                    case SiInt.CloseFileHandle:
-                        //this.kernelStorage.resources.add(new HandleOperationRequest(this.creatorId, HandleOperationType.Close, (int)eval.registers.B));
-                        break;
-                    case SiInt.DeleteFile:
-                        //this.kernelStorage.resources.add(new HandleOperationRequest(this.creatorId, HandleOperationType., (int)eval.registers.B));
-                        break;
-
-                }
-            }
-
-            if (eval.registers.PI > 0) {
-
-            }
-        
-            this.kernelStorage.resources.add(new Interrupt(this.creatorId, (IntType)eval.registers.PI, this.program.fileName));
-        }
     }
 }
-
-
 
 
 
