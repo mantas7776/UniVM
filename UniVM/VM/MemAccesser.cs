@@ -31,8 +31,11 @@ namespace UniVM
             memory.set(realMemAddr, data);
         }
 
-        public void writeFromAddr(uint fromVirtAddr, byte[] data)
+        public void writeFromAddr(uint fromVirtAddr, byte[] data, uint length = 0)
         {
+            if (length == 0)
+                length = checked((uint)data.Length);
+
             for(uint i = 0; i < data.Length; i++)
             {
                 this.set(fromVirtAddr+i, data[i]);

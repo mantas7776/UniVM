@@ -9,7 +9,7 @@ namespace UniVM
     class CreateHandleResponse : BaseHandleResource
     {
         public int handle { get; private set; }
-        public CreateHandleResponse(int creatorId, int handle, int messageid) : base(ResType.CreateHandleResponse, HandleOperationType.CreateHandle, creatorId, messageid)
+        public CreateHandleResponse(int creatorId, int handle, int messageid) : base(ResType.CreateHandleResponse, HandleOperationType.CreateFileHandle, creatorId, messageid)
         {
             this.handle = handle;
         }

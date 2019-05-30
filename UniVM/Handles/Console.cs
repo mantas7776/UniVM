@@ -16,7 +16,7 @@ namespace UniVM
 
         public override bool write(byte b)
         {
-            Console.Write(b);
+            Console.Write((char)b);
             return true;
         }
 

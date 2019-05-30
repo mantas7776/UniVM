@@ -9,7 +9,7 @@ namespace UniVM
     class CreateHandleRequest : BaseHandleResource
     {
         public string fileName { get; private set; }
-        public CreateHandleRequest(int creatorId, string fileName) : base(ResType.BaseHandleResource, HandleOperationType.CreateHandle, creatorId, -1)
+        public CreateHandleRequest(int creatorId, string fileName) : base(ResType.BaseHandleResource, HandleOperationType.CreateFileHandle, creatorId, -1)
         {
             this.fileName = fileName;
         }

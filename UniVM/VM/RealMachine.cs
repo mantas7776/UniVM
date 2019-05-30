@@ -5,10 +5,11 @@ namespace UniVM {
     class RealMachine
     {
         private List<Program> programs = new List<Program>();
-        private Storage storage = new Storage("HDD.txt", 30000);
+        private Storage storage = new Storage("HDD.txt");
         private Memory memory;
         private HandleStorage handles = new HandleStorage();
         private VirtualMemory virtualMemory;
+        private ChannelDevice channelDevice = new ChannelDevice();
         private Eval eval;
 
         public RealMachine()
@@ -16,6 +17,7 @@ namespace UniVM {
             this.memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCK_SIZE);
             this.eval = new Eval();
             this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
+            handles.add(new ConsoleDevice());
         }
 
         public void handleSiInt(Program program, SiInt siNr)
@@ -26,15 +28,134 @@ namespace UniVM {
                     program.setDone();
                     break;
                 case SiInt.OpenFileHandle:
-                    byte[] memoryBytes = program.memAccesser.getAllBytes();
-                    string fileName = Util.AsciiBytesToString(memoryBytes, checked((int)program.registers.B));
+                    {
+                        byte[] memoryBytes = program.memAccesser.getAllBytes();
+                        string fileName = Util.AsciiBytesToString(memoryBytes, checked((int)(program.registers.B + program.registers.DS)));
+                        channelDevice.storage = 1;
+                        StorageFile file = StorageFile.OpenOrCreate(storage, fileName);
+                        FileHandle fh = new FileHandle(file);
 
-                    StorageFile file = StorageFile.OpenOrCreate(storage, fileName);
-                    FileHandle fh = new FileHandle(file);
+                        int hndl = handles.add(fh);
+                        channelDevice.storage = 0;
+                        program.registers.B = checked((uint)hndl);
+                        program.registers.SI = SiInt.None;
+                        break;
+                    }
+                case SiInt.ReadFromHandle:
+                    {
+                        int bytesToReadAmount = checked((int)program.registers.CX);
+                        FileHandle hndl = (FileHandle)handles[checked((int)program.registers.B)];
 
-                    int hndl = handles.add(fh);
-                    program.registers.A = checked((uint)hndl);
-                    break;
+                        channelDevice.storage = 1;
+                        byte[] readBytes = new byte[program.registers.CX];
+
+                        uint amountRead = 0;
+                        try
+                        {
+                            for (uint i = 0; i < program.registers.CX; i++)
+                            {
+                                amountRead++;
+                                readBytes[i] = hndl.read();
+                            }
+                            program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
+                            program.registers.A = 0;
+                        }
+                        catch (Exception e)
+                        {
+                            if (!e.Message.Contains("Reading file out of bounds"))
+                                throw e;
+                            program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes);
+                            program.registers.A = 1;
+                            break;
+                        }
+
+
+                        channelDevice.storage = 0;
+                        program.registers.CX = amountRead;
+                        program.registers.SI = SiInt.None;
+                        break;
+                    }
+                case SiInt.ReadConsole:
+                    {
+                        this.channelDevice.console = 1;
+                        ConsoleDevice hndl = (ConsoleDevice)handles[checked((int)program.registers.B)];
+                        byte[] readBytes = hndl.readLine();
+                        if (readBytes.Length > program.registers.CX)
+                        {
+                            program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes, program.registers.CX);
+                            program.registers.A = 1;
+                        }
+                        else
+                        {
+                            uint len = checked((uint)readBytes.Length);
+                            program.memAccesser.writeFromAddr(program.registers.DS + program.registers.A, readBytes, len);
+                            program.registers.CX = len;
+                            program.registers.A = 0;
+                        }
+                        
+                        this.channelDevice.console = 0;
+                        program.registers.A = 0;
+                        program.registers.SI = SiInt.None;
+                        break;
+                    }
+                case SiInt.PrintConsole:
+                case SiInt.WriteToHandle:
+                    {
+                        uint bytesToWriteAmount = program.registers.CX;
+                        Handle hndl = handles[checked((int)program.registers.B)];
+
+                        channelDevice.storage = 1;
+                        byte[] bytesToWrite = program.memAccesser.readFromAddr(program.registers.DS + program.registers.A, bytesToWriteAmount);
+
+                        uint amountWritten = 0;
+                        try
+                        {
+                            for (uint i = 0; i < bytesToWriteAmount; i++)
+                            {
+                                amountWritten++;
+                                hndl.write(bytesToWrite[i]);
+                            }
+                            
+                            program.registers.A = 0;
+                        }
+                        catch (Exception e)
+                        {
+                            if (!e.Message.Contains("Writing file out of bounds."))
+                                throw e;
+                            program.registers.A = 1;
+                            break;
+                        }
+
+
+                        channelDevice.storage = 0;
+                        program.registers.CX = amountWritten;
+                        program.registers.SI = SiInt.None;
+                        break;
+                    }
+                case SiInt.CloseFileHandle:
+                    {
+                        if (program.registers.B == 0)
+                            throw new Exception("Default handle closing is not allowed!");
+                        Handle handle = handles[checked((int)program.registers.B)];
+                        this.handles.remove(handle);
+                        program.registers.SI = SiInt.None;
+                        break;
+                    }
+                case SiInt.DeleteFile:
+                    {
+                        channelDevice.storage = 1;
+                        Handle handle = handles[checked((int)program.registers.B)];
+                        if (handle.GetType() != typeof(FileHandle))
+                            throw new Exception("Only file handles can be deleted");
+                        FileHandle file = (FileHandle)handle;
+                        string fileName = file.fileName;
+                        this.handles.remove(handle);
+
+                        StorageFile.DeleteFile(storage, fileName);
+                        channelDevice.storage = 0;
+                        program.registers.SI = SiInt.None;
+                        break;
+                    }
             }
 
             return;
@@ -58,12 +179,19 @@ namespace UniVM {
         {
             //var codeStorage = new Storage(fileName);
 
-            byte[] altcode = Util.getCode("MOVA 0\nMOVATOCX\nMOVB 1\nADD\nLOOP 3\nHALT\n");
-            byte[] altdata = Util.getData("000000050000000166696C652E747874");
+            //byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nHALT\n");3
+            //byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nREAD\nCLOSEHANDLE\nHALT\n");
+            //byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n");
+            byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nREADC\nHALT\n");
+            //string t = "0000001000000008\"big\0\"00000000FFFFFFFF00000004";
+            //string t2 = "0000001000000008\"big\0\"00000000BBBBBBBB00000004";
+            //string t = "0000000C00000008\"big\0\"00000000BBBBBBBB00000004";
+            string t = "0000000C00000008\"big\0\"00000000BBBBBBBB00000004";
+            byte[] altdata = Util.getData(t);
             //Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
             //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
             //uint rowCount = 10;
-            MemAccesser memAccesser = virtualMemory.reserveMemory(5);
+            MemAccesser memAccesser = virtualMemory.reserveMemory(8);
             memAccesser.writeFromAddr(0, altcode);
             memAccesser.writeFromAddr((uint)altcode.Length, altdata);
             Program program = new Program("a", memAccesser);
@@ -92,18 +220,18 @@ namespace UniVM {
                     ranAnything = true;
                     program.registers.TIMER = Constants.TIMER_VALUE;
                     eval.registers = program.registers;
-                    while (eval.registers.TIMER > 0 && eval.registers.SI == 0 && eval.registers.PI == 0)
+                    while (eval.registers.TIMER > 0 && eval.registers.SI == SiInt.None && eval.registers.PI == PiInt.None)
                     {
                         eval.run(program);
                     }
+                    program.registers = eval.registers;
 
-
-                    if (eval.registers.SI > 0)
+                    if (eval.registers.SI != SiInt.None)
                         handleSiInt(program, eval.registers.SI);
-                    if (eval.registers.PI > 0)
+                    if (eval.registers.PI != PiInt.None)
                         handlePiInt(program, eval.registers.PI);
 
-                    program.registers = eval.registers;
+                    
                 }
 
                 if (!ranAnything)

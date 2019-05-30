@@ -59,9 +59,11 @@
     <Compile Include="Processes\VirtualMachine.cs" />
     <Compile Include="Kernel\Kernel.cs" />
     <Compile Include="Resources\BaseHandleResource.cs" />
+    <Compile Include="Resources\File\ReadHandleRequest.cs" />
     <Compile Include="Resources\File\WriteHandleRequest.cs" />
     <Compile Include="Resources\File\CreateHandleRequest.cs" />
     <Compile Include="Resources\File\CreateHandleResponse.cs" />
+    <Compile Include="Resources\File\WriteHandleResponse.cs" />
     <Compile Include="Resources\Interrupt.cs" />
     <Compile Include="Resources\File\HandleOperationResponse.cs" />
     <Compile Include="Resources\File\ReadHandleResponse.cs" />

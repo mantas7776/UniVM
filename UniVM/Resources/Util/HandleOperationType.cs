@@ -8,10 +8,11 @@ namespace UniVM
 {
     public enum HandleOperationType
     {
-        CreateHandle,
+        CreateFileHandle,
         Read,
         Write,
         Close,
-        Delete
+        Delete,
+        CreateBatteryHandle
     }
 }
