@@ -64,6 +64,16 @@ namespace UniVM
             return resFound;
         }
 
+        protected List<Resource> getAllResources(ResType resType, int messageid = -1)
+        {
+            List<Resource> resFound = getResources()
+                .Where(res => ((res.type == resType || resType == ResType.Any) && res.Messageid == messageid))
+                .ToList();
+
+            if (resFound == null) throw new Exception("The required resource with type: " + resType + " was not found!");
+            return resFound;
+        }
+
         public void kill()
         {
             this.getResources().ForEach(res => res.release());
