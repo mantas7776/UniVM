@@ -23,30 +23,49 @@ namespace UniVM
 
         public override void run()
         {
+            int testblocks = 5;
             switch(this.IC)
             {
                 case 0:
-                    long fileSize = new System.IO.FileInfo(programName).Length;
-                    if (fileSize == 0) throw new Exception($"File {programName} is empty!");
+                    {
+                        long fileSize = new System.IO.FileInfo(programName).Length;
+                        if (fileSize == 0) throw new Exception($"File {programName} is empty!");
 
-                    uint rowCount = (uint)(fileSize / Constants.BLOCK_SIZE);
-                    for (int i = 0; i < rowCount; i++) this.resourceRequestor.request(ResType.Memory);
-                    this.IC++;
-                    break;
+                        //int rowCount = (fileSize / Constants.BLOCK_SIZE);
+                        int rowCount = testblocks;
+                        for (int i = 0; i < rowCount; i++) this.resourceRequestor.request(ResType.Memory);
+                        this.IC++;
+                        break;
+                    }
                 case 1:
-                    MemAccesser memAcceser = this.virtualMemory.reserveMemory(this.getResourceTypeCount(ResType.Memory));
-                    Program program = new Program(programName, memAcceser);
+                    {
+                        uint rowCount = this.getResourceTypeCount(ResType.Memory);
+                        MemAccesser memAccesser = this.virtualMemory.reserveMemory(rowCount);
 
-                    this.virtualMachine = new VirtualMachine(program, memAcceser, kernelStorage, this.id);
-                    kernelStorage.processes.add(virtualMachine);
-                    this.IC++;
-                    break;
+                        byte[] altcode = Util.getCode("MOVA 0\nMOVATOCX\nMOVB 1\nADD\nLOOP 3\nHALT\n");
+                        byte[] altdata = Util.getData("000000050000000166696C652E747874");
+
+                        memAccesser.writeFromAddr(0, altcode);
+                        memAccesser.writeFromAddr((uint)altcode.Length, altdata);
+                        Program program = new Program("a", memAccesser);
+
+                        byte[] PTRIInfo = new byte[] { (byte)rowCount, (byte)Constants.MAX_BLOCK_COUNT };
+                        program.registers.PTRI = BitConverter.ToUInt32(PTRIInfo, 0);
+
+                        program.registers.CS = 0;
+                        program.registers.DS = 0 + (uint)altcode.Length;
+
+                        this.virtualMachine = new VirtualMachine(program, memAccesser, kernelStorage, this.id);
+                        kernelStorage.processes.add(virtualMachine);
+                        this.IC++;
+                        break;
+                    }
                 case 2:
                     this.resourceRequestor.request(ResType.Any, this.id);
                     this.IC++;
                     break;
                 case 3:
-                    Resource resource = this.getFirstResource(ResType.Any);
+                    Resource resource = this.getFirstResource(ResType.Any, this.id);
                     if(resource.type == ResType.Interrupt)
                     {
                         this.intHandler.handleInt((Interrupt)resource);

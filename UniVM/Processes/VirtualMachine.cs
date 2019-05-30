@@ -29,29 +29,23 @@ namespace UniVM
                     var regs = new Registers();
                     regs.PTR = Constants.PTR;
                     eval.registers = regs;
-                    while (true)
+                    if (program.completed)
+                        return;
+
+                    program.registers.TIMER = Constants.TIMER_VALUE;
+                    eval.registers = program.registers;
+
+                    while (eval.registers.TIMER > 0 && eval.registers.SI == 0 && eval.registers.PI == 0)
                     {
-                        bool ranAnything = false;
-                        if (program.completed)
-                            continue;
-
-                        ranAnything = true;
-                        program.registers.TIMER = Constants.TIMER_VALUE;
-                        eval.registers = program.registers;
-
-                        while (eval.registers.TIMER > 0 && eval.registers.SI == 0 && eval.registers.PI == 0)
-                        {
-                            eval.run(program);
-                        }
-
-                        if (eval.registers.SI > 0 || eval.registers.PI > 0)
-                        {
-                            this.kernelStorage.resources.add(new Interrupt(this.creatorId, this.program.fileName, this.creatorId));
-                        }
-
-                        program.registers = eval.registers;
-                        if (!ranAnything) break;
+                        eval.run(program);
                     }
+
+                    if (eval.registers.SI > 0 || eval.registers.PI > 0)
+                    {
+                        this.kernelStorage.resources.add(new Interrupt(this.creatorId, this.program.fileName, this.creatorId));
+                    }
+
+                    program.registers = eval.registers;
                     break;
             }
         }

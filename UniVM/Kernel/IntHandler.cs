@@ -19,18 +19,26 @@ namespace UniVM
 
         public void handleInt(Interrupt interrupt)
         {
-            if (Enum.IsDefined(typeof(SiInt), interrupt.type) == true)
-                handleSiInt(interrupt);
-            else if (Enum.IsDefined(typeof(PiInt), interrupt.type) == true)
-                handlePiInt(interrupt);
+            Program program = process.virtualMachine.program;
+            if (program.registers.SI > 0)
+                handleSiInt(program.registers.SI);
+            else if (program.registers.PI > 0)
+                handlePiInt(program.registers.PI);
             else
-                throw new NotImplementedException("Invalid int type was provided");
+                throw new Exception("Jobgovernor expected an int, but was not found inside the program.");
 
+
+            //if (Enum.IsDefined(typeof(SiInt), interrupt.type) == true)
+            //    handleSiInt(interrupt);
+            //else if (Enum.IsDefined(typeof(PiInt), interrupt.type) == true)
+            //    handlePiInt(interrupt);
+            //else
+            //    throw new NotImplementedException("Invalid int type was provided");
         }
 
-        public void handleSiInt(Interrupt interrupt)
+        private void handleSiInt(SiInt intNr)
         {
-            switch ((SiInt)interrupt.type)
+            switch (intNr)
             {
                 case SiInt.Halt:
                     {
@@ -71,9 +79,9 @@ namespace UniVM
             return;
         }
 
-        public void handlePiInt(Interrupt interrupt)
+        private void handlePiInt(PiInt intNr)
         {
-            switch ((PiInt)interrupt.type)
+            switch (intNr)
             {
                 case PiInt.InvalidCommand:
                     process.destroyVM();

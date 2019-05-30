@@ -14,11 +14,9 @@ namespace UniVM
             CX,
             MODE,
             PTR,
+            PTRI,
             IP, /* instruction pointer */
             FLAGS,
-            CH1,
-            CH2,
-            CH3,
             CS,
             TIMER,
             DS;
