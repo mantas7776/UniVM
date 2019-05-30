@@ -61,8 +61,11 @@ namespace UniVM
                         break;
                     }
                 case SiInt.DeleteFile:
-                    //this.kernelStorage.resources.add(new HandleOperationRequest(this.creatorId, HandleOperationType., (int)eval.registers.B));
-                    break;
+                    {
+                        Program program = process.virtualMachine.program;
+                        this.kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Delete, (int)program.registers.B, process.programName));
+                        break;
+                    }
             }
 
             return;
