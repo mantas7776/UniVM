@@ -21,7 +21,7 @@ namespace UniVM
             resources = new ResourceList(processes);
             memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCK_SIZE);
             handles = new HandleStorage();
-            virtualHdd = new Storage("main.bin");
+            virtualHdd = new Storage("main.bin", 2000);
             channelDevice = new ChannelDevice();
             handles.add(new ConsoleDevice());
         }

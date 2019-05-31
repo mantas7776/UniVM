@@ -59,8 +59,8 @@ namespace UniVM
                         memAccesser.writeFromAddr((uint)altcode.Length, altdata);
                         Program program = new Program("a", memAccesser);
 
-                        byte[] PTRIInfo = new byte[] { (byte)rowCount, (byte)Constants.MAX_BLOCK_COUNT };
-                        //program.registers.PTRI = BitConverter.ToUInt32(PTRIInfo, 0);
+                        byte[] PTRIInfo = new byte[] { (byte)rowCount, (byte)Constants.MAX_BLOCK_COUNT, (byte)0, (byte)0 };
+                        program.registers.PTRI = BitConverter.ToUInt32(PTRIInfo, 0);
 
                         program.registers.CS = 0;
                         program.registers.DS = 0 + (uint)altcode.Length;
