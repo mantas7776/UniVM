@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class Resource
+    public class Resource
     {
         public int id { get; private set; }
         public ResType type { get; protected set; }
@@ -58,7 +58,6 @@ namespace UniVM
         public void assign(BaseSystemProcess process)
         {
             assignedTo = process;
-
         }
 
     }

@@ -38,7 +38,7 @@ namespace UniVM
 
             //Kernel kernel = new Kernel();
             Application.EnableVisualStyles();
-            Application.Run(new RMMain());
+            Application.Run(new OSMain());
         }
     }
 }

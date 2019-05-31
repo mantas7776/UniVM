@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    abstract class BaseSystemProcess
+    public abstract class BaseSystemProcess
     {
         private static int nextId = 0;
         protected uint IC = 0;

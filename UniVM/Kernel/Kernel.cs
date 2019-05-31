@@ -8,7 +8,7 @@ namespace UniVM
 {
     class Kernel
     {
-        private KernelStorage kernelStorage = new KernelStorage();
+        public KernelStorage kernelStorage = new KernelStorage();
 
         public Kernel()
         {

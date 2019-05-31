@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class KernelStorage
+    public class KernelStorage
     {
         public ProcessList processes { get; private set; } 
         public ResourceList resources { get; private set; }
