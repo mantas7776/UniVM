@@ -97,7 +97,7 @@ namespace UniVM
                     regs.TIMER--;
                     break;
                 case "ADD":
-                    res = regs.A - regs.B;
+                    res = regs.A + regs.B;
                     regs.A += regs.B;
                     updateFlags(regs.A);
                     regs.A = res;
@@ -333,6 +333,24 @@ namespace UniVM
                         }
                         regs.B = device;
                         regs.SI = SiInt.MountBattery;
+                        break;
+                    }
+                case "SETA":
+                    {
+                        uint value = uint.Parse(args[1]);
+                        regs.A = value;
+                        break;
+                    }
+                case "SETB":
+                    {
+                        uint value = uint.Parse(args[1]);
+                        regs.B = value;
+                        break;
+                    }
+                case "SETCX":
+                    {
+                        uint value = uint.Parse(args[1]);
+                        regs.CX = value;
                         break;
                     }
                 default:
