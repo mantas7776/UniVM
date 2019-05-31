@@ -16,9 +16,9 @@ namespace UniVM
             //byte[] altcode = Util.getCode("MOVA 1\nMOVB 2\nADD\nSUB\nHALT\n");
             //byte[] altdata = Util.getData("FFFFFFFFAAAABBBB");
             //RealMachine realMachine = new RealMachine();
-            var randomStorage = new Storage("test.bin");
-            byte[] altcode = Util.getCode("MOVA 12\nnADD\nSUB\nHALT\n");
-            byte[] altdata = Util.getData("FFFFFFFFAAAABBBB\"big\0\"00000000");
+            //var randomStorage = new Storage("test.bin");
+            //byte[] altcode = Util.getCode("MOVA 12\nnADD\nSUB\nHALT\n");
+            //byte[] altdata = Util.getData("FFFFFFFFAAAABBBB\"big\0\"00000000");
 
             //VMInfo codeInfo = new VMInfo() { code = altcode, data = altdata };
             //int size = Util.getProgramSizeInFile(codeInfo);
@@ -36,12 +36,17 @@ namespace UniVM
             //VMInfo codeInfo = new VMInfo() { code = altcode, data = altdata };
             //var codeFile = StorageFile.Open(randomStorage, "program1");
             //Util.saveCodeToFile(codeFile, codeInfo);
-            
-            //Kernel kernel = new Kernel();
-            Application.EnableVisualStyles();
-            //Application.Run(new RMMain());
-            Application.Run(new OSMain());
 
+            //Kernel kernel = new Kernel();
+            //Application.EnableVisualStyles();
+            //Application.Run(new RMMain());
+            //Application.Run(new OSMain());
+            Kernel kernel = new Kernel();
+            while (true)
+            {
+                kernel.startScheduler();
+                System.Threading.Thread.Sleep(100);
+            }
         }
     }
 }
