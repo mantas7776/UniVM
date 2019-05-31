@@ -38,6 +38,7 @@ namespace UniVM
 
         private void handleSiInt(SiInt intNr)
         {
+            Program program = process.virtualMachine.program;
             switch (intNr)
             {
                 case SiInt.Halt:
@@ -47,7 +48,6 @@ namespace UniVM
                     }
                 case SiInt.OpenFileHandle:
                     {
-                        Program program = process.virtualMachine.program;
                         byte[] memoryBytes = program.memAccesser.getAllBytes();
                         string fileName = Util.AsciiBytesToString(memoryBytes, checked((int)(program.registers.B + program.registers.DS)));
 
@@ -56,13 +56,11 @@ namespace UniVM
                     }
                 case SiInt.CloseFileHandle:
                     {
-                        Program program = process.virtualMachine.program;
                         kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, (int)program.registers.B, process.programName));
                         break;
                     }
                 case SiInt.WriteToHandle:
                     {
-                        Program program = process.virtualMachine.program;
 
                         uint bytesToWriteAmount = program.registers.CX;
                         byte[] bytesToWrite = program.memAccesser.readFromAddr(program.registers.DS + program.registers.A, bytesToWriteAmount);
@@ -72,14 +70,11 @@ namespace UniVM
                     }
                 case SiInt.ReadFromHandle:
                     {
-
-                        Program program = process.virtualMachine.program;
                         this.kernelStorage.resources.add(new ReadHandleRequest(process.id, (int)program.registers.B, (int)program.registers.CX, process.programName));
                         break;
                     }
                 case SiInt.DeleteFile:
                     {
-                        Program program = process.virtualMachine.program;
                         this.kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Delete, (int)program.registers.B, process.programName));
                         break;
                     }
@@ -87,6 +82,13 @@ namespace UniVM
                     {
                         this.kernelStorage.resources.add(
                             new BaseHandleResource(ResType.BaseHandleResource, HandleOperationType.CreateBatteryHandle, process.id, -1)
+                        );
+                        break;
+                    }
+                case SiInt.SeekHandle:
+                    {
+                        this.kernelStorage.resources.add(
+                            new SetHandleSeekRequest(process.id, (int)program.registers.B, (int)program.registers.CX)
                         );
                         break;
                     }
