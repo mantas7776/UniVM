@@ -36,24 +36,27 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(26, 33);
+            this.label1.Location = new System.Drawing.Point(35, 41);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.Size = new System.Drawing.Size(109, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Program name: ";
             // 
             // programNameInp
             // 
-            this.programNameInp.Location = new System.Drawing.Point(113, 26);
+            this.programNameInp.Location = new System.Drawing.Point(151, 32);
+            this.programNameInp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.programNameInp.Name = "programNameInp";
-            this.programNameInp.Size = new System.Drawing.Size(169, 20);
+            this.programNameInp.Size = new System.Drawing.Size(224, 22);
             this.programNameInp.TabIndex = 1;
             // 
             // StartProgramBtn
             // 
-            this.StartProgramBtn.Location = new System.Drawing.Point(299, 23);
+            this.StartProgramBtn.Location = new System.Drawing.Point(399, 28);
+            this.StartProgramBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.StartProgramBtn.Name = "StartProgramBtn";
-            this.StartProgramBtn.Size = new System.Drawing.Size(75, 23);
+            this.StartProgramBtn.Size = new System.Drawing.Size(100, 28);
             this.StartProgramBtn.TabIndex = 2;
             this.StartProgramBtn.Text = "Start program";
             this.StartProgramBtn.UseVisualStyleBackColor = true;
@@ -61,12 +64,13 @@
             // 
             // ProgramStart
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(524, 106);
             this.Controls.Add(this.StartProgramBtn);
             this.Controls.Add(this.programNameInp);
             this.Controls.Add(this.label1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "ProgramStart";
             this.Text = "ProgramStart";
             this.ResumeLayout(false);

@@ -13,6 +13,7 @@ namespace UniVM
         public Memory memory { get; private set; }
         public HandleStorage handles { get; private set; }
         public Storage virtualHdd { get; private set; }
+        public Storage codeStorage { get; private set; }
         public ChannelDevice channelDevice { get; private set; }
 
         public KernelStorage()
@@ -22,8 +23,10 @@ namespace UniVM
             memory = new Memory(Constants.BLOCKS_AMOUNT, Constants.BLOCK_SIZE);
             handles = new HandleStorage();
             virtualHdd = new Storage("main.bin", 65535);
+            codeStorage = new Storage("code.bin", 65535);
             channelDevice = new ChannelDevice();
             handles.add(new ConsoleDevice());
+            loadProgramsToStorage();
         }
 
 
@@ -36,7 +39,7 @@ namespace UniVM
                 data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
             };
             int sz = Util.getProgramSizeInFile(vminfo);
-            StorageFile program = StorageFile.createFile(virtualHdd, "write.prog", sz);
+            StorageFile program = StorageFile.createFile(codeStorage, "write.prog", sz);
             Util.saveCodeToFile(program, vminfo);
             //read.prog
             vminfo = new VMInfo()
@@ -45,7 +48,7 @@ namespace UniVM
                 data = Util.getData("0000001000000008\"big\0\"00000000BBBBBBBB00000004")
             };
             sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(virtualHdd, "read.prog", sz);
+            program = StorageFile.createFile(codeStorage, "read.prog", sz);
             Util.saveCodeToFile(program, vminfo);
             //print.prog
             vminfo = new VMInfo()
@@ -54,7 +57,7 @@ namespace UniVM
                 data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
             };
             sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(virtualHdd, "print.prog", sz);
+            program = StorageFile.createFile(codeStorage, "print.prog", sz);
             Util.saveCodeToFile(program, vminfo);
             //printc.prog
             vminfo = new VMInfo()
@@ -63,7 +66,7 @@ namespace UniVM
                 data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
             };
             sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(virtualHdd, "printc.prog", sz);
+            program = StorageFile.createFile(codeStorage, "printc.prog", sz);
             Util.saveCodeToFile(program, vminfo);
             //readc.prog
             vminfo = new VMInfo()
@@ -72,7 +75,7 @@ namespace UniVM
                 data = Util.getData("0000001000000008\"big\0\"00000000BBBBBBBB00000004")
             };
             sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(virtualHdd, "printc.prog", sz);
+            program = StorageFile.createFile(codeStorage, "readc.prog", sz);
             Util.saveCodeToFile(program, vminfo);
             //battery.prog
             vminfo = new VMInfo()
@@ -81,7 +84,7 @@ namespace UniVM
                 data = Util.getData("000000040000000100000004")
             };
             sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(virtualHdd, "battery.prog", sz);
+            program = StorageFile.createFile(codeStorage, "battery.prog", sz);
             Util.saveCodeToFile(program, vminfo);
             //inf.prog
             vminfo = new VMInfo()
@@ -90,7 +93,7 @@ namespace UniVM
                 data = Util.getData("00000004")
             };
             sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(virtualHdd, "inf.prog", sz);
+            program = StorageFile.createFile(codeStorage, "inf.prog", sz);
             Util.saveCodeToFile(program, vminfo);
 
         }
