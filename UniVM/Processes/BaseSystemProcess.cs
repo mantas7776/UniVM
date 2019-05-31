@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    abstract class BaseSystemProcess
+    public abstract class BaseSystemProcess
     {
         private static int nextId = 0;
         protected uint IC = 0;
-        public readonly int id;
-        public ResourceRequestor resourceRequestor { get; private set; } = new ResourceRequestor();
+        public int id { get; }
+        public ResourceRequestor resourceRequestor { get; private set; }
         public int priority { get; set; }
+        public string procName { get; set; }
         public readonly int creatorId;
         private bool running = false;
         protected KernelStorage kernelStorage;
@@ -32,10 +33,12 @@ namespace UniVM
 
         protected BaseSystemProcess(int priority, KernelStorage kernelStorage, int creatorId)
         {
+            this.procName = this.GetType().Name;
             this.id = nextId++;
             this.creatorId = creatorId;
             this.priority = priority;
             this.kernelStorage = kernelStorage;
+            this.resourceRequestor = new ResourceRequestor(this.id);
         }
 
         public void execute()

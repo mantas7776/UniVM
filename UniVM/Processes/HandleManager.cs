@@ -15,7 +15,7 @@ namespace UniVM
             if (handle is FileHandle)
                 this.kernelStorage.channelDevice.storage = status;
             else if (handle is ConsoleDevice)
-                this.kernelStorage.channelDevice.storage = status;
+                this.kernelStorage.channelDevice.console = status;
             else
                 throw new NotImplementedException();
 
@@ -23,7 +23,7 @@ namespace UniVM
 
         public void createFileHandle(CreateHandleRequest request)
         {
-            //wait until realeased
+            //wait until released
             if (this.kernelStorage.handles.isFileTaken(request.fileName))
                 return;
 
@@ -44,6 +44,24 @@ namespace UniVM
             this.kernelStorage.channelDevice.storage = 1;
             createFileHandle(request);
             this.kernelStorage.channelDevice.storage = 0;
+        }
+
+        private void seekHandle(SetHandleSeekRequest request)
+        {
+            this.kernelStorage.channelDevice.storage = 1;
+
+            Handle hndl = this.kernelStorage.handles[request.handle];
+            if (!(hndl is FileHandle))
+                throw new NotImplementedException();
+
+            FileHandle handle = (FileHandle)hndl;
+            handle.Seek = request.where;
+
+            this.kernelStorage.channelDevice.storage = 0;
+
+            Resource response = new HandleOperationResponse(this.id, HandleOperationType.Seek, request.createdByProcess);
+            kernelStorage.resources.add(response);
+            request.release();
         }
 
         private void readHandleFile(FileHandle hndl,ReadHandleRequest request)
@@ -198,41 +216,54 @@ namespace UniVM
             switch(this.IC)
             {
                 case 0:
-                    this.resourceRequestor.request(ResType.BaseHandleResource);
-                    this.IC++;
-                    break;
-                case 1:
-                    List<Resource> reqs = getAllResources(ResType.BaseHandleResource);
-                    foreach (Resource baseReq in reqs)
                     {
-                        BaseHandleResource req = baseReq as BaseHandleResource;
-
-                        switch (req.handleResourceType)
-                        {
-                            case HandleOperationType.CreateFileHandle:
-                                createHandle(req as CreateHandleRequest);
-                                break;
-                            case HandleOperationType.Read:
-                                readHandle(req as ReadHandleRequest);
-                                break;
-                            case HandleOperationType.Write:
-                                writeHandle(req as WriteHandleRequest);
-                                break;
-                            case HandleOperationType.Close:
-                                closeHandle(req as HandleOperationRequest);
-                                break;
-                            case HandleOperationType.Delete:
-                                deleteHandle(req as HandleOperationRequest);
-                                break;
-                            case HandleOperationType.CreateBatteryHandle:
-                                mountBattery(req);
-                                break;
-                            default:
-                                throw new NotImplementedException();
-                        }
+                        bool hasResource = getAllResources(ResType.BaseHandleResource).Any();
+                        if (this.resourceRequestor.RequestedResources.Count == 0)
+                            this.resourceRequestor.request(ResType.BaseHandleResource, -1, !hasResource);
+                        this.IC++;
+                        break;
                     }
-                    this.IC = 0;
-                    break;
+                case 1:
+                    {
+                        List<Resource> reqs = getAllResources(ResType.BaseHandleResource);
+                        foreach (Resource baseReq in reqs)
+                        {
+                            BaseHandleResource req = baseReq as BaseHandleResource;
+
+                            switch (req.handleResourceType)
+                            {
+                                case HandleOperationType.CreateFileHandle:
+                                    createHandle(req as CreateHandleRequest);
+                                    break;
+                                case HandleOperationType.Read:
+                                    readHandle(req as ReadHandleRequest);
+                                    break;
+                                case HandleOperationType.Write:
+                                    writeHandle(req as WriteHandleRequest);
+                                    break;
+                                case HandleOperationType.Close:
+                                    closeHandle(req as HandleOperationRequest);
+                                    break;
+                                case HandleOperationType.Delete:
+                                    deleteHandle(req as HandleOperationRequest);
+                                    break;
+                                case HandleOperationType.CreateBatteryHandle:
+                                    mountBattery(req);
+                                    break;
+                                case HandleOperationType.Seek:
+                                    seekHandle(req as SetHandleSeekRequest);
+                                    break;
+                                default:
+                                    throw new NotImplementedException();
+                            }
+                        }
+                        this.IC = 0;
+                        //if (this.kernelStorage.resources.Resources
+                        //   .Where(res => res.assignedTo == this)
+                        //   .Count() == 0
+                        //    ) this.IC = 0;
+                        break;
+                    }
             }
         }
 

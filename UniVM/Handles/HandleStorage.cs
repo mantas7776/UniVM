@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class HandleStorage
+    public class HandleStorage
     {
-        List<Handle> handles = new List<Handle>();
-        
+        Dictionary<int, Handle> handles = new Dictionary<int, Handle>(); 
+        int lastid = 0;
 
         public int add(Handle hndl)
         {
-            int ind = handles.Count;
-            handles.Add(hndl);
+            int ind = lastid++;
+            handles[ind] = hndl;
             return ind;
         }
 
@@ -29,14 +29,15 @@ namespace UniVM
         public bool remove(Handle hndl)
         {
             hndl.close();
-            return handles.Remove(hndl);
+            int id = handles.FirstOrDefault(x => x.Value == hndl).Key;
+            return handles.Remove(id);
         }
 
         public bool isFileTaken(string fileName)
         {
             int count = handles.Where(hndl =>
-                hndl.GetType() == typeof(FileHandle) &&
-                ((FileHandle)hndl).fileName == fileName
+                hndl.Value.GetType() == typeof(FileHandle) &&
+                ((FileHandle)hndl.Value).fileName == fileName
             ).Count();
 
             return count > 0;

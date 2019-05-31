@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    struct ResourceDesc
+    public struct ResourceDesc
     {
         public ResType type;
         public int messageid;
+        public bool blocking;
+
+        public ResourceDesc(ResType type, int messageid)
+        {
+            this.type = type;
+            this.messageid = messageid;
+            blocking = true;
+        }
     }
 }

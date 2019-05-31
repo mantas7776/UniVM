@@ -12,6 +12,18 @@ namespace UniVM
 
         private int seek = 0;
 
+        public int Seek
+        {
+            get
+            {
+                return seek;
+            }
+            set
+            {
+                seek = value;
+            }
+        }
+
         public string fileName 
         {
             get

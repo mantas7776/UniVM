@@ -33,9 +33,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,6 +49,55 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\Memval.cs" />
+    <Compile Include="Forms\MemoryGUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MemoryGUI.Designer.cs">
+      <DependentUpon>MemoryGUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OSMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\OSMain.Designer.cs">
+      <DependentUpon>OSMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProcessTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessTable.Designer.cs">
+      <DependentUpon>ProcessTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProgramMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProgramMain.Designer.cs">
+      <DependentUpon>ProgramMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProgramStart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProgramStart.Designer.cs">
+      <DependentUpon>ProgramStart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ResourceTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ResourceTable.Designer.cs">
+      <DependentUpon>ResourceTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\RMMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\RMMain.Designer.cs">
+      <DependentUpon>RMMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\VMMemGui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\VMMemGui.Designer.cs">
+      <DependentUpon>VMMemGui.cs</DependentUpon>
+    </Compile>
     <Compile Include="Handles\BatteryHandle.cs" />
     <Compile Include="Handles\FileHandle.cs" />
     <Compile Include="Kernel\ChannelDevice.cs" />
@@ -61,6 +115,7 @@
     <Compile Include="Kernel\Kernel.cs" />
     <Compile Include="Resources\BaseHandleResource.cs" />
     <Compile Include="Resources\File\ReadHandleRequest.cs" />
+    <Compile Include="Resources\File\SetHandleSeekRequest.cs" />
     <Compile Include="Resources\File\WriteHandleRequest.cs" />
     <Compile Include="Resources\File\CreateHandleRequest.cs" />
     <Compile Include="Resources\File\CreateHandleResponse.cs" />
@@ -70,6 +125,7 @@
     <Compile Include="Resources\File\ReadHandleResponse.cs" />
     <Compile Include="Resources\File\HandleOperationRequest.cs" />
     <Compile Include="Resources\Util\HandleOperationType.cs" />
+    <Compile Include="Resources\Util\MemVal.cs" />
     <Compile Include="Resources\Util\ResType.cs" />
     <Compile Include="VM\MemAccesser.cs" />
     <Compile Include="Kernel\Memory.cs" />
@@ -104,7 +160,41 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Properties\DataSources\BaseSystemProcess.datasource" />
+    <None Include="Properties\DataSources\Memory.datasource" />
+    <None Include="Properties\DataSources\Memval.datasource" />
+    <None Include="Properties\DataSources\Program.datasource" />
+    <None Include="Properties\DataSources\Registers.datasource" />
+    <None Include="Properties\DataSources\Resource.datasource" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Forms\MemoryGUI.resx">
+      <DependentUpon>MemoryGUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\OSMain.resx">
+      <DependentUpon>OSMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessTable.resx">
+      <DependentUpon>ProcessTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProgramMain.resx">
+      <DependentUpon>ProgramMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProgramStart.resx">
+      <DependentUpon>ProgramStart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ResourceTable.resx">
+      <DependentUpon>ResourceTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\RMMain.resx">
+      <DependentUpon>RMMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\VMMemGui.resx">
+      <DependentUpon>VMMemGui.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Forms\Bind\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

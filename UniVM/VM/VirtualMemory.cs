@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class VirtualMemory
+    public class VirtualMemory
     {
         private uint PTR;
         private Memory memory;

@@ -19,8 +19,10 @@ namespace UniVM
         ProgramStartKill,
         Interrupt,
         NonExistent,
-        FromInterrupt,
+        InterruptRes,
         Any,
+        FromInterrupt,
+        SeekHandleResponse
     };
 
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class MemAccesser
+    public class MemAccesser
     {
         private uint[] allowedVirtRows;
         private Memory memory;
@@ -55,7 +55,7 @@ namespace UniVM
 
         public int size()
         {
-            return allowedVirtRows.Length * 16;
+            return allowedVirtRows.Length * (int)Constants.BLOCK_SIZE;
         }
 
         public byte[] getAllBytes()
@@ -80,6 +80,14 @@ namespace UniVM
             uint realRowNr = memory.get(PTR + translTableIndex);
             uint realMemAddr = realRowNr * Constants.BLOCK_SIZE + offset;
             return realMemAddr;
+        }
+
+        public byte[] getRowBytesFromVirtAddr(uint virtAddr)
+        {
+            uint offset = virtAddr % Constants.BLOCK_SIZE;
+            uint rowNr = virtAddr / Constants.BLOCK_SIZE;
+            uint translTableIndex = allowedVirtRows[rowNr];
+            return this.readFromAddr(rowNr*Constants.BLOCK_SIZE, Constants.BLOCK_SIZE);
         }
     }
 }

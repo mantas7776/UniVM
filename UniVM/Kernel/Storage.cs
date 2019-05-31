@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class Storage
+    public class Storage
     {
         private byte[] storage;
         private int length;

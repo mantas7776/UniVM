@@ -5,8 +5,9 @@ namespace UniVM {
     class RealMachine
     {
         private List<Program> programs = new List<Program>();
-        private Storage storage = new Storage("HDD.txt", 3000);
-        private Memory memory;
+        public Memory memory { get; private set; }
+        private Storage storage = new Storage("HDD.txt", 10024);
+        private Storage codeStorage = new Storage("code.txt", 60024);
         private HandleStorage handles = new HandleStorage();
         private VirtualMemory virtualMemory;
         private ChannelDevice channelDevice = new ChannelDevice();
@@ -18,6 +19,88 @@ namespace UniVM {
             this.eval = new Eval();
             this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
             handles.add(new ConsoleDevice());
+            loadProgramsToStorage();
+            addProgramFromFile("inf.prog");
+            addProgramFromFile("battery.prog");
+            addProgramFromFile("battery2.prog");
+            addProgramFromFile("inf.prog");
+        }
+
+        private void loadProgramsToStorage()
+        {
+            //write.prog
+            VMInfo vminfo = new VMInfo()
+            {
+                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nCLOSEHANDLE\nHALT\n"),
+                data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
+            };
+            int sz = Util.getProgramSizeInFile(vminfo);
+            StorageFile program = StorageFile.createFile(codeStorage, "write.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
+            //read.prog
+            vminfo = new VMInfo()
+            {
+                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nREAD\nCLOSEHANDLE\nHALT\n"),
+                data = Util.getData("0000001000000008\"big\0\"00000000BBBBBBBB00000004")
+            };
+            sz = Util.getProgramSizeInFile(vminfo);
+            program = StorageFile.createFile(codeStorage, "read.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
+            //print.prog
+            vminfo = new VMInfo()
+            {
+                code = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n"),
+                data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
+            };
+            sz = Util.getProgramSizeInFile(vminfo);
+            program = StorageFile.createFile(codeStorage, "print.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
+            //printc.prog
+            vminfo = new VMInfo()
+            {
+                code = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n"),
+                data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
+            };
+            sz = Util.getProgramSizeInFile(vminfo);
+            program = StorageFile.createFile(codeStorage, "printc.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
+            //readc.prog
+            vminfo = new VMInfo()
+            {
+                code = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nREADC\nHALT\n"),
+                data = Util.getData("0000001000000008\"big\0\"00000000BBBBBBBB00000004")
+            };
+            sz = Util.getProgramSizeInFile(vminfo);
+            program = StorageFile.createFile(codeStorage, "readc.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
+            //battery.prog
+            vminfo = new VMInfo()
+            {
+                code = Util.getCode("MOUNT 0\nMOVA 0\nMOVATOCX\nMOVA 8\nWRITE\nMOVA 4\nCLOSEHANDLE\nHALT\n"),
+                data = Util.getData("000000040000000100000004")
+            };
+            sz = Util.getProgramSizeInFile(vminfo);
+            program = StorageFile.createFile(codeStorage, "battery.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
+            //battery2.prog
+            vminfo = new VMInfo()
+            {
+                code = Util.getCode("MOUNT 0\nMOVA 0\nMOVATOCX\nMOVA 4\nREAD\nCLOSEHANDLE\nHALT\n"),
+                data = Util.getData("0000000400000000")
+            };
+            sz = Util.getProgramSizeInFile(vminfo);
+            program = StorageFile.createFile(codeStorage, "battery2.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
+            //inf.prog
+            vminfo = new VMInfo()
+            {
+                code = Util.getCode("MOVA 0\nMOVATOCX\nLOOP 0\nHALT\n"),
+                data = Util.getData("00000004")
+            };
+            sz = Util.getProgramSizeInFile(vminfo);
+            program = StorageFile.createFile(codeStorage, "inf.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
+
         }
 
         public void handleSiInt(Program program, SiInt siNr)
@@ -117,7 +200,11 @@ namespace UniVM {
                         //handle battery, special case
                         if (hndl is Battery)
                         {
-                            ((Battery)hndl).setStatus((byte)program.registers.A);
+                            int status = BitConverter.ToInt32(
+                                program.memAccesser.readFromAddr(
+                                    program.registers.DS + program.registers.A, 4)
+                                , 0);
+                            ((Battery)hndl).setStatus((byte)status);
                             program.registers.SI = SiInt.None;
                             return;
                         }
@@ -188,6 +275,22 @@ namespace UniVM {
                         program.registers.SI = SiInt.None;
                         break;
                     }
+                case SiInt.SeekHandle:
+                    {
+                        channelDevice.storage = 1;
+                        Handle handle = handles[checked((int)program.registers.B)];
+                        if (handle.GetType() != typeof(FileHandle))
+                            throw new Exception("Only file handles can seek");
+                        FileHandle file = (FileHandle)handle;
+                        file.Seek = checked((int)program.registers.CX);
+                        channelDevice.storage = 0;
+                        break;
+                    }
+                case SiInt.PrintConsoleRegA:
+                    channelDevice.console = 1;
+                    Console.WriteLine(program.registers.A);
+                    channelDevice.console = 0;
+                    break;
                 default:
                     throw new NotImplementedException();
             }
@@ -209,29 +312,31 @@ namespace UniVM {
             return;
         }
 
-        public void addProgramFromFile()
+        public void addProgramFromFile(string fileName)
         {
             //var codeStorage = new Storage(fileName);
 
-            byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nHALT\n");
+            //byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nHALT\n");
             //byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nREAD\nCLOSEHANDLE\nHALT\n");
             //byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n");
             //byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nREADC\nHALT\n");
             //byte[] altcode = Util.getCode("MOUNT 0\nMOVA 0\nMOVATOCX\nMOVA 8\nWRITE\nMOVA 4\nREAD\nHALT\n");
-            string t = "0000001000000008\"big\0\"00000000FFFFFFFF00000004";
+            //string t = "0000001000000008\"big\0\"00000000FFFFFFFF00000004";
             //string t2 = "0000001000000008\"big\0\"00000000BBBBBBBB00000004";
             //string t = "0000000C00000008\"big\0\"00000000BBBBBBBB00000004";
             //string t = "000000040000000100000004";
-            byte[] altdata = Util.getData(t);
+            //byte[] altdata = Util.getData(t);
+            StorageFile codeFile = StorageFile.Open(this.codeStorage, fileName);
+            VMInfo programData = Util.readCodeFromFile(codeFile);
             //Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
-            //uint rowCount = (uint)(codeStorage.getBytes().Length / Constants.BLOCK_SIZE);
+            uint rowCount = (uint)((programData.code.Length + programData.data.Length) / Constants.BLOCK_SIZE)+1;
             //uint rowCount = 10;
-            MemAccesser memAccesser = virtualMemory.reserveMemory(8);
-            memAccesser.writeFromAddr(0, altcode);
-            memAccesser.writeFromAddr((uint)altcode.Length, altdata);
-            Program program = new Program("a", memAccesser);
+            MemAccesser memAccesser = virtualMemory.reserveMemory(rowCount);
+            memAccesser.writeFromAddr(0, programData.code);
+            memAccesser.writeFromAddr((uint)programData.code.Length, programData.data);
+            Program program = new Program(fileName, memAccesser);
             program.registers.CS = 0;
-            program.registers.DS = 0 + (uint)altcode.Length;
+            program.registers.DS = 0 + (uint)programData.code.Length;
 
             programs.Add(program);
         }
@@ -239,7 +344,7 @@ namespace UniVM {
         public void start()
         {
             //DEBUG
-            addProgramFromFile();
+            //addProgramFromFile();
             var regs = new Registers();
             regs.PTR = Constants.PTR;
             eval.registers = regs;
@@ -271,8 +376,17 @@ namespace UniVM {
 
                 if (!ranAnything)
                     break;
+                break;
             }
 
+        }
+
+        public List<Program> Programs
+        {
+            get
+            {
+                return programs;
+            }
         }
     }
 }

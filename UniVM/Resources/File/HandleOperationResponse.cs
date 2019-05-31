@@ -18,6 +18,9 @@ namespace UniVM
                 case HandleOperationType.Delete:
                     this.type = ResType.DeleteHandleResponse;
                     break;
+                case HandleOperationType.Seek:
+                    this.type = ResType.SeekHandleResponse;
+                    break;
                 default:
                     throw new NotImplementedException();
             }

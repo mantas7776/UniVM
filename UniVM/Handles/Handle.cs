@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    abstract class Handle
+    public abstract class Handle
     {
         abstract public byte read();
         abstract public bool write(byte c);

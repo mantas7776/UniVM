@@ -97,7 +97,7 @@ namespace UniVM
                     regs.TIMER--;
                     break;
                 case "ADD":
-                    res = regs.A - regs.B;
+                    res = regs.A + regs.B;
                     regs.A += regs.B;
                     updateFlags(regs.A);
                     regs.A = res;
@@ -283,11 +283,26 @@ namespace UniVM
                         regs.SI = SiInt.WriteToHandle;
                         break;
                     }
+                case "SEEK":
+                    {
+                        uint seekWhere = uint.Parse(args[1]);
+                        regs.CX = seekWhere;
+                        regs.TIMER--;
+                        regs.SI = SiInt.SeekHandle;
+                        break;
+                    }
+                case "PRINTA":
+                    {
+                        regs.SI = SiInt.PrintConsoleRegA;
+                        regs.TIMER--;
+                        break;
+                    }
                 case "PRINTC": //prints reg A adr to console
                     {
                         //WRITES FROM ADR TO \0
                         regs.B = 0;
                         regs.SI = SiInt.PrintConsole;
+                        regs.TIMER--;
                         break;
                     }
                 case "READC":
@@ -296,6 +311,7 @@ namespace UniVM
                         //CX = limit
                         regs.B = 0;
                         regs.SI = SiInt.ReadConsole;
+                        regs.TIMER--;
                         break;
                     }
                 case "OPENFILEHANDLE": 
@@ -333,6 +349,24 @@ namespace UniVM
                         }
                         regs.B = device;
                         regs.SI = SiInt.MountBattery;
+                        break;
+                    }
+                case "SETA":
+                    {
+                        uint value = uint.Parse(args[1]);
+                        regs.A = value;
+                        break;
+                    }
+                case "SETB":
+                    {
+                        uint value = uint.Parse(args[1]);
+                        regs.B = value;
+                        break;
+                    }
+                case "SETCX":
+                    {
+                        uint value = uint.Parse(args[1]);
+                        regs.CX = value;
                         break;
                     }
                 default:
