@@ -29,7 +29,8 @@ namespace UniVM.Forms
             if (VmList.SelectedItem != null)
             {
                 Program p = VmList.SelectedItem as Program;
-                MessageBox.Show(p.fileName);
+                ProgramMain programGui = new ProgramMain(p);
+                programGui.Show();
             }
         }
     }
