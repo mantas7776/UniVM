@@ -20,7 +20,7 @@ namespace UniVM.Forms
             InitializeComponent();
 
             Timer timer = new Timer();
-            timer.Interval = 50;
+            timer.Interval = 300;
             timer.Enabled = true;
             timer.Tick += new EventHandler(timerTick);
 

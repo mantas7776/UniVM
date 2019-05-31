@@ -18,7 +18,6 @@ namespace UniVM
         public JobGovernor(string programName, KernelStorage kernelStorage, int creatorId) : base(ProcPriority.JobGovernor, kernelStorage, creatorId)
         {
             this.programName = programName;
-            virtualMemory = new VirtualMemory(Constants.PTR, this.kernelStorage.memory);
             intHandler = new IntHandler(this.kernelStorage, this);
         }
 
@@ -42,7 +41,7 @@ namespace UniVM
                 case 1:
                     {
                         uint rowCount = this.getResourceTypeCount(ResType.Memory);
-                        MemAccesser memAccesser = this.virtualMemory.reserveMemory(rowCount);
+                        MemAccesser memAccesser = this.kernelStorage.virtualMemory.reserveMemory(rowCount);
 
                         //byte[] altcode = Util.getCode("MOVA 0\nMOVATOCX\nMOVB 1\nADD\nLOOP 3\nHALT\n");
                         //byte[] altdata = Util.getData("000000050000000166696C652E747874");

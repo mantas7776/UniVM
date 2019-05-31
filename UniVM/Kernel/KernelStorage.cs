@@ -15,6 +15,7 @@ namespace UniVM
         public Storage virtualHdd { get; private set; }
         public Storage codeStorage { get; private set; }
         public ChannelDevice channelDevice { get; private set; }
+        public VirtualMemory virtualMemory { get; private set; }
 
         public KernelStorage()
         {
@@ -25,6 +26,7 @@ namespace UniVM
             virtualHdd = new Storage("main.bin", 65535);
             codeStorage = new Storage("code.bin", 65535);
             channelDevice = new ChannelDevice();
+            virtualMemory = new VirtualMemory(Constants.PTR, this.memory);
             handles.add(new ConsoleDevice());
             loadProgramsToStorage();
         }
@@ -35,8 +37,23 @@ namespace UniVM
             //write.prog
             VMInfo vminfo = new VMInfo()
             {
-                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nMOVA 16\nMOVATOCX\nMOVA 0\nWRITE\nCLOSEHANDLE\nHALT\n"),
-                data = Util.getData("0000000C\"big\0\"00000000FFFFFFFF00000004")
+                code = Util.getCode(@"MOVB 4
+SAVEB 12
+OPENFILEHANDLE
+MOVA 16
+MOVATOCX
+MOVA 0
+READ
+MOVB 16
+ADD
+SAVEA 16
+MOVB 12
+MOVA 0
+WRITE
+CLOSEHANDLE
+JMP 0
+HALT\n"),
+                data = Util.getData("0000000C\"big\0\"000000000000000100000004")
             };
             int sz = Util.getProgramSizeInFile(vminfo);
             StorageFile program = StorageFile.createFile(codeStorage, "write.prog", sz);
