@@ -353,6 +353,7 @@ namespace UniVM {
 
                 if (!ranAnything)
                     break;
+                break;
             }
 
         }
