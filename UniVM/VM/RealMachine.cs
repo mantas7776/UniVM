@@ -275,6 +275,22 @@ namespace UniVM {
                         program.registers.SI = SiInt.None;
                         break;
                     }
+                case SiInt.SeekHandle:
+                    {
+                        channelDevice.storage = 1;
+                        Handle handle = handles[checked((int)program.registers.B)];
+                        if (handle.GetType() != typeof(FileHandle))
+                            throw new Exception("Only file handles can seek");
+                        FileHandle file = (FileHandle)handle;
+                        file.Seek = checked((int)program.registers.CX);
+                        channelDevice.storage = 0;
+                        break;
+                    }
+                case SiInt.PrintConsoleRegA:
+                    channelDevice.console = 1;
+                    Console.WriteLine(program.registers.A);
+                    channelDevice.console = 0;
+                    break;
                 default:
                     throw new NotImplementedException();
             }
