@@ -97,7 +97,7 @@ namespace UniVM
                     regs.TIMER--;
                     break;
                 case "ADD":
-                    res = regs.A - regs.B;
+                    res = regs.A + regs.B;
                     regs.A += regs.B;
                     updateFlags(regs.A);
                     regs.A = res;
@@ -281,6 +281,14 @@ namespace UniVM
                         //handles[(int)regs.B].write((byte)regs.A);
                         regs.TIMER--;
                         regs.SI = SiInt.WriteToHandle;
+                        break;
+                    }
+                case "SEEK":
+                    {
+                        uint seekWhere = uint.Parse(args[1]);
+                        regs.CX = seekWhere;
+                        regs.TIMER--;
+                        regs.SI = SiInt.SeekHandle;
                         break;
                     }
                 case "PRINTC": //prints reg A adr to console

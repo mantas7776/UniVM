@@ -27,7 +27,8 @@ namespace UniVM
         NonExistent,
         InterruptRes,
         Any,
-        FromInterrupt
+        FromInterrupt,
+        SeekHandleResponse
     };
 
 

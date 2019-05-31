@@ -115,6 +115,7 @@
     <Compile Include="Kernel\Kernel.cs" />
     <Compile Include="Resources\BaseHandleResource.cs" />
     <Compile Include="Resources\File\ReadHandleRequest.cs" />
+    <Compile Include="Resources\File\SetHandleSeekRequest.cs" />
     <Compile Include="Resources\File\WriteHandleRequest.cs" />
     <Compile Include="Resources\File\CreateHandleRequest.cs" />
     <Compile Include="Resources\File\CreateHandleResponse.cs" />

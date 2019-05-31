@@ -46,6 +46,24 @@ namespace UniVM
             this.kernelStorage.channelDevice.storage = 0;
         }
 
+        private void seekHandle(SetHandleSeekRequest request)
+        {
+            this.kernelStorage.channelDevice.storage = 1;
+
+            Handle hndl = this.kernelStorage.handles[request.handle];
+            if (!(hndl is FileHandle))
+                throw new NotImplementedException();
+
+            FileHandle handle = (FileHandle)hndl;
+            handle.Seek = request.where;
+
+            this.kernelStorage.channelDevice.storage = 0;
+
+            Resource response = new HandleOperationResponse(this.id, HandleOperationType.Seek, request.createdByProcess);
+            kernelStorage.resources.add(response);
+            request.release();
+        }
+
         private void readHandleFile(FileHandle hndl,ReadHandleRequest request)
         {
             this.kernelStorage.channelDevice.storage = 1;
@@ -226,6 +244,9 @@ namespace UniVM
                                 break;
                             case HandleOperationType.CreateBatteryHandle:
                                 mountBattery(req);
+                                break;
+                            case HandleOperationType.Seek:
+                                seekHandle(req as SetHandleSeekRequest);
                                 break;
                             default:
                                 throw new NotImplementedException();

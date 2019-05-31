@@ -45,7 +45,7 @@ namespace UniVM
             while (true)
             {
                 kernel.startScheduler();
-                System.Threading.Thread.Sleep(200);
+                //System.Threading.Thread.Sleep(200);
             }
         }
     }
