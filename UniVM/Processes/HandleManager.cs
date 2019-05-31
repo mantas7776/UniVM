@@ -24,8 +24,8 @@ namespace UniVM
         public void createFileHandle(CreateHandleRequest request)
         {
             //wait until realeased
-            if (this.kernelStorage.handles.isFileTaken(request.fileName))
-                return;
+            //if (this.kernelStorage.handles.isFileTaken(request.fileName))
+              //  return;
 
             StorageFile file = StorageFile.OpenOrCreate(this.kernelStorage.virtualHdd, request.fileName);
 
@@ -231,7 +231,10 @@ namespace UniVM
                                 throw new NotImplementedException();
                         }
                     }
-                    this.IC = 0;
+                    if (this.kernelStorage.resources.Resources
+                        .Where(res => res.assignedTo == this)
+                        .Count() == 0
+                        ) this.IC = 0;
                     break;
             }
         }

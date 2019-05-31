@@ -22,7 +22,7 @@ namespace UniVM
             List<BaseSystemProcess> processes = kernelStorage
                 .processes
                 .Processes
-                .Where(o => !o.resourceRequestor.blocked && o.priority > 0)
+                .Where(o => !o.resourceRequestor.blocked && o.priority > 0 )
                 .OrderByDescending(o => o.priority)
                 .ToList();
 
