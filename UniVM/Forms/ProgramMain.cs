@@ -83,12 +83,12 @@ namespace UniVM.Forms
 
         private void TextBoxPI_TextChanged(object sender, EventArgs e)
         {
-            this.program.registers.PI = uint.Parse(textBoxPI.Text);
+            //this.program.registers.PI = (PiInt)PiInt.Parse(textBoxPI.Text);
         }
 
         private void TextBoxSI_TextChanged(object sender, EventArgs e)
         {
-            this.program.registers.SI = uint.Parse(textBoxSI.Text);
+            //this.program.registers.SI = (PiInt)PiInt.Parse(textBoxSI.Text);
         }
     }
 }

@@ -17,8 +17,6 @@ namespace UniVM.Forms
         public ResourceTable(List<Resource> resources)
         {   
             InitializeComponent();
-            //Load += new EventHandler(DataLoad);
-
             this.dataGridView1.DataSource = resources;
         }
 
@@ -43,6 +41,11 @@ namespace UniVM.Forms
         }
 
         private void DataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void ResourceBindingSource_CurrentChanged(object sender, EventArgs e)
         {
 
         }

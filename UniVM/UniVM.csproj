@@ -55,11 +55,29 @@
     <Compile Include="Forms\OSMain.Designer.cs">
       <DependentUpon>OSMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ProcessTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProcessTable.Designer.cs">
+      <DependentUpon>ProcessTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ProgramMain.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\ProgramMain.Designer.cs">
       <DependentUpon>ProgramMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProgramStart.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProgramStart.Designer.cs">
+      <DependentUpon>ProgramStart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ResourceTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ResourceTable.Designer.cs">
+      <DependentUpon>ResourceTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\RMMain.cs">
       <SubType>Form</SubType>
@@ -67,6 +85,7 @@
     <Compile Include="Forms\RMMain.Designer.cs">
       <DependentUpon>RMMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Test.cs" />
     <Compile Include="Handles\BatteryHandle.cs" />
     <Compile Include="Handles\FileHandle.cs" />
     <Compile Include="Kernel\ChannelDevice.cs" />
@@ -93,6 +112,7 @@
     <Compile Include="Resources\File\ReadHandleResponse.cs" />
     <Compile Include="Resources\File\HandleOperationRequest.cs" />
     <Compile Include="Resources\Util\HandleOperationType.cs" />
+    <Compile Include="Resources\Util\MemVal.cs" />
     <Compile Include="Resources\Util\ResType.cs" />
     <Compile Include="VM\MemAccesser.cs" />
     <Compile Include="Kernel\Memory.cs" />
@@ -127,15 +147,26 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Properties\DataSources\BaseSystemProcess.datasource" />
     <None Include="Properties\DataSources\Program.datasource" />
     <None Include="Properties\DataSources\Registers.datasource" />
+    <None Include="Properties\DataSources\Resource.datasource" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forms\OSMain.resx">
       <DependentUpon>OSMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProcessTable.resx">
+      <DependentUpon>ProcessTable.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\ProgramMain.resx">
       <DependentUpon>ProgramMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProgramStart.resx">
+      <DependentUpon>ProgramStart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ResourceTable.resx">
+      <DependentUpon>ResourceTable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\RMMain.resx">
       <DependentUpon>RMMain.cs</DependentUpon>

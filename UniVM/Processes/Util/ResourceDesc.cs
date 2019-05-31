@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    struct ResourceDesc
+    public struct ResourceDesc
     {
         public ResType type;
         public int messageid;

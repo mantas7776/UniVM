@@ -81,5 +81,13 @@ namespace UniVM
             uint realMemAddr = realRowNr * Constants.BLOCK_SIZE + offset;
             return realMemAddr;
         }
+
+        public byte[] getRowBytesFromVirtAddr(uint virtAddr)
+        {
+            uint offset = virtAddr % Constants.BLOCK_SIZE;
+            uint rowNr = virtAddr / Constants.BLOCK_SIZE;
+            uint translTableIndex = allowedVirtRows[rowNr];
+            return this.readFromAddr(rowNr*Constants.BLOCK_SIZE, Constants.BLOCK_SIZE);
+        }
     }
 }

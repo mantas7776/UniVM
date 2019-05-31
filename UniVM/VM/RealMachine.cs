@@ -5,7 +5,7 @@ namespace UniVM {
     class RealMachine
     {
         private List<Program> programs = new List<Program>();
-        private Storage storage = new Storage("HDD.txt");
+        private Storage storage = new Storage("HDD.txt", 1024);
         private Memory memory;
         private HandleStorage handles = new HandleStorage();
         private VirtualMemory virtualMemory;

@@ -30,13 +30,13 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.resourceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.typeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.createdByProcessDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.staticResDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.assignedToDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.expiredDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.messageidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.resourceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.resourceBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -61,10 +61,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(648, 380);
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellContentClick);
-            // 
-            // resourceBindingSource
-            // 
-            this.resourceBindingSource.DataSource = typeof(UniVM.Resource);
             // 
             // typeDataGridViewTextBoxColumn
             // 
@@ -107,6 +103,11 @@
             this.messageidDataGridViewTextBoxColumn.HeaderText = "Messageid";
             this.messageidDataGridViewTextBoxColumn.Name = "messageidDataGridViewTextBoxColumn";
             this.messageidDataGridViewTextBoxColumn.ReadOnly = true;
+            // 
+            // resourceBindingSource
+            // 
+            this.resourceBindingSource.DataSource = typeof(UniVM.Resource);
+            this.resourceBindingSource.CurrentChanged += new System.EventHandler(this.ResourceBindingSource_CurrentChanged);
             // 
             // ResourceTable
             // 

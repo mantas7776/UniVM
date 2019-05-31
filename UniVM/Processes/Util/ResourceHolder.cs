@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class ResourceRequestor
+    public class ResourceRequestor
     {
 
         private List<ResourceDesc> requestedResources = new List<ResourceDesc>();

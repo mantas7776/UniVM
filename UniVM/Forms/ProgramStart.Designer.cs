@@ -1,6 +1,6 @@
 ﻿namespace UniVM.Forms
 {
-    partial class OSMain
+    partial class ProgramStart
     {
         /// <summary>
         /// Required designer variable.
@@ -28,59 +28,56 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.ProcTableBtn = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.programNameInp = new System.Windows.Forms.TextBox();
             this.StartProgramBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // ProcTableBtn
+            // label1
             // 
-            this.ProcTableBtn.Location = new System.Drawing.Point(13, 13);
-            this.ProcTableBtn.Name = "ProcTableBtn";
-            this.ProcTableBtn.Size = new System.Drawing.Size(75, 23);
-            this.ProcTableBtn.TabIndex = 0;
-            this.ProcTableBtn.Text = "Processes";
-            this.ProcTableBtn.UseVisualStyleBackColor = true;
-            this.ProcTableBtn.Click += new System.EventHandler(this.ProcTableBtnClick);
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(26, 33);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(81, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Program name: ";
             // 
-            // button2
+            // programNameInp
             // 
-            this.button2.Location = new System.Drawing.Point(13, 43);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Resources";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.resButtonClick);
+            this.programNameInp.Location = new System.Drawing.Point(113, 26);
+            this.programNameInp.Name = "programNameInp";
+            this.programNameInp.Size = new System.Drawing.Size(169, 20);
+            this.programNameInp.TabIndex = 1;
             // 
             // StartProgramBtn
             // 
-            this.StartProgramBtn.Location = new System.Drawing.Point(329, 13);
+            this.StartProgramBtn.Location = new System.Drawing.Point(299, 23);
             this.StartProgramBtn.Name = "StartProgramBtn";
-            this.StartProgramBtn.Size = new System.Drawing.Size(94, 23);
+            this.StartProgramBtn.Size = new System.Drawing.Size(75, 23);
             this.StartProgramBtn.TabIndex = 2;
-            this.StartProgramBtn.Text = "Start Program";
+            this.StartProgramBtn.Text = "Start program";
             this.StartProgramBtn.UseVisualStyleBackColor = true;
             this.StartProgramBtn.Click += new System.EventHandler(this.StartProgram);
             // 
-            // OSMain
+            // ProgramStart
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(466, 401);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.StartProgramBtn);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.ProcTableBtn);
-            this.Name = "OSMain";
-            this.Text = "OSMain";
+            this.Controls.Add(this.programNameInp);
+            this.Controls.Add(this.label1);
+            this.Name = "ProgramStart";
+            this.Text = "ProgramStart";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button ProcTableBtn;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox programNameInp;
         private System.Windows.Forms.Button StartProgramBtn;
     }
 }

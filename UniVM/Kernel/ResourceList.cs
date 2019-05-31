@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class ResourceList
+    public class ResourceList
     {
         private List<Resource> resourceList = new List<Resource>();
         private ProcessList processList;

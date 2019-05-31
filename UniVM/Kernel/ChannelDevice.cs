@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class ChannelDevice
+    public class ChannelDevice
     {
         public int console { get; set; } = 0;
         public int storage { get; set; } = 0;

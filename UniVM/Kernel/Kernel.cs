@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class Kernel
+    public class Kernel
     {
         public KernelStorage kernelStorage = new KernelStorage();
 
@@ -15,10 +15,12 @@ namespace UniVM
             ProcessScheduler scheduler = new ProcessScheduler(kernelStorage);
             BaseSystemProcess startStop = new StartStop(100, kernelStorage, 0);
             kernelStorage.processes.add(startStop);
-            while (true)
-            {
-                scheduler.start();
-            }
+
+            startStop.execute();
+            //while (true)
+            //{
+            //    scheduler.start();
+            //}
         }
     }
 }

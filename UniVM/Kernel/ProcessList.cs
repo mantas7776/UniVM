@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class ProcessList
+    public class ProcessList
     {
         private List<BaseSystemProcess> processes = new List<BaseSystemProcess>();
         public BaseSystemProcess idle { get; set; }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class HandleStorage
+    public class HandleStorage
     {
         List<Handle> handles = new List<Handle>();
         
