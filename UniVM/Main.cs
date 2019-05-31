@@ -39,7 +39,7 @@ namespace UniVM
             
             //Kernel kernel = new Kernel();
             Application.EnableVisualStyles();
-            Application.Run(new OSMain());
+            Application.Run(new RealMachine());
 
         }
     }

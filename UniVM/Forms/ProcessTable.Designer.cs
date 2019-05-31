@@ -51,40 +51,51 @@
             this.priorityDataGridViewTextBoxColumn,
             this.stateDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.baseSystemProcessBindingSource;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView1.Location = new System.Drawing.Point(16, 15);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(776, 412);
+            this.dataGridView1.RowHeadersWidth = 51;
+            this.dataGridView1.Size = new System.Drawing.Size(1035, 507);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellContentClick);
+            this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView1_CellDoubleClick);
             // 
             // id
             // 
             this.id.DataPropertyName = "id";
             this.id.HeaderText = "id";
+            this.id.MinimumWidth = 6;
             this.id.Name = "id";
             this.id.ReadOnly = true;
+            this.id.Width = 125;
             // 
             // procName
             // 
             this.procName.DataPropertyName = "procName";
             this.procName.HeaderText = "procName";
+            this.procName.MinimumWidth = 6;
             this.procName.Name = "procName";
             this.procName.ReadOnly = true;
+            this.procName.Width = 125;
             // 
             // priorityDataGridViewTextBoxColumn
             // 
             this.priorityDataGridViewTextBoxColumn.DataPropertyName = "priority";
             this.priorityDataGridViewTextBoxColumn.HeaderText = "priority";
+            this.priorityDataGridViewTextBoxColumn.MinimumWidth = 6;
             this.priorityDataGridViewTextBoxColumn.Name = "priorityDataGridViewTextBoxColumn";
             this.priorityDataGridViewTextBoxColumn.ReadOnly = true;
+            this.priorityDataGridViewTextBoxColumn.Width = 125;
             // 
             // stateDataGridViewTextBoxColumn
             // 
             this.stateDataGridViewTextBoxColumn.DataPropertyName = "state";
             this.stateDataGridViewTextBoxColumn.HeaderText = "state";
+            this.stateDataGridViewTextBoxColumn.MinimumWidth = 6;
             this.stateDataGridViewTextBoxColumn.Name = "stateDataGridViewTextBoxColumn";
             this.stateDataGridViewTextBoxColumn.ReadOnly = true;
+            this.stateDataGridViewTextBoxColumn.Width = 125;
             // 
             // baseSystemProcessBindingSource
             // 
@@ -92,10 +103,11 @@
             // 
             // ProcessTable
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1067, 554);
             this.Controls.Add(this.dataGridView1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "ProcessTable";
             this.Text = "ProcessList";
             this.Load += new System.EventHandler(this.ProcessTable_Load);
