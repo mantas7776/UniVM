@@ -231,11 +231,12 @@ namespace UniVM
                                 throw new NotImplementedException();
                         }
                     }
-                    if (this.kernelStorage.resources.Resources
-                        .Where(res => res.assignedTo == this)
-                        .Count() == 0
-                        ) this.IC = 0;
+                    //if (this.kernelStorage.resources.Resources
+                     //   .Where(res => res.assignedTo == this)
+                     //   .Count() == 0
+                    //    ) this.IC = 0;
                     break;
+                    
             }
         }
 
