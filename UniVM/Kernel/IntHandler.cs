@@ -98,11 +98,8 @@ namespace UniVM
                     }
                 case SiInt.PrintConsoleRegA:
                     {
-                        List<byte> numbers = BitConverter.GetBytes(program.registers.A).Reverse().ToList();
-                        numbers.ForEach(num => num += 48);
-                        numbers.Add((byte)'\n');
-                        
-                        this.kernelStorage.resources.add(new WriteHandleRequest(process.id, 0, numbers.ToArray()));
+                        string numbers = program.registers.A.ToString() + "\n";
+                        this.kernelStorage.resources.add(new WriteHandleRequest(process.id, 0, Encoding.ASCII.GetBytes(numbers)));
                         break;
                     }
                 default:

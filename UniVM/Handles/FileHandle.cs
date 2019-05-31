@@ -16,7 +16,7 @@ namespace UniVM
         {
             get
             {
-                return Seek;
+                return seek;
             }
             set
             {

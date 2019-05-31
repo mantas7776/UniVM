@@ -216,50 +216,54 @@ namespace UniVM
             switch(this.IC)
             {
                 case 0:
-                    bool blocking = !getAllResources(ResType.BaseHandleResource).Any();
-                    this.resourceRequestor.request(ResType.BaseHandleResource, -1, blocking);
-                    this.IC++;
-                    break;
-                case 1:
-                    List<Resource> reqs = getAllResources(ResType.BaseHandleResource);
-                    foreach (Resource baseReq in reqs)
                     {
-                        BaseHandleResource req = baseReq as BaseHandleResource;
-
-                        switch (req.handleResourceType)
-                        {
-                            case HandleOperationType.CreateFileHandle:
-                                createHandle(req as CreateHandleRequest);
-                                break;
-                            case HandleOperationType.Read:
-                                readHandle(req as ReadHandleRequest);
-                                break;
-                            case HandleOperationType.Write:
-                                writeHandle(req as WriteHandleRequest);
-                                break;
-                            case HandleOperationType.Close:
-                                closeHandle(req as HandleOperationRequest);
-                                break;
-                            case HandleOperationType.Delete:
-                                deleteHandle(req as HandleOperationRequest);
-                                break;
-                            case HandleOperationType.CreateBatteryHandle:
-                                mountBattery(req);
-                                break;
-                            case HandleOperationType.Seek:
-                                seekHandle(req as SetHandleSeekRequest);
-                                break;
-                            default:
-                                throw new NotImplementedException();
-                        }
+                        bool hasResource = getAllResources(ResType.BaseHandleResource).Any();
+                        if (this.resourceRequestor.RequestedResources.Count == 0)
+                            this.resourceRequestor.request(ResType.BaseHandleResource, -1, !hasResource);
+                        this.IC++;
+                        break;
                     }
-                    this.IC = 0;
-                    //if (this.kernelStorage.resources.Resources
-                     //   .Where(res => res.assignedTo == this)
-                     //   .Count() == 0
-                    //    ) this.IC = 0;
-                    break;
-                    
+                case 1:
+                    {
+                        List<Resource> reqs = getAllResources(ResType.BaseHandleResource);
+                        foreach (Resource baseReq in reqs)
+                        {
+                            BaseHandleResource req = baseReq as BaseHandleResource;
+
+                            switch (req.handleResourceType)
+                            {
+                                case HandleOperationType.CreateFileHandle:
+                                    createHandle(req as CreateHandleRequest);
+                                    break;
+                                case HandleOperationType.Read:
+                                    readHandle(req as ReadHandleRequest);
+                                    break;
+                                case HandleOperationType.Write:
+                                    writeHandle(req as WriteHandleRequest);
+                                    break;
+                                case HandleOperationType.Close:
+                                    closeHandle(req as HandleOperationRequest);
+                                    break;
+                                case HandleOperationType.Delete:
+                                    deleteHandle(req as HandleOperationRequest);
+                                    break;
+                                case HandleOperationType.CreateBatteryHandle:
+                                    mountBattery(req);
+                                    break;
+                                case HandleOperationType.Seek:
+                                    seekHandle(req as SetHandleSeekRequest);
+                                    break;
+                                default:
+                                    throw new NotImplementedException();
+                            }
+                        }
+                        this.IC = 0;
+                        //if (this.kernelStorage.resources.Resources
+                        //   .Where(res => res.assignedTo == this)
+                        //   .Count() == 0
+                        //    ) this.IC = 0;
+                        break;
+                    }
             }
         }
 

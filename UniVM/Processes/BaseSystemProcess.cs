@@ -11,7 +11,7 @@ namespace UniVM
         private static int nextId = 0;
         protected uint IC = 0;
         public int id { get; }
-        public ResourceRequestor resourceRequestor { get; private set; } = new ResourceRequestor();
+        public ResourceRequestor resourceRequestor { get; private set; }
         public int priority { get; set; }
         public string procName { get; set; }
         public readonly int creatorId;
@@ -38,6 +38,7 @@ namespace UniVM
             this.creatorId = creatorId;
             this.priority = priority;
             this.kernelStorage = kernelStorage;
+            this.resourceRequestor = new ResourceRequestor(this.id);
         }
 
         public void execute()

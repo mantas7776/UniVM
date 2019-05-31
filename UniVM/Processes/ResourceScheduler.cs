@@ -19,7 +19,7 @@ namespace UniVM
             var waitingProcesses = kernelStorage
                 .processes
                 .Processes
-                .Where(o => o.resourceRequestor.blocked)
+                //.Where(o => o.resourceRequestor.blocked)
                 .OrderByDescending(o => o.priority)
                 .ToList();
 
