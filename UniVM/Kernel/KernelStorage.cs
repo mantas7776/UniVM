@@ -37,8 +37,8 @@ namespace UniVM
             //write.prog
             VMInfo vminfo = new VMInfo()
             {
-                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 16\nMOVATOCX\nMOVA 0\nREAD\nMOVA 8\nMOVB 20\nADD\nSAVEA 8\nMOVA 16\nMOVATOCX\nMOVB 12\nMOVA 0\nWRITE\nCLOSEHANDLE\nJMP 0\nHALT\n"),
-                data = Util.getData("00000008\"big\0\"00000000000000010000000400000001")
+                code = Util.getCode("SETB 12\nOPENFILEHANDLE\nSAVEB 8\nSETCX 4\nSETA 4\nREAD\nMOVA 4\nSETB 1\nADD\nSAVEA 0\nSETA 0\nMOVB 8\nSETA 0\nSEEK 0\nSETCX = 4\nWRITE\nCLOSEHANDLE\nJMP 0\nHALT\n"),
+                data = Util.getData("000000010000000200000003\"big\0\"")
             };
             int sz = Util.getProgramSizeInFile(vminfo);
             StorageFile program = StorageFile.createFile(codeStorage, "write.prog", sz);
