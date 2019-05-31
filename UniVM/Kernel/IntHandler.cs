@@ -47,7 +47,11 @@ namespace UniVM
                     }
                 case SiInt.OpenFileHandle:
                     {
-                        kernelStorage.resources.add(new CreateHandleRequest(process.id, process.programName));
+                        Program program = process.virtualMachine.program;
+                        byte[] memoryBytes = program.memAccesser.getAllBytes();
+                        string fileName = Util.AsciiBytesToString(memoryBytes, checked((int)(program.registers.B + program.registers.DS)));
+
+                        kernelStorage.resources.add(new CreateHandleRequest(process.id, fileName));
                         break;
                     }
                 case SiInt.CloseFileHandle:

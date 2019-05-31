@@ -20,9 +20,10 @@ namespace UniVM {
             this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
             handles.add(new ConsoleDevice());
             loadProgramsToStorage();
+            addProgramFromFile("inf.prog");
             addProgramFromFile("battery.prog");
             addProgramFromFile("battery2.prog");
-            
+            addProgramFromFile("inf.prog");
         }
 
         private void loadProgramsToStorage()
@@ -75,7 +76,7 @@ namespace UniVM {
             //battery.prog
             vminfo = new VMInfo()
             {
-                code = Util.getCode("MOUNT 0\nMOVA 0\nMOVATOCX\nMOVA 8\nWRITE\nMOVA 4\nREAD\nCLOSEHANDLE\nHALT\n"),
+                code = Util.getCode("MOUNT 0\nMOVA 0\nMOVATOCX\nMOVA 8\nWRITE\nMOVA 4\nCLOSEHANDLE\nHALT\n"),
                 data = Util.getData("000000040000000100000004")
             };
             sz = Util.getProgramSizeInFile(vminfo);

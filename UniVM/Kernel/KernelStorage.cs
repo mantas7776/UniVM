@@ -35,8 +35,8 @@ namespace UniVM
             //write.prog
             VMInfo vminfo = new VMInfo()
             {
-                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nCLOSEHANDLE\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
+                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nMOVA 16\nMOVATOCX\nMOVA 0\nWRITE\nCLOSEHANDLE\nHALT\n"),
+                data = Util.getData("0000000C\"big\0\"00000000FFFFFFFF00000004")
             };
             int sz = Util.getProgramSizeInFile(vminfo);
             StorageFile program = StorageFile.createFile(codeStorage, "write.prog", sz);
@@ -44,8 +44,8 @@ namespace UniVM
             //read.prog
             vminfo = new VMInfo()
             {
-                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nREAD\nCLOSEHANDLE\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000BBBBBBBB00000004")
+                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nMOVA 16\nMOVATOCX\nMOVA 0\nREAD\nCLOSEHANDLE\nHALT\n"),
+                data = Util.getData("0000000C\"big\0\"00000000BBBBBBBB00000004")
             };
             sz = Util.getProgramSizeInFile(vminfo);
             program = StorageFile.createFile(codeStorage, "read.prog", sz);
