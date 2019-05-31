@@ -64,6 +64,9 @@ namespace UniVM
                     {
 
                         uint bytesToWriteAmount = program.registers.CX;
+                        if (bytesToWriteAmount == 0xFFFFFFFF)
+                            bytesToWriteAmount = 4;
+
                         byte[] bytesToWrite = program.memAccesser.readFromAddr(program.registers.DS + program.registers.A, bytesToWriteAmount);
 
                         this.kernelStorage.resources.add(new WriteHandleRequest(process.id, (int)program.registers.B, bytesToWrite));
@@ -91,6 +94,15 @@ namespace UniVM
                         this.kernelStorage.resources.add(
                             new SetHandleSeekRequest(process.id, (int)program.registers.B, (int)program.registers.CX)
                         );
+                        break;
+                    }
+                case SiInt.PrintConsoleRegA:
+                    {
+                        List<byte> numbers = BitConverter.GetBytes(program.registers.A).Reverse().ToList();
+                        numbers.ForEach(num => num += 48);
+                        numbers.Add((byte)'\n');
+                        
+                        this.kernelStorage.resources.add(new WriteHandleRequest(process.id, 0, numbers.ToArray()));
                         break;
                     }
                 default:

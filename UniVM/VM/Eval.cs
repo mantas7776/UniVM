@@ -291,11 +291,18 @@ namespace UniVM
                         regs.SI = SiInt.SeekHandle;
                         break;
                     }
+                case "PRINTA":
+                    {
+                        regs.SI = SiInt.PrintConsoleRegA;
+                        regs.TIMER--;
+                        break;
+                    }
                 case "PRINTC": //prints reg A adr to console
                     {
                         //WRITES FROM ADR TO \0
                         regs.B = 0;
                         regs.SI = SiInt.PrintConsole;
+                        regs.TIMER--;
                         break;
                     }
                 case "READC":
@@ -304,6 +311,7 @@ namespace UniVM
                         //CX = limit
                         regs.B = 0;
                         regs.SI = SiInt.ReadConsole;
+                        regs.TIMER--;
                         break;
                     }
                 case "OPENFILEHANDLE": 
