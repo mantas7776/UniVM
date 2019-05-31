@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.registersBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.VmList = new System.Windows.Forms.ListBox();
+            this.programBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.registersBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.programBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.registersBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -44,14 +44,6 @@
             this.dataGridViewTextBoxColumn1.HeaderText = "Registers";
             this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             // 
-            // programBindingSource
-            // 
-            this.programBindingSource.DataSource = typeof(UniVM.Program);
-            // 
-            // registersBindingSource
-            // 
-            this.registersBindingSource.DataSource = typeof(UniVM.Registers);
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(305, 13);
@@ -60,6 +52,7 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "Atmintis";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
             // VmList
             // 
@@ -70,6 +63,14 @@
             this.VmList.Size = new System.Drawing.Size(286, 329);
             this.VmList.TabIndex = 4;
             this.VmList.DoubleClick += new System.EventHandler(this.VmList_DoubleClick);
+            // 
+            // programBindingSource
+            // 
+            this.programBindingSource.DataSource = typeof(UniVM.Program);
+            // 
+            // registersBindingSource
+            // 
+            this.registersBindingSource.DataSource = typeof(UniVM.Registers);
             // 
             // RMMain
             // 

@@ -17,8 +17,8 @@ namespace UniVM.Forms
         {
             InitializeComponent();
             this.program = program;
-            textBoxA.DataBindings.Add("Text", this.program.registers, "A", true, DataSourceUpdateMode.OnPropertyChanged);
-            textBoxB.DataBindings.Add("Text", this.program.registers, "B", true, DataSourceUpdateMode.OnPropertyChanged);
+            textBoxA.DataBindings.Add("Text", this.program.registers, "A", false, DataSourceUpdateMode.OnPropertyChanged);
+            textBoxB.DataBindings.Add("Text", this.program.registers, "B", false, DataSourceUpdateMode.OnPropertyChanged);
             textBoxCX.DataBindings.Add("Text", this.program.registers, "CX", false, DataSourceUpdateMode.OnPropertyChanged);
             textBoxPTR.DataBindings.Add("Text", this.program.registers, "PTR", false, DataSourceUpdateMode.OnPropertyChanged);
             textBoxPTRI.DataBindings.Add("Text", this.program.registers, "PTRI", false, DataSourceUpdateMode.OnPropertyChanged);
@@ -29,6 +29,22 @@ namespace UniVM.Forms
             textBoxDS.DataBindings.Add("Text", this.program.registers, "DS", false, DataSourceUpdateMode.OnPropertyChanged);
             textBoxSI.DataBindings.Add("Text", this.program.registers, "SI", false, DataSourceUpdateMode.OnPropertyChanged);
             textBoxPI.DataBindings.Add("Text", this.program.registers, "PI", false, DataSourceUpdateMode.OnPropertyChanged);
+            nextCmdLabel.DataBindings.Add("Text", this.nextCmd, "", false, DataSourceUpdateMode.OnPropertyChanged);
+        }
+
+        private string nextCmd 
+        {
+            get
+            {
+                Registers regs = this.program.registers;
+                uint codeSegByteCount = regs.DS - regs.CS;
+                byte[] codeSegBytes = program.memAccesser.readFromAddr(regs.CS, codeSegByteCount);
+                string codeString = Encoding.ASCII.GetString(codeSegBytes);
+                string[] code = codeString.Split('\n');
+
+                string instructionLine = code[regs.IP + 1];
+                return "Sekanti komanda: " + instructionLine;
+            }
         }
 
         private void TextBoxA_TextChanged(object sender, EventArgs e)
@@ -83,12 +99,17 @@ namespace UniVM.Forms
 
         private void TextBoxPI_TextChanged(object sender, EventArgs e)
         {
-            //this.program.registers.PI = (PiInt)PiInt.Parse(textBoxPI.Text);
+            //this.program.registers.PI = (PiInt)Enum.Parse(typeof(PiInt),textBoxPI.Text);
         }
 
         private void TextBoxSI_TextChanged(object sender, EventArgs e)
         {
-            //this.program.registers.SI = (PiInt)PiInt.Parse(textBoxSI.Text);
+            //this.program.registers.SI = (SiInt)Enum.Parse(typeof(SiInt), textBoxPI.Text);
+        }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            new VMMemGui(program.memAccesser).Show();
         }
     }
 }

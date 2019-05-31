@@ -49,6 +49,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\Memval.cs" />
+    <Compile Include="Forms\MemoryGUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MemoryGUI.Designer.cs">
+      <DependentUpon>MemoryGUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\OSMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -85,7 +92,12 @@
     <Compile Include="Forms\RMMain.Designer.cs">
       <DependentUpon>RMMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Test.cs" />
+    <Compile Include="Forms\VMMemGui.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\VMMemGui.Designer.cs">
+      <DependentUpon>VMMemGui.cs</DependentUpon>
+    </Compile>
     <Compile Include="Handles\BatteryHandle.cs" />
     <Compile Include="Handles\FileHandle.cs" />
     <Compile Include="Kernel\ChannelDevice.cs" />
@@ -148,11 +160,16 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="Properties\DataSources\BaseSystemProcess.datasource" />
+    <None Include="Properties\DataSources\Memory.datasource" />
+    <None Include="Properties\DataSources\Memval.datasource" />
     <None Include="Properties\DataSources\Program.datasource" />
     <None Include="Properties\DataSources\Registers.datasource" />
     <None Include="Properties\DataSources\Resource.datasource" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\MemoryGUI.resx">
+      <DependentUpon>MemoryGUI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\OSMain.resx">
       <DependentUpon>OSMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -171,6 +188,12 @@
     <EmbeddedResource Include="Forms\RMMain.resx">
       <DependentUpon>RMMain.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\VMMemGui.resx">
+      <DependentUpon>VMMemGui.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Forms\Bind\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

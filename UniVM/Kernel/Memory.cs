@@ -9,6 +9,15 @@ namespace UniVM
     public class Memory
     {
         private byte[] physicalMemory;
+        public List<Byte> PhysicalMemory
+        {
+            get
+            {
+                return physicalMemory.ToList();
+            }
+        }
+        
+
 
         public Memory(uint blockSize, uint blocksAmount)
         {

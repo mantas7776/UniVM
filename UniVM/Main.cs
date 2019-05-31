@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Windows.Forms;
 using UniVM.Forms;
 
@@ -35,7 +36,7 @@ namespace UniVM
             //VMInfo codeInfo = new VMInfo() { code = altcode, data = altdata };
             //var codeFile = StorageFile.Open(randomStorage, "program1");
             //Util.saveCodeToFile(codeFile, codeInfo);
-
+            
             //Kernel kernel = new Kernel();
             Application.EnableVisualStyles();
             Application.Run(new OSMain());
