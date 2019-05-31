@@ -20,9 +20,16 @@ namespace UniVM.Forms
             VmList.DataSource = rm.Programs;
             VmList.DisplayMember = "fileName";
 
+            Timer timer = new Timer();
+            timer.Interval = 50;
+            timer.Enabled = true;
+            timer.Tick += new EventHandler(timerTick);
         }
 
-
+        private void timerTick(object Sender, EventArgs e)
+        {
+            this.rm.start();
+        }
 
         private void VmList_DoubleClick(object sender, EventArgs e)
         {
