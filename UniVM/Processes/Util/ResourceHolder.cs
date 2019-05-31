@@ -20,14 +20,14 @@ namespace UniVM
         {
             get
             {
-                return requestedResources.Count > 0;
+                return requestedResources.Where(res => res.blocking).Any();
             }
         }
 
-        public void request(ResType type, int messageId = -1)
+        public void request(ResType type, int messageId = -1, bool blocking = true)
         {
             if (type == ResType.Any && messageId == -1) throw new Exception("You probably dont want to reserve all the resources!");
-            requestedResources.Add(new ResourceDesc() { type = type, messageid = messageId });
+            requestedResources.Add(new ResourceDesc() { type = type, messageid = messageId, blocking = blocking });
         }
 
 

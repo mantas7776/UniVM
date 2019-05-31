@@ -15,7 +15,7 @@ namespace UniVM
             if (handle is FileHandle)
                 this.kernelStorage.channelDevice.storage = status;
             else if (handle is ConsoleDevice)
-                this.kernelStorage.channelDevice.storage = status;
+                this.kernelStorage.channelDevice.console = status;
             else
                 throw new NotImplementedException();
 
@@ -23,9 +23,9 @@ namespace UniVM
 
         public void createFileHandle(CreateHandleRequest request)
         {
-            //wait until realeased
-            //if (this.kernelStorage.handles.isFileTaken(request.fileName))
-              //  return;
+            //wait until released
+            if (this.kernelStorage.handles.isFileTaken(request.fileName))
+                return;
 
             StorageFile file = StorageFile.OpenOrCreate(this.kernelStorage.virtualHdd, request.fileName);
 
@@ -216,7 +216,8 @@ namespace UniVM
             switch(this.IC)
             {
                 case 0:
-                    this.resourceRequestor.request(ResType.BaseHandleResource);
+                    bool blocking = !getAllResources(ResType.BaseHandleResource).Any();
+                    this.resourceRequestor.request(ResType.BaseHandleResource, -1, blocking);
                     this.IC++;
                     break;
                 case 1:
