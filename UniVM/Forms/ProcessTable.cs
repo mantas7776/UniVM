@@ -12,10 +12,11 @@ namespace UniVM.Forms
 {
     public partial class ProcessTable : Form
     {
-        public ProcessTable(List<BaseSystemProcess> processes)
+        public ProcessTable(KernelStorage kernelStorage)
         {
             InitializeComponent();
-            dataGridView1.DataSource = processes;
+            dataGridView1.DataSource = kernelStorage.processes.Processes;
+            dataGridView1.Update();
             this.Show();
         }
 
@@ -27,6 +28,11 @@ namespace UniVM.Forms
         private void ProcessTable_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void DataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
         }
     }
 }

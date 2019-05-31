@@ -40,7 +40,7 @@ namespace UniVM.Forms
 
         private void ProcTableBtnClick(object sender, EventArgs e)
         {
-            ProcessTable processTable = new ProcessTable(kernel.kernelStorage.processes.Processes);
+            ProcessTable processTable = new ProcessTable(kernel.kernelStorage);
             processTable.Show();
         }
 
