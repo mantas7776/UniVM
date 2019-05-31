@@ -9,7 +9,7 @@ namespace UniVM
     public struct Registers
     {
         public uint A { get; set; }
-            public uint B{ get; set; }
+            public uint B { get; set; }
            public uint CX { get; set; }
             public uint PTR{ get; set; }
             public uint PTRI { get; set; }
