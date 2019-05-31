@@ -59,6 +59,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.registersBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.registersBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.registersBindingSource1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.registersBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -307,11 +308,22 @@
             // 
             this.registersBindingSource.DataSource = typeof(UniVM.Registers);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(212, 86);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 29;
+            this.button1.Text = "Atmintis";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.Button1_Click);
+            // 
             // ProgramMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(607, 482);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.textBoxSI);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.textBoxPI);
@@ -379,5 +391,6 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBoxSI;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Button button1;
     }
 }

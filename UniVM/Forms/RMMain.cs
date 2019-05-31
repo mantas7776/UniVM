@@ -33,5 +33,11 @@ namespace UniVM.Forms
                 programGui.Show();
             }
         }
+
+        private void Button1_Click(object sender, EventArgs e)
+        {
+            var gui = new MemoryGUI(rm.memory);
+            gui.Show();
+        }
     }
 }
