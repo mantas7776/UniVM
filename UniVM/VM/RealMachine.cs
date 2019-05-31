@@ -19,8 +19,10 @@ namespace UniVM {
             this.eval = new Eval();
             this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
             handles.add(new ConsoleDevice());
+            loadProgramsToStorage();
             addProgramFromFile("battery.prog");
             addProgramFromFile("battery2.prog");
+            
         }
 
         private void loadProgramsToStorage()
@@ -197,7 +199,11 @@ namespace UniVM {
                         //handle battery, special case
                         if (hndl is Battery)
                         {
-                            ((Battery)hndl).setStatus((byte)program.registers.A);
+                            int status = BitConverter.ToInt32(
+                                program.memAccesser.readFromAddr(
+                                    program.registers.DS + program.registers.A, 4)
+                                , 0);
+                            ((Battery)hndl).setStatus((byte)status);
                             program.registers.SI = SiInt.None;
                             return;
                         }
@@ -303,10 +309,10 @@ namespace UniVM {
             //string t = "0000000C00000008\"big\0\"00000000BBBBBBBB00000004";
             //string t = "000000040000000100000004";
             //byte[] altdata = Util.getData(t);
-            StorageFile codeFile = StorageFile.Open(this.storage, fileName);
+            StorageFile codeFile = StorageFile.Open(this.codeStorage, fileName);
             VMInfo programData = Util.readCodeFromFile(codeFile);
             //Util.saveCodeToHdd(codeStorage, 10, new VMInfo { code = altcode, data = altdata });
-            uint rowCount = (uint)(programData.code.Length + programData.data.Length / Constants.BLOCK_SIZE);
+            uint rowCount = (uint)((programData.code.Length + programData.data.Length) / Constants.BLOCK_SIZE)+1;
             //uint rowCount = 10;
             MemAccesser memAccesser = virtualMemory.reserveMemory(rowCount);
             memAccesser.writeFromAddr(0, programData.code);

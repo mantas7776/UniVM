@@ -42,7 +42,13 @@ namespace UniVM.Forms
                 string codeString = Encoding.ASCII.GetString(codeSegBytes);
                 string[] code = codeString.Split('\n');
 
-                string instructionLine = code[regs.IP + 1];
+                string instructionLine;
+                if (regs.IP + 1 > codeString.Length)
+                    instructionLine = code[regs.IP + 1];
+                else
+                    instructionLine = "";
+
+                
                 return "Sekanti komanda: " + instructionLine;
             }
         }
