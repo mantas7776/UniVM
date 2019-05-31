@@ -18,6 +18,7 @@ namespace UniVM {
             this.eval = new Eval();
             this.virtualMemory = new VirtualMemory(eval.registers.PTR, memory);
             handles.add(new ConsoleDevice());
+            addProgramFromFile();
         }
 
         public void handleSiInt(Program program, SiInt siNr)
@@ -213,7 +214,7 @@ namespace UniVM {
         {
             //var codeStorage = new Storage(fileName);
 
-            byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nHALT\n");3
+            byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nHALT\n");
             //byte[] altcode = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nREAD\nCLOSEHANDLE\nHALT\n");
             //byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n");
             //byte[] altcode = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nREADC\nHALT\n");
@@ -239,7 +240,7 @@ namespace UniVM {
         public void start()
         {
             //DEBUG
-            addProgramFromFile();
+            //addProgramFromFile();
             var regs = new Registers();
             regs.PTR = Constants.PTR;
             eval.registers = regs;
@@ -273,6 +274,14 @@ namespace UniVM {
                     break;
             }
 
+        }
+
+        public List<Program> Programs
+        {
+            get
+            {
+                return programs;
+            }
         }
     }
 }

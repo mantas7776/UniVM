@@ -1,9 +1,10 @@
 ﻿namespace UniVM
 {
-    class Program
+    public class Program
     {
         public string fileName { get; private set; }
         public Registers registers;
+        public Registers Registers { get { return registers; } }
         public MemAccesser memAccesser { get; private set; }
         public bool completed { get; private set; }
 

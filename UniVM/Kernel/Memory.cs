@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class Memory
+    public class Memory
     {
         private byte[] physicalMemory;
 

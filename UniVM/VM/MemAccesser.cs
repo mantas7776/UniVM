@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UniVM
 {
-    class MemAccesser
+    public class MemAccesser
     {
         private uint[] allowedVirtRows;
         private Memory memory;
