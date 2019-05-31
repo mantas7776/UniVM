@@ -13,6 +13,7 @@ namespace UniVM
         Write,
         Close,
         Delete,
-        CreateBatteryHandle
+        CreateBatteryHandle,
+        Seek
     }
 }

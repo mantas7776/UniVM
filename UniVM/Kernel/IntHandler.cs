@@ -154,6 +154,7 @@ namespace UniVM
                     }
                 case ResType.CloseHandleResponse:
                 case ResType.DeleteHandleResponse:
+                case ResType.SeekHandleResponse:
                     {
                         Program program = process.virtualMachine.program;
                         program.registers.SI = SiInt.None;

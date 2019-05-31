@@ -283,6 +283,14 @@ namespace UniVM
                         regs.SI = SiInt.WriteToHandle;
                         break;
                     }
+                case "SEEK":
+                    {
+                        uint seekWhere = uint.Parse(args[1]);
+                        regs.CX = seekWhere;
+                        regs.TIMER--;
+                        regs.SI = SiInt.SeekHandle;
+                        break;
+                    }
                 case "PRINTC": //prints reg A adr to console
                     {
                         //WRITES FROM ADR TO \0

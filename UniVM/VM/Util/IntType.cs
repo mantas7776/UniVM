@@ -19,6 +19,7 @@ namespace UniVM
         PrintConsole,
         ReadConsole,
         MountBattery,
+        SeekHandle,
     }
     public enum PiInt
     {
