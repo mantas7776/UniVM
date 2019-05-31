@@ -18,7 +18,18 @@ namespace UniVM.Forms
         public OSMain()
         {
             InitializeComponent();
+
+            Timer timer = new Timer();
+            timer.Interval = 50;
+            timer.Enabled = true;
+            timer.Tick += new EventHandler(timerTick);
+
             this.kernel = new Kernel();
+        }
+
+        private void timerTick(object Sender, EventArgs e)
+        {
+            this.kernel.startScheduler();
         }
 
         private void resButtonClick(object sender, EventArgs e)

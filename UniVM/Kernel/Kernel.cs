@@ -8,19 +8,22 @@ namespace UniVM
 {
     public class Kernel
     {
+        public bool run = true;
         public KernelStorage kernelStorage = new KernelStorage();
+        private ProcessScheduler processScheduler;
 
         public Kernel()
         {
-            ProcessScheduler scheduler = new ProcessScheduler(kernelStorage);
+            this.processScheduler = new ProcessScheduler(kernelStorage);
             BaseSystemProcess startStop = new StartStop(100, kernelStorage, 0);
             kernelStorage.processes.add(startStop);
+            this.startScheduler();
+            //startStop.execute();
+        }
 
-            startStop.execute();
-            //while (true)
-            //{
-            //    scheduler.start();
-            //}
+        public void startScheduler()
+        {
+            processScheduler.start();
         }
     }
 }
