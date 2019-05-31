@@ -83,6 +83,15 @@ namespace UniVM
             sz = Util.getProgramSizeInFile(vminfo);
             program = StorageFile.createFile(virtualHdd, "battery.prog", sz);
             Util.saveCodeToFile(program, vminfo);
+            //inf.prog
+            vminfo = new VMInfo()
+            {
+                code = Util.getCode("MOVA 0\nMOVATOCX\nLOOP 0\nHALT\n"),
+                data = Util.getData("00000004")
+            };
+            sz = Util.getProgramSizeInFile(vminfo);
+            program = StorageFile.createFile(virtualHdd, "inf.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
 
         }
     }
