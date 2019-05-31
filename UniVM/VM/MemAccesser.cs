@@ -55,7 +55,7 @@ namespace UniVM
 
         public int size()
         {
-            return allowedVirtRows.Length * 16;
+            return allowedVirtRows.Length * (int)Constants.BLOCK_SIZE;
         }
 
         public byte[] getAllBytes()
