@@ -43,10 +43,18 @@ namespace UniVM
             int sz = Util.getProgramSizeInFile(vminfo);
             StorageFile program = StorageFile.createFile(codeStorage, "write.prog", sz);
             Util.saveCodeToFile(program, vminfo);
+            //testprinta.prog
+            vminfo = new VMInfo()
+            {
+                code = Util.getCode("SETB 4\nOPENFILEHANDLE\nSETCX 4\nSETA 0\nREAD\nCLOSEHANDLE\nMOVA 0\nPRINTA\nHALT\n"),
+                data = Util.getData("FFFFFFFF\"big\0\"")
+            };
+            program = StorageFile.createFile(codeStorage, "testprinta.prog", sz);
+            Util.saveCodeToFile(program, vminfo);
             //read.prog
             vminfo = new VMInfo()
             {
-                code = Util.getCode("SETB 4\nOPENFILEHANDLE\nSETCX 4\nSETA 0\nREAD\nCLOSEHANDLE\nMOVA 0\nSETCX 4\nPRINTC\nHALT\n"),
+                code = Util.getCode("SETB 4\nOPENFILEHANDLE\nSETCX 4\nSETA 0\nREAD\nCLOSEHANDLE\nMOVA 0\nPRINTA\nHALT\n"),
                 data = Util.getData("FFFFFFFF\"big\0\"")
             };
             sz = Util.getProgramSizeInFile(vminfo);
