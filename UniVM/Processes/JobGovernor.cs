@@ -23,7 +23,6 @@ namespace UniVM
 
         public override void run()
         {
-            int testblocks = 10;
             switch(this.IC)
             {
                 case 0:

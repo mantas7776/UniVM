@@ -13,6 +13,7 @@ namespace UniVM
 
         public SetHandleSeekRequest(int createdBy, int handle, int where) : base(ResType.BaseHandleResource, HandleOperationType.Seek, createdBy, -1)
         {
+            this.handle = handle;
             this.where = where;
         }
     }

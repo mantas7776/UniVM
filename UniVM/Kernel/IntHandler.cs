@@ -59,6 +59,7 @@ namespace UniVM
                         kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, (int)program.registers.B, process.programName));
                         break;
                     }
+                case SiInt.PrintConsole:
                 case SiInt.WriteToHandle:
                     {
 

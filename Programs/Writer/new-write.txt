@@ -1,0 +1,44 @@
+1. SETB 12\n
+2. OPENFILEHANDLE\n
+3. SAVEB 8\n
+4. SETCX 4\n
+5. SETA 4\n
+6. READ\n
+7. MOVA 4\n
+8. SETB 1\n
+9. ADD\n
+10. SAVEA 0\n
+11. SETA 0\n
+12. MOVB 8\n
+13. SETA 0\n
+15. SEEK 0\n
+14. SETCX 4\n
+16. WRITE\n
+17. CLOSEHANDLE\n
+18. JMP 0\n
+19. HALT\n
+
+
+FRESH:
+
+0. 00000001 // storage
+4. 00000002 // readRes
+8. 00000003 // handleNumber
+12. \"big\0\" // fileName
+
+
+COMMANDS:
+
+1. nusetinam ptr i filename
+2. atidarom
+3. i DS:8 issaugom file handleNr
+4. CX = 4
+5. A = 7
+6. Readinam is atidaryto file handle, issaugom res i ds:4
+7. A = DS:4(res)
+8. B = 1
+9. ADD
+10. DS:0 = AddRes
+11. A = 0
+12. B = handleNr
+13. A = 

@@ -37,16 +37,16 @@ namespace UniVM
             //var codeFile = StorageFile.Open(randomStorage, "program1");
             //Util.saveCodeToFile(codeFile, codeInfo);
 
-            //Kernel kernel = new Kernel();
-            //Application.EnableVisualStyles();
+            Application.EnableVisualStyles();
             //Application.Run(new RMMain());
-            //Application.Run(new OSMain());
-            Kernel kernel = new Kernel();
-            while (true)
-            {
-                kernel.startScheduler();
-                //System.Threading.Thread.Sleep(200);
-            }
+            
+            Application.Run(new OSMain());
+            //Kernel kernel = new Kernel();
+            //while (true)
+            //{
+            //    kernel.startScheduler();
+            //    System.Threading.Thread.Sleep(200);
+            //}
         }
     }
 }
