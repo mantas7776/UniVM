@@ -35,7 +35,7 @@ namespace UniVM
             {
                 case SiInt.Halt:
                     {
-                        process.destroyVM();
+                        process.changeIC(7);
                         break;
                     }
                 case SiInt.OpenFileHandle:
@@ -105,7 +105,7 @@ namespace UniVM
             switch (intNr)
             {
                 case PiInt.InvalidCommand:
-                    process.destroyVM();
+                    process.changeIC(7);
                     break;
                 default:
                     throw new NotImplementedException();

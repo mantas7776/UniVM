@@ -11,6 +11,8 @@ namespace UniVM
         private IntHandler intHandler;
         private VirtualMemory virtualMemory;
         private VMInfo programData;
+        private double rowCount;
+        private MemAccesser memAccesser;
 
         public VirtualMachine virtualMachine;
         public string programName { get; private set;  }
@@ -29,19 +31,26 @@ namespace UniVM
                     {
                         StorageFile file = StorageFile.Open(this.kernelStorage.codeStorage, programName);
                         programData = Util.readCodeFromFile(file);
-                        //if (fileSize == 0) throw new Exception($"File {programName} is empty!");
 
-                        double rowCount = Math.Ceiling((programData.data.Length + programData.code.Length) / (double)Constants.BLOCK_SIZE);
-                        //int rowCount = testblocks;
-                        for (int i = 0; i < Convert.ToInt32(rowCount); i++) this.resourceRequestor.request(ResType.Memory);
+                        this.rowCount = Math.Ceiling((programData.data.Length + programData.code.Length) / (double)Constants.BLOCK_SIZE);
                         this.IC++;
                         break;
                     }
                 case 1:
                     {
+                        for (int i = 0; i < Convert.ToInt32(rowCount); i++) this.resourceRequestor.request(ResType.Memory);
+                        this.IC++;
+                        break;
+                    }
+                case 2:
+                    {
                         uint rowCount = this.getResourceTypeCount(ResType.Memory);
-                        MemAccesser memAccesser = this.kernelStorage.virtualMemory.reserveMemory(rowCount);
-
+                        this.memAccesser = this.kernelStorage.virtualMemory.reserveMemory(rowCount);
+                        this.IC++;
+                        break;
+                    }
+                case 3:
+                    {
                         //byte[] altcode = Util.getCode("MOVA 0\nMOVATOCX\nMOVB 1\nADD\nLOOP 3\nHALT\n");
                         //byte[] altdata = Util.getData("000000050000000166696C652E747874");
 
@@ -54,9 +63,14 @@ namespace UniVM
                         //string t = "0000001000000008\"big\0\"00000000BBBBBBBB00000004";
                         //string t = "000000040000000100000004";
                         //byte[] altdata = Util.getData(t);
-                        
+
                         memAccesser.writeFromAddr(0, programData.code);
                         memAccesser.writeFromAddr((uint)programData.code.Length, programData.data);
+                        this.IC++;
+                        break;
+                    }
+                case 4:
+                    {
                         Program program = new Program("a", memAccesser);
 
                         byte[] PTRIInfo = new byte[] { (byte)rowCount, (byte)Constants.MAX_BLOCK_COUNT, (byte)0, (byte)0 };
@@ -70,37 +84,73 @@ namespace UniVM
                         this.IC++;
                         break;
                     }
-                case 2:
-                    this.resourceRequestor.request(ResType.Any, this.id);
-                    this.IC++;
-                    break;
-                case 3:
-                    Resource resource = this.getFirstResource(ResType.Any, this.id);
-                    if(resource.type == ResType.Interrupt)
+                case 5:
                     {
-                        this.intHandler.handleInt((Interrupt)resource);
-                    } else if(resource is BaseHandleResource) // we are only looking at responses. Should be impossible for request to get here.
-                    {
-                        this.intHandler.handleResponse(resource);
-                        this.kernelStorage.resources.add(new Resource(ResType.FromInterrupt, this.id, false, virtualMachine.id));
-                    } else
-                    {
-                        throw new NotImplementedException();
+                        this.resourceRequestor.request(ResType.Any, this.id);
+                        this.IC++;
+                        break;
                     }
+                case 6:
+                    {
+                        Resource resource = this.getFirstResource(ResType.Any, this.id);
+                        Program program = this.virtualMachine.program;
+                        if (resource.type == ResType.Interrupt && (program.registers.SI == SiInt.Halt || program.registers.PI == PiInt.InvalidCommand))
+                        {
+                            this.IC = 8;
+                            break;
+                        }
+                        else
+                        {
+                            this.IC++;
+                        }
+                        break;
+                    }
+                case 7:
+                    {
+                        Resource resource = this.getFirstResource(ResType.Any, this.id);
+                        if (resource.type == ResType.Interrupt)
+                        {
+                            this.intHandler.handleInt((Interrupt)resource);
+                        }
+                        else if (resource is BaseHandleResource) // we are only looking at responses. Should be impossible for request to get here.
+                        {
+                            this.intHandler.handleResponse(resource);
+                            this.kernelStorage.resources.add(new Resource(ResType.FromInterrupt, this.id, false, virtualMachine.id));
+                        }
+                        else
+                        {
+                            throw new NotImplementedException();
+                        }
 
-                    resource.release();
-                    this.IC = 2;
-                    break;
+                        resource.release();
+                        this.IC = 5;
+                        break;
+                    }
+                case 8:
+                    {
+                        kernelStorage.processes.remove(this.virtualMachine);
+                        this.IC++;
+                        break;
+                    }
+                case 9:
+                    {
+                        kernelStorage.resources.add(new ProgramStartKill(this.id, true, this.programName));
+                        this.IC++;
+                        break;
+                    }
+                case 10:
+                    {
+                        this.resourceRequestor.request(ResType.NonExistent);
+                        break;
+                    }
                 default:
                     throw new NotImplementedException();
             }
         }
 
-        public void destroyVM()
+        public void changeIC(uint IC)
         {
-            kernelStorage.processes.remove(this.virtualMachine);
-            kernelStorage.resources.add(new ProgramStartKill(this.id, true, this.programName));
-            this.resourceRequestor.request(ResType.NonExistent);
+            this.IC = IC;
         }
     }
 }
