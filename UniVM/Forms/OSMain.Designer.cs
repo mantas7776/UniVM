@@ -57,7 +57,7 @@
             // 
             this.StartProgramBtn.Location = new System.Drawing.Point(329, 13);
             this.StartProgramBtn.Name = "StartProgramBtn";
-            this.StartProgramBtn.Size = new System.Drawing.Size(94, 23);
+            this.StartProgramBtn.Size = new System.Drawing.Size(125, 23);
             this.StartProgramBtn.TabIndex = 2;
             this.StartProgramBtn.Text = "Start Program";
             this.StartProgramBtn.UseVisualStyleBackColor = true;

@@ -48,9 +48,9 @@
             // 
             this.button1.Location = new System.Drawing.Point(305, 13);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.Size = new System.Drawing.Size(102, 41);
             this.button1.TabIndex = 3;
-            this.button1.Text = "Atmintis";
+            this.button1.Text = "Realios mašinos atmintis";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.Button1_Click);
             // 
@@ -62,6 +62,7 @@
             this.VmList.Name = "VmList";
             this.VmList.Size = new System.Drawing.Size(286, 329);
             this.VmList.TabIndex = 4;
+            this.VmList.SelectedIndexChanged += new System.EventHandler(this.VmList_SelectedIndexChanged);
             this.VmList.DoubleClick += new System.EventHandler(this.VmList_DoubleClick);
             // 
             // programBindingSource

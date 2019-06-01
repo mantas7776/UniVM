@@ -46,5 +46,10 @@ namespace UniVM.Forms
             var gui = new MemoryGUI(rm.memory);
             gui.Show();
         }
+
+        private void VmList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

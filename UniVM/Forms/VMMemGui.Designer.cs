@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.memvalBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.indexDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.valueDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.memvalBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.memvalBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -50,10 +50,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(243, 390);
             this.dataGridView1.TabIndex = 1;
             // 
-            // memvalBindingSource
-            // 
-            this.memvalBindingSource.DataSource = typeof(UniVM.Memval);
-            // 
             // indexDataGridViewTextBoxColumn
             // 
             this.indexDataGridViewTextBoxColumn.DataPropertyName = "Index";
@@ -66,11 +62,15 @@
             this.valueDataGridViewTextBoxColumn.HeaderText = "Value";
             this.valueDataGridViewTextBoxColumn.Name = "valueDataGridViewTextBoxColumn";
             // 
+            // memvalBindingSource
+            // 
+            this.memvalBindingSource.DataSource = typeof(UniVM.Memval);
+            // 
             // VMMemGui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(268, 413);
+            this.ClientSize = new System.Drawing.Size(270, 413);
             this.Controls.Add(this.dataGridView1);
             this.Name = "VMMemGui";
             this.Text = "VMMemGui";
