@@ -8,6 +8,8 @@ namespace UniVM
 {
     class HandleManager : BaseSystemProcess
     {
+        private BaseHandleResource last;
+        private int lastid = 0;
         public HandleManager(KernelStorage kernelStorage, int creatorId) : base(50, kernelStorage, creatorId) { }
 
         private void setDevice(Handle handle, int status)
@@ -226,42 +228,85 @@ namespace UniVM
                 case 1:
                     {
                         List<Resource> reqs = getAllResources(ResType.BaseHandleResource);
-                        foreach (Resource baseReq in reqs)
-                        {
-                            BaseHandleResource req = baseReq as BaseHandleResource;
+                        this.lastid++;
+                        if (reqs.Count == 0) { this.IC = 0; break; }
+                        if (this.lastid >= reqs.Count) this.lastid = 0;
 
-                            switch (req.handleResourceType)
-                            {
-                                case HandleOperationType.CreateFileHandle:
-                                    createHandle(req as CreateHandleRequest);
-                                    break;
-                                case HandleOperationType.Read:
-                                    readHandle(req as ReadHandleRequest);
-                                    break;
-                                case HandleOperationType.Write:
-                                    writeHandle(req as WriteHandleRequest);
-                                    break;
-                                case HandleOperationType.Close:
-                                    closeHandle(req as HandleOperationRequest);
-                                    break;
-                                case HandleOperationType.Delete:
-                                    deleteHandle(req as HandleOperationRequest);
-                                    break;
-                                case HandleOperationType.CreateBatteryHandle:
-                                    mountBattery(req);
-                                    break;
-                                case HandleOperationType.Seek:
-                                    seekHandle(req as SetHandleSeekRequest);
-                                    break;
-                                default:
-                                    throw new NotImplementedException();
-                            }
+                        BaseHandleResource req = reqs[this.lastid] as BaseHandleResource;
+                        this.last = req;
+                        switch (req.handleResourceType)
+                        {
+                            case HandleOperationType.CreateFileHandle:
+                                this.IC = 2;
+                                break;
+                            case HandleOperationType.Read:
+                                this.IC = 3;
+                                break;
+                            case HandleOperationType.Write:
+                                this.IC = 4;
+                                break;
+                            case HandleOperationType.Close:
+                                this.IC = 5;
+                                break;
+                            case HandleOperationType.Delete:
+                                this.IC = 6;
+                                break;
+                            case HandleOperationType.CreateBatteryHandle:
+                                this.IC = 7;
+                                break;
+                            case HandleOperationType.Seek:
+                                this.IC = 8;
+                                break;
+                            default:
+                                throw new NotImplementedException();
                         }
-                        this.IC = 0;
+                        //this.IC = 0;
                         //if (this.kernelStorage.resources.Resources
                         //   .Where(res => res.assignedTo == this)
                         //   .Count() == 0
                         //    ) this.IC = 0;
+                        break;
+                    }
+                case 2:
+                    {
+                        createHandle(this.last as CreateHandleRequest);
+                        this.IC = 0;
+                        break;
+                    }
+                case 3:
+                    {
+                        readHandle(this.last as ReadHandleRequest);
+                        this.IC = 0;
+                        break;
+                    }
+                case 4:
+                    {
+                        writeHandle(this.last as WriteHandleRequest);
+                        this.IC = 0;
+                        break;
+                    }
+                case 5:
+                    {
+                        closeHandle(this.last as HandleOperationRequest);
+                        this.IC = 0;
+                        break;
+                    }
+                case 6:
+                    {
+                        deleteHandle(this.last as HandleOperationRequest);
+                        this.IC = 0;
+                        break;
+                    }
+                case 7:
+                    {
+                        mountBattery(this.last);
+                        this.IC = 0;
+                        break;
+                    }
+                case 8:
+                    {
+                        seekHandle(this.last as SetHandleSeekRequest);
+                        this.IC = 0;
                         break;
                     }
             }
