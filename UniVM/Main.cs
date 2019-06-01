@@ -40,7 +40,7 @@ namespace UniVM
             Application.EnableVisualStyles();
             //Application.Run(new RMMain());
             
-            Application.Run(new RMMain());
+            Application.Run(new OSMain());
             //Kernel kernel = new Kernel();
             //while (true)
             //{
