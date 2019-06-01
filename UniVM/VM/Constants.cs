@@ -10,8 +10,8 @@ namespace UniVM
     {
         public static readonly int WORD_SIZE = sizeof(UInt32);
         public static readonly uint MAX_BLOCK_COUNT = 16;
-        public static readonly uint BLOCK_SIZE = 100;
-        public static readonly uint BLOCKS_AMOUNT = 100;
+        public static readonly uint BLOCK_SIZE = 16;
+        public static readonly uint BLOCKS_AMOUNT = 16;
         public static readonly uint START = 0x3000;
         public static readonly uint PTR = 0;
         public static readonly uint TIMER_VALUE = 4;
