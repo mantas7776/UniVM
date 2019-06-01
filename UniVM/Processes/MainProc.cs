@@ -23,21 +23,44 @@ namespace UniVM
                     this.IC++;
                     break;
                 case 1:
-                    ProgramStartKill programStartKill = (ProgramStartKill)this.getFirstResource(ResType.ProgramStartKill);
-                    if(!programStartKill.kill)
                     {
+                        ProgramStartKill programStartKill = (ProgramStartKill)this.getFirstResource(ResType.ProgramStartKill);
+                        if (!programStartKill.kill)
+                        {
+                            this.IC = 2;
+                        }
+                        else
+                        {
+                            this.IC = 3;
+                        }
+
+                        break;
+                    }
+                case 2:
+                    {
+                        ProgramStartKill programStartKill = (ProgramStartKill)this.getFirstResource(ResType.ProgramStartKill);
                         JobGovernor jobGovernor = new JobGovernor(programStartKill.programName, this.kernelStorage, this.id);
                         jobGovernors.Add(jobGovernor);
                         kernelStorage.processes.add(jobGovernor);
-                    } else
+                        
+                        this.IC = 4;
+                        break;
+                    }
+                case 3:
                     {
+                        ProgramStartKill programStartKill = (ProgramStartKill)this.getFirstResource(ResType.ProgramStartKill);
                         JobGovernor toDelete = jobGovernors.Find(gov => gov.programName == programStartKill.programName);
                         kernelStorage.processes.remove(toDelete);
+                        this.IC = 4;
+                        break;
                     }
-
-                    programStartKill.release();
-                    this.IC = 0;
-                    break;              
+                case 4:
+                    {
+                        ProgramStartKill programStartKill = (ProgramStartKill)this.getFirstResource(ResType.ProgramStartKill);
+                        programStartKill.release();
+                        this.IC = 0;
+                        break;
+                    }
             }
 
         }

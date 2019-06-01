@@ -38,16 +38,24 @@ namespace UniVM
                         eval.run(program);
                     }
 
-                    if (eval.registers.SI > 0 || eval.registers.PI > 0)
-                    {
-                        this.kernelStorage.resources.add(new Interrupt(this.id, this.program.fileName, this.creatorId));
-                        this.resourceRequestor.request(ResType.FromInterrupt, this.id);
-                        this.IC++;
-                    }
-
                     program.registers = eval.registers;
+                    this.IC++;
                     break;
                 case 1:
+                    if (program.registers.SI > 0 || program.registers.PI > 0)
+                    {
+                        this.kernelStorage.resources.add(new Interrupt(this.id, this.program.fileName, this.creatorId));
+                        this.IC++;
+                    } else
+                    {
+                        this.IC = 0;
+                    }
+                    break;
+                case 2:
+                    this.resourceRequestor.request(ResType.FromInterrupt, this.id);
+                    this.IC++;
+                    break;
+                case 3:
                     Resource resource = this.getFirstResource(ResType.FromInterrupt, this.id);
                     resource.release();
                     this.IC = 0;
