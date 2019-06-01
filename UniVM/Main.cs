@@ -8,9 +8,9 @@ namespace UniVM
         public static void Main(string[] args) {
 
             Application.EnableVisualStyles();
-            Application.Run(new RMMain());
+            //Application.Run(new RMMain());
             
-            //Application.Run(new OSMain());
+            Application.Run(new RMMain());
             //Kernel kernel = new Kernel();
             //while (true)
             //{
