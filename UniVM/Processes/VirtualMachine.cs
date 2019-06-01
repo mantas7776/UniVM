@@ -41,13 +41,16 @@ namespace UniVM
                     if (eval.registers.SI > 0 || eval.registers.PI > 0)
                     {
                         this.kernelStorage.resources.add(new Interrupt(this.id, this.program.fileName, this.creatorId));
-                        this.resourceRequestor.request(ResType.FromInterrupt, this.id);
                         this.IC++;
                     }
 
                     program.registers = eval.registers;
                     break;
                 case 1:
+                    this.resourceRequestor.request(ResType.FromInterrupt, this.id);
+                    this.IC++;
+                    break;
+                case 2:
                     Resource resource = this.getFirstResource(ResType.FromInterrupt, this.id);
                     resource.release();
                     this.IC = 0;
