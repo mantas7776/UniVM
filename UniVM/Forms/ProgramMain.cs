@@ -43,10 +43,10 @@ namespace UniVM.Forms
                 string[] code = codeString.Split('\n');
 
                 string instructionLine;
-                if (regs.IP + 1 > codeString.Length)
-                    instructionLine = code[regs.IP + 1];
+                if (regs.IP < code.Length- 1)
+                    instructionLine = code[regs.IP];
                 else
-                    instructionLine = "";
+                    instructionLine = "HALT";
 
                 
                 return "Sekanti komanda: " + instructionLine;

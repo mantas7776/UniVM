@@ -35,9 +35,10 @@
             // 
             // ProcTableBtn
             // 
-            this.ProcTableBtn.Location = new System.Drawing.Point(13, 13);
+            this.ProcTableBtn.Location = new System.Drawing.Point(17, 16);
+            this.ProcTableBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ProcTableBtn.Name = "ProcTableBtn";
-            this.ProcTableBtn.Size = new System.Drawing.Size(75, 23);
+            this.ProcTableBtn.Size = new System.Drawing.Size(100, 28);
             this.ProcTableBtn.TabIndex = 0;
             this.ProcTableBtn.Text = "Processes";
             this.ProcTableBtn.UseVisualStyleBackColor = true;
@@ -45,9 +46,10 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(13, 43);
+            this.button2.Location = new System.Drawing.Point(17, 53);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(100, 28);
             this.button2.TabIndex = 1;
             this.button2.Text = "Resources";
             this.button2.UseVisualStyleBackColor = true;
@@ -55,9 +57,10 @@
             // 
             // StartProgramBtn
             // 
-            this.StartProgramBtn.Location = new System.Drawing.Point(329, 13);
+            this.StartProgramBtn.Location = new System.Drawing.Point(439, 16);
+            this.StartProgramBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.StartProgramBtn.Name = "StartProgramBtn";
-            this.StartProgramBtn.Size = new System.Drawing.Size(94, 23);
+            this.StartProgramBtn.Size = new System.Drawing.Size(125, 28);
             this.StartProgramBtn.TabIndex = 2;
             this.StartProgramBtn.Text = "Start Program";
             this.StartProgramBtn.UseVisualStyleBackColor = true;
@@ -65,12 +68,13 @@
             // 
             // OSMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(466, 401);
+            this.ClientSize = new System.Drawing.Size(621, 143);
             this.Controls.Add(this.StartProgramBtn);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.ProcTableBtn);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "OSMain";
             this.Text = "OSMain";
             this.ResumeLayout(false);
