@@ -60,7 +60,6 @@ namespace UniVM
                     }
                 case SiInt.CloseFileHandle:
                     {
-                        Program program = process.virtualMachine.program;
                         kernelStorage.resources.add(new HandleOperationRequest(process.id, HandleOperationType.Close, (int)program.registers.B, process.programName));
                         break;
                     }

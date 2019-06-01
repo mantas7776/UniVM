@@ -43,14 +43,7 @@ namespace UniVM
             int sz = Util.getProgramSizeInFile(vminfo);
             StorageFile program = StorageFile.createFile(codeStorage, "write.prog", sz);
             Util.saveCodeToFile(program, vminfo);
-            //testprinta.prog
-            vminfo = new VMInfo()
-            {
-                code = Util.getCode("SETB 4\nOPENFILEHANDLE\nSETCX 4\nSETA 0\nREAD\nCLOSEHANDLE\nMOVA 0\nPRINTA\nHALT\n"),
-                data = Util.getData("FFFFFFFF\"big\0\"")
-            };
-            program = StorageFile.createFile(codeStorage, "testprinta.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
+           
             //read.prog
             vminfo = new VMInfo()
             {
@@ -60,42 +53,7 @@ namespace UniVM
             sz = Util.getProgramSizeInFile(vminfo);
             program = StorageFile.createFile(codeStorage, "read.prog", sz);
             Util.saveCodeToFile(program, vminfo);
-            //print.prog
-            vminfo = new VMInfo()
-            {
-                code = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
-            };
-            sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(codeStorage, "print.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
-            //printc.prog
-            vminfo = new VMInfo()
-            {
-                code = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
-            };
-            sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(codeStorage, "printc.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
-            //readc.prog
-            vminfo = new VMInfo()
-            {
-                code = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nREADC\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000BBBBBBBB00000004")
-            };
-            sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(codeStorage, "readc.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
-            //battery.prog
-            vminfo = new VMInfo()
-            {
-                code = Util.getCode("MOUNT 0\nMOVA 0\nMOVATOCX\nMOVA 8\nWRITE\nMOVA 4\nREAD\nCLOSEHANDLE\nHALT\n"),
-                data = Util.getData("000000040000000100000004")
-            };
-            sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(codeStorage, "battery.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
+            
             //inf.prog
             vminfo = new VMInfo()
             {

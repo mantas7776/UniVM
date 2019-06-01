@@ -28,51 +28,9 @@ namespace UniVM {
 
         private void loadProgramsToStorage()
         {
-            //write.prog
-            VMInfo vminfo = new VMInfo()
-            {
-                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nWRITE\nCLOSEHANDLE\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
-            };
-            int sz = Util.getProgramSizeInFile(vminfo);
-            StorageFile program = StorageFile.createFile(codeStorage, "write.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
-            //read.prog
-            vminfo = new VMInfo()
-            {
-                code = Util.getCode("MOVB 4\nOPENFILEHANDLE\nSAVEB 12\nMOVA 20\nMOVATOCX\nMOVA 0\nREAD\nCLOSEHANDLE\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000BBBBBBBB00000004")
-            };
-            sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(codeStorage, "read.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
-            //print.prog
-            vminfo = new VMInfo()
-            {
-                code = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
-            };
-            sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(codeStorage, "print.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
-            //printc.prog
-            vminfo = new VMInfo()
-            {
-                code = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nPRINTC\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000FFFFFFFF00000004")
-            };
-            sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(codeStorage, "printc.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
-            //readc.prog
-            vminfo = new VMInfo()
-            {
-                code = Util.getCode("MOVA 20\nMOVATOCX\nMOVA 4\nREADC\nHALT\n"),
-                data = Util.getData("0000001000000008\"big\0\"00000000BBBBBBBB00000004")
-            };
-            sz = Util.getProgramSizeInFile(vminfo);
-            program = StorageFile.createFile(codeStorage, "readc.prog", sz);
-            Util.saveCodeToFile(program, vminfo);
+            VMInfo vminfo;
+            int sz;
+            StorageFile program;
             //battery.prog
             vminfo = new VMInfo()
             {
